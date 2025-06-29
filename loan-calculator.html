@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .result-card {
+            transition: all 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .input-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4f46e5;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div class="md:flex">
+            <!-- Calculator Form -->
+            <div class="md:w-1/2 p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Loan Calculator</h1>
+                <p class="text-gray-600 mb-8">Calculate your monthly payments and total interest for any loan amount.</p>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="loanAmount" class="block text-sm font-medium text-gray-700 mb-2">Loan Amount ($)</label>
+                        <div class="flex items-center">
+                            <input type="range" id="loanAmount" min="1000" max="1000000" step="1000" value="25000" class="input-slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <input type="number" id="loanAmountInput" class="ml-4 w-24 px-3 py-2 border border-gray-300 rounded-md text-gray-700" value="25000">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="interestRate" class="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+                        <div class="flex items-center">
+                            <input type="range" id="interestRate" min="1" max="20" step="0.1" value="5" class="input-slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <input type="number" id="interestRateInput" class="ml-4 w-24 px-3 py-2 border border-gray-300 rounded-md text-gray-700" value="5">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="loanTerm" class="block text-sm font-medium text-gray-700 mb-2">Loan Term (years)</label>
+                        <div class="flex items-center">
+                            <input type="range" id="loanTerm" min="1" max="30" step="1" value="5" class="input-slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <input type="number" id="loanTermInput" class="ml-4 w-24 px-3 py-2 border border-gray-300 rounded-md text-gray-700" value="5">
+                        </div>
+                    </div>
+                    
+                    <button id="calculateBtn" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 transition duration-200 font-medium">
+                        Calculate Payment
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="md:w-1/2 bg-gray-50 p-6 flex flex-col overflow-y-auto" style="max-height: 600px;">
+                <div id="results" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Loan Details</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="result-card bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-sm font-medium text-gray-500">Monthly Payment</h3>
+                            <p id="monthlyPayment" class="text-2xl font-bold text-indigo-600 mt-1 truncate">$0</p>
+                        </div>
+                        
+                        <div class="result-card bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-sm font-medium text-gray-500">Total Interest</h3>
+                            <p id="totalInterest" class="text-2xl font-bold text-indigo-600 mt-1 truncate">$0</p>
+                        </div>
+                        
+                        <div class="result-card bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-sm font-medium text-gray-500">Total Payment</h3>
+                            <p id="totalPayment" class="text-2xl font-bold text-indigo-600 mt-1 truncate">$0</p>
+                        </div>
+                        
+                        <div class="result-card bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-sm font-medium text-gray-500">Loan Term</h3>
+                            <p id="displayTerm" class="text-3xl font-bold text-indigo-600 mt-2">0 years</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-lg font-medium text-gray-800 mb-4">Payment Schedule</h3>
+                        <div class="bg-white rounded-lg shadow overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 text-xs">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principal</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="amortizationTable" class="bg-white divide-y divide-gray-200">
+                                    <!-- Amortization table will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="placeholder" class="text-center">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e3eed383-fa20-4a5a-a656-b8304de72da9.png" alt="Illustration of a calculator with dollar signs and charts representing loan calculations" class="mx-auto mb-6 rounded-lg" />
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">Calculate Your Loan</h3>
+                    <p class="text-gray-500">Enter your loan details and click "Calculate Payment" to see your results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sync slider and input fields
+            const loanAmount = document.getElementById('loanAmount');
+            const loanAmountInput = document.getElementById('loanAmountInput');
+            const interestRate = document.getElementById('interestRate');
+            const interestRateInput = document.getElementById('interestRateInput');
+            const loanTerm = document.getElementById('loanTerm');
+            const loanTermInput = document.getElementById('loanTermInput');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const resultsSection = document.getElementById('results');
+            const placeholderSection = document.getElementById('placeholder');
+            
+            // Format currency
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2
+                }).format(amount);
+            };
+            
+            // Sync slider and input fields
+            loanAmount.addEventListener('input', () => {
+                loanAmountInput.value = loanAmount.value;
+            });
+            
+            loanAmountInput.addEventListener('input', () => {
+                loanAmount.value = loanAmountInput.value;
+            });
+            
+            interestRate.addEventListener('input', () => {
+                interestRateInput.value = interestRate.value;
+            });
+            
+            interestRateInput.addEventListener('input', () => {
+                interestRate.value = interestRateInput.value;
+            });
+            
+            loanTerm.addEventListener('input', () => {
+                loanTermInput.value = loanTerm.value;
+            });
+            
+            loanTermInput.addEventListener('input', () => {
+                loanTerm.value = loanTermInput.value;
+            });
+            
+            // Calculate loan
+            calculateBtn.addEventListener('click', () => {
+                const principal = parseFloat(loanAmount.value);
+                const interest = parseFloat(interestRate.value) / 100 / 12;
+                const payments = parseFloat(loanTerm.value) * 12;
+                
+                // Compute monthly payment
+                const x = Math.pow(1 + interest, payments);
+                const monthly = (principal * x * interest) / (x - 1);
+                
+                // Compute total payment and interest
+                const totalPayment = monthly * payments;
+                const totalInterest = totalPayment - principal;
+                
+                // Update results
+                document.getElementById('monthlyPayment').textContent = formatCurrency(monthly);
+                document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+                document.getElementById('totalPayment').textContent = formatCurrency(totalPayment);
+                document.getElementById('displayTerm').textContent = `${loanTerm.value} years`;
+                
+                // Generate amortization schedule
+                generateAmortizationSchedule(principal, interest, monthly, payments);
+                
+                // Show results
+                resultsSection.classList.remove('hidden');
+                placeholderSection.classList.add('hidden');
+            });
+            
+            // Generate amortization schedule
+            function generateAmortizationSchedule(principal, interestRate, monthlyPayment, totalPayments) {
+                const tableBody = document.getElementById('amortizationTable');
+                tableBody.innerHTML = '';
+                
+                let balance = principal;
+                let totalInterestPaid = 0;
+                
+                // Group by year
+                for (let year = 1; year <= Math.ceil(totalPayments / 12); year++) {
+                    let yearPrincipal = 0;
+                    let yearInterest = 0;
+                    const paymentsInYear = year === Math.ceil(totalPayments / 12) ? 
+                        totalPayments % 12 || 12 : 12;
+                    
+                    for (let month = 1; month <= paymentsInYear; month++) {
+                        const interestForMonth = balance * interestRate;
+                        const principalForMonth = monthlyPayment - interestForMonth;
+                        
+                        yearPrincipal += principalForMonth;
+                        yearInterest += interestForMonth;
+                        totalInterestPaid += interestForMonth;
+                        balance -= principalForMonth;
+                    }
+                    
+                    // Add row for the year
+                    const row = document.createElement('tr');
+                    row.className = year % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                    row.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${year}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${formatCurrency(yearPrincipal)}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${formatCurrency(yearInterest)}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">${formatCurrency(Math.max(0, balance))}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
