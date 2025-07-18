@@ -1,0 +1,211 @@
+/* 
+ * Financial Glossary Component Styles
+ * Implements requirement 5.1
+ */
+
+.glossary-toggle {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  margin: 10px 0;
+}
+
+.glossary-toggle:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.glossary-toggle:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.glossary-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.glossary-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.glossary-modal.open {
+  display: flex;
+}
+
+.glossary-content {
+  background-color: var(--background-color);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.glossary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glossary-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--text-color);
+}
+
+.glossary-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.glossary-close:hover {
+  background-color: var(--hover-color);
+}
+
+.glossary-close:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.glossary-search {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glossary-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 16px;
+  color: var(--text-color);
+  background-color: var(--input-background);
+}
+
+.glossary-search-input:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-color: var(--primary-color);
+}
+
+.glossary-terms {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.glossary-letter-group {
+  margin-bottom: 24px;
+}
+
+.glossary-letter {
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.glossary-definitions {
+  margin: 0;
+}
+
+.glossary-term {
+  margin-bottom: 16px;
+}
+
+.glossary-term dt {
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 4px;
+}
+
+.glossary-term dd {
+  margin-left: 0;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+.glossary-no-results {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-color-secondary);
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .glossary-content {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .glossary-header h2 {
+    font-size: 18px;
+  }
+  
+  .glossary-term dt {
+    font-size: 16px;
+  }
+  
+  .glossary-term dd {
+    font-size: 14px;
+  }
+}
+
+/* Dark theme adjustments */
+.dark-theme .glossary-content {
+  background-color: var(--background-color);
+}
+
+.dark-theme .glossary-close:hover {
+  background-color: var(--hover-color);
+}
+
+.dark-theme .glossary-search-input {
+  background-color: var(--input-background);
+  color: var(--text-color);
+}

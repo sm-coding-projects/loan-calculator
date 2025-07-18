@@ -1,0 +1,99 @@
+/* 
+ * Light Theme
+ * Default color scheme for the loan calculator
+ * Optimized for accessibility with proper contrast ratios
+ */
+
+:root {
+  /* Base colors */
+  --background-color: #ffffff;
+  --text-color: #212529;
+  --text-muted: #5a6268; /* Darkened for better contrast */
+  --primary-color: #0056b3; /* Added primary color for header/footer */
+  
+  /* Component colors */
+  --card-background: #ffffff;
+  --card-border: #dee2e6;
+  --card-border-rgb: 222, 226, 230;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Form elements */
+  --input-background: #ffffff;
+  --input-border: #ced4da;
+  --input-text: #495057;
+  --input-focus-border: #0056b3; /* Darkened for better contrast */
+  --input-focus-shadow: rgba(0, 86, 179, 0.25);
+  
+  /* Buttons */
+  --primary-button-bg: #0056b3; /* Darkened for better contrast */
+  --primary-button-text: #ffffff;
+  --primary-button-hover: #004494;
+  --secondary-button-bg: #5a6268; /* Darkened for better contrast */
+  --secondary-button-text: #ffffff;
+  --secondary-button-hover: #4a5258;
+  
+  /* Tables */
+  --table-header-bg: #f8f9fa;
+  --table-border: #dee2e6;
+  --table-row-hover: rgba(0, 86, 179, 0.05);
+  
+  /* Charts */
+  --chart-principal-color: #0056b3; /* Darkened for better contrast */
+  --chart-interest-color: #c82333; /* Darkened for better contrast */
+  --chart-grid-color: #e9ecef;
+  --chart-axis-color: #5a6268;
+  
+  /* Alerts and notifications */
+  --success-color: #218838; /* Darkened for better contrast */
+  --success-color-rgb: 33, 136, 56;
+  --warning-color: #e0a800; /* Darkened for better contrast */
+  --warning-color-rgb: 224, 168, 0;
+  --danger-color: #c82333; /* Darkened for better contrast */
+  --danger-color-rgb: 200, 35, 51;
+  --info-color: #138496; /* Darkened for better contrast */
+  --info-color-rgb: 19, 132, 150;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Apply theme to form elements */
+.form-input,
+.form-select {
+  background-color: var(--input-background);
+  border-color: var(--input-border);
+  color: var(--input-text);
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 0.2rem var(--input-focus-shadow);
+}
+
+/* Apply theme to buttons */
+.form-button {
+  background-color: var(--primary-button-bg);
+  color: var(--primary-button-text);
+}
+
+.form-button:hover {
+  background-color: var(--primary-button-hover);
+}
+
+/* Apply theme to tables */
+.table th {
+  background-color: var(--table-header-bg);
+}
+
+.table th,
+.table td {
+  border-color: var(--table-border);
+}
+
+.table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}

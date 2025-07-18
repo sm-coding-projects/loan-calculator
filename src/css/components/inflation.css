@@ -1,0 +1,58 @@
+/**
+ * Inflation adjustment component styles
+ * Implements requirement 5.6
+ */
+
+.inflation-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.inflation-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.inflation-summary {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: var(--bg-primary);
+  border-radius: 0.25rem;
+  border-left: 4px solid var(--color-accent);
+}
+
+.inflation-summary .summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.inflation-summary .summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.inflation-summary .label {
+  font-weight: 500;
+}
+
+.inflation-summary .value {
+  font-weight: 600;
+}
+
+.inflation-summary .highlight .value {
+  color: var(--color-success);
+}
+
+/* Dark theme adjustments */
+.dark-theme .inflation-section {
+  background-color: var(--bg-secondary-dark);
+}
+
+.dark-theme .inflation-summary {
+  background-color: var(--bg-primary-dark);
+}

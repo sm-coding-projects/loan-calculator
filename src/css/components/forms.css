@@ -1,0 +1,255 @@
+/* 
+ * Forms CSS
+ * Styles for calculator form elements
+ * Enhanced for responsive design
+ */
+
+/* Form container */
+.form-container {
+  margin-bottom: 20px;
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px var(--card-shadow);
+}
+
+/* Form layout */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+.form-col {
+  flex: 1 0 0%;
+  padding: 0 10px;
+  min-width: 200px;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Form labels */
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Form inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: var(--input-background);
+  color: var(--input-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 0.2rem var(--input-focus-shadow);
+  outline: none;
+}
+
+/* Form validation */
+.form-input.is-invalid {
+  border-color: var(--danger-color);
+}
+
+.invalid-feedback {
+  color: var(--danger-color);
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Form sliders */
+.form-slider-container {
+  padding: 10px 0;
+}
+
+.form-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--input-border);
+  outline: none;
+}
+
+.form-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-button-bg);
+  cursor: pointer;
+}
+
+.form-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-button-bg);
+  cursor: pointer;
+  border: none;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.slider-min, .slider-max {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.slider-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Form selects */
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: var(--input-background);
+  color: var(--input-text);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.form-select:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 0.2rem var(--input-focus-shadow);
+  outline: none;
+}
+
+/* Form buttons */
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-button {
+  padding: 10px 15px;
+  background-color: var(--primary-button-bg);
+  color: var(--primary-button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.form-button:hover {
+  background-color: var(--primary-button-hover);
+}
+
+.form-button:disabled {
+  background-color: var(--secondary-button-bg);
+  cursor: not-allowed;
+}
+
+.form-button.secondary {
+  background-color: var(--secondary-button-bg);
+}
+
+.form-button.secondary:hover {
+  background-color: var(--secondary-button-hover);
+}
+
+/* Responsive adjustments */
+@media (min-width: 992px) {
+  .form-container {
+    padding: 25px;
+  }
+  
+  .form-row {
+    margin: 0 -15px;
+  }
+  
+  .form-col {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .form-container {
+    padding: 15px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-col {
+    width: 100%;
+    padding: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-label {
+    font-size: 14px;
+  }
+  
+  .form-input, 
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .form-button {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  .form-input,
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .form-slider::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .form-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .form-button {
+    padding: 12px 15px;
+  }
+}

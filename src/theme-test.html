@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Switching Test</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: var(--card-background);
+      border: 1px solid var(--card-border);
+    }
+    
+    .test-title {
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+    
+    .test-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .test-item {
+      flex: 1 0 200px;
+      padding: 15px;
+      background-color: var(--background-color);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+    }
+    
+    .contrast-test {
+      margin-top: 20px;
+    }
+    
+    .contrast-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .contrast-label {
+      width: 150px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    
+    .contrast-sample {
+      flex: 1;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    
+    .theme-toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to content link for keyboard users -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <div class="container">
+    <div class="theme-toggle-container">
+      <div class="theme-toggle" role="group" aria-labelledby="theme-toggle-label">
+        <span id="theme-toggle-label" class="sr-only">Theme Selection</span>
+        <span id="light-theme-label">Light</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="theme-toggle-checkbox" aria-labelledby="theme-toggle-label" aria-describedby="light-theme-label dark-theme-label">
+          <span class="toggle-slider"></span>
+        </label>
+        <span id="dark-theme-label">Dark</span>
+      </div>
+    </div>
+    
+    <header role="banner">
+      <h1>Theme Switching Test</h1>
+    </header>
+    
+    <main id="main-content" role="main">
+    
+    <div class="test-section">
+      <h2 class="test-title">Typography</h2>
+      <div class="test-container">
+        <div class="test-item">
+          <h1>Heading 1</h1>
+          <h2>Heading 2</h2>
+          <h3>Heading 3</h3>
+          <h4>Heading 4</h4>
+          <p>Regular paragraph text</p>
+          <p><small>Small text</small></p>
+          <p><a href="#">Link text</a></p>
+        </div>
+        <div class="test-item">
+          <p><strong>Bold text</strong></p>
+          <p><em>Italic text</em></p>
+          <p><code>Code text</code></p>
+          <p class="text-muted" style="color: var(--text-muted);">Muted text</p>
+          <p><mark>Highlighted text</mark></p>
+          <blockquote>Blockquote text</blockquote>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2 class="test-title">Form Elements</h2>
+      <div class="test-container">
+        <div class="test-item">
+          <div class="form-group">
+            <label class="form-label" for="text-input">Text Input</label>
+            <input type="text" id="text-input" class="form-input" placeholder="Enter text" aria-describedby="text-input-help">
+            <div id="text-input-help" class="sr-only">Enter your text here</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="select-input">Select</label>
+            <select id="select-input" class="form-select" aria-describedby="select-help">
+              <option value="option1">Option 1</option>
+              <option value="option2">Option 2</option>
+              <option value="option3">Option 3</option>
+            </select>
+            <div id="select-help" class="sr-only">Select one of the available options</div>
+          </div>
+        </div>
+        <div class="test-item">
+          <div class="form-group">
+            <label class="form-label" for="range-slider">Range Slider</label>
+            <div class="form-slider-container">
+              <input type="range" id="range-slider" class="form-slider" min="0" max="100" value="50" 
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-describedby="slider-help">
+              <div class="slider-labels">
+                <span class="slider-min">0</span>
+                <span class="slider-value" aria-live="polite">50</span>
+                <span class="slider-max">100</span>
+              </div>
+              <div id="slider-help" class="sr-only">Adjust the slider value between 0 and 100</div>
+            </div>
+          </div>
+          <div class="form-buttons" role="group" aria-label="Form actions">
+            <button class="form-button" type="button">Primary Button</button>
+            <button class="form-button secondary" type="button">Secondary Button</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2 class="test-title">Components</h2>
+      <div class="test-container">
+        <div class="test-item">
+          <div class="summary-item" role="region" aria-labelledby="monthly-payment-label">
+            <div id="monthly-payment-label" class="summary-label">Monthly Payment</div>
+            <div class="summary-value highlight" aria-live="polite">$1,250.00</div>
+          </div>
+          <div class="summary-item" style="margin-top: 15px;" role="region" aria-labelledby="interest-rate-label">
+            <div id="interest-rate-label" class="summary-label">Interest Rate</div>
+            <div class="summary-value" aria-live="polite">4.5%</div>
+          </div>
+        </div>
+        <div class="test-item">
+          <div class="breakdown-bar" role="img" aria-label="Payment breakdown: 65% principal and 35% interest">
+            <div class="breakdown-principal" style="width: 65%;">
+              <span class="breakdown-label">Principal (65%)</span>
+            </div>
+            <div class="breakdown-interest" style="width: 35%;">
+              <span class="breakdown-label">Interest (35%)</span>
+            </div>
+          </div>
+          <div class="breakdown-legend" style="margin-top: 15px;" role="list" aria-label="Chart legend">
+            <div class="legend-item" role="listitem">
+              <div class="legend-color principal-color" aria-hidden="true"></div>
+              <span class="legend-label">Principal</span>
+            </div>
+            <div class="legend-item" role="listitem">
+              <div class="legend-color interest-color" aria-hidden="true"></div>
+              <span class="legend-label">Interest</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2 class="test-title">Table</h2>
+      <div class="table-container">
+        <table class="table" aria-label="Amortization Schedule">
+          <caption class="sr-only">Monthly payment schedule showing principal and interest breakdown</caption>
+          <thead>
+            <tr>
+              <th class="col-number" scope="col">#</th>
+              <th class="col-date" scope="col">Date</th>
+              <th class="col-amount" scope="col">Payment</th>
+              <th class="col-principal" scope="col">Principal</th>
+              <th class="col-interest" scope="col">Interest</th>
+              <th class="col-balance" scope="col">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr tabindex="0">
+              <td class="col-number">1</td>
+              <td class="col-date">Jan 2023</td>
+              <td class="col-amount">$1,250.00</td>
+              <td class="col-principal">$750.00</td>
+              <td class="col-interest">$500.00</td>
+              <td class="col-balance">$299,250.00</td>
+            </tr>
+            <tr tabindex="0">
+              <td class="col-number">2</td>
+              <td class="col-date">Feb 2023</td>
+              <td class="col-amount">$1,250.00</td>
+              <td class="col-principal">$753.13</td>
+              <td class="col-interest">$496.88</td>
+              <td class="col-balance">$298,496.88</td>
+            </tr>
+            <tr class="highlight-milestone" tabindex="0" aria-label="Milestone payment">
+              <td class="col-number">3</td>
+              <td class="col-date">Mar 2023</td>
+              <td class="col-amount">$1,250.00</td>
+              <td class="col-principal">$756.27</td>
+              <td class="col-interest">$493.73</td>
+              <td class="col-balance">$297,740.61</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <h2 class="test-title">Contrast Tests</h2>
+      <div class="contrast-test" role="region" aria-labelledby="contrast-test-title">
+        <h3 id="contrast-test-title" class="sr-only">Color Contrast Samples</h3>
+        <div class="contrast-row">
+          <div class="contrast-label" id="text-bg-label">Text on Background</div>
+          <div class="contrast-sample" style="background-color: var(--background-color); color: var(--text-color);" aria-labelledby="text-bg-label">
+            This is regular text on the background color.
+          </div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-label" id="muted-text-label">Muted Text</div>
+          <div class="contrast-sample" style="background-color: var(--background-color); color: var(--text-muted);" aria-labelledby="muted-text-label">
+            This is muted text on the background color.
+          </div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-label" id="primary-btn-label">Primary Button</div>
+          <div class="contrast-sample" style="background-color: var(--primary-button-bg); color: var(--primary-button-text);" aria-labelledby="primary-btn-label">
+            This is text on the primary button color.
+          </div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-label" id="secondary-btn-label">Secondary Button</div>
+          <div class="contrast-sample" style="background-color: var(--secondary-button-bg); color: var(--secondary-button-text);" aria-labelledby="secondary-btn-label">
+            This is text on the secondary button color.
+          </div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-label" id="input-field-label">Input Field</div>
+          <div class="contrast-sample" style="background-color: var(--input-background); color: var(--input-text); border: 1px solid var(--input-border);" aria-labelledby="input-field-label">
+            This is text in an input field.
+          </div>
+        </div>
+        <div class="contrast-row">
+          <div class="contrast-label" id="table-header-label">Table Header</div>
+          <div class="contrast-sample" style="background-color: var(--table-header-bg); color: var(--text-color);" aria-labelledby="table-header-label">
+            This is text in a table header.
+          </div>
+        </div>
+      </div>
+    </div>
+    </main>
+    
+    <footer role="contentinfo">
+      <div class="container">
+        <p>Theme Switching Test Page - Accessibility Enhanced</p>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Theme toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeToggle = document.getElementById('theme-toggle-checkbox');
+      
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        themeToggle.checked = true;
+      }
+      
+      // Add event listener for theme toggle
+      themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+          document.body.classList.add('dark-theme');
+          localStorage.setItem('theme', 'dark');
+          // Announce theme change to screen readers
+          announceThemeChange('Dark theme enabled');
+        } else {
+          document.body.classList.remove('dark-theme');
+          localStorage.setItem('theme', 'light');
+          // Announce theme change to screen readers
+          announceThemeChange('Light theme enabled');
+        }
+        
+        // Dispatch a custom event for other components to react to theme change
+        const themeChangeEvent = new CustomEvent('themechange', { 
+          detail: { theme: this.checked ? 'dark' : 'light' } 
+        });
+        document.dispatchEvent(themeChangeEvent);
+      });
+      
+      // Add keyboard support for range slider
+      const rangeSlider = document.getElementById('range-slider');
+      if (rangeSlider) {
+        rangeSlider.addEventListener('input', function() {
+          const sliderValue = document.querySelector('.slider-value');
+          if (sliderValue) {
+            sliderValue.textContent = this.value;
+            this.setAttribute('aria-valuenow', this.value);
+          }
+        });
+        
+        // Add keyboard arrow key support for finer control
+        rangeSlider.addEventListener('keydown', function(e) {
+          let newValue = parseInt(this.value);
+          
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            newValue = Math.min(parseInt(this.max), newValue + 1);
+            e.preventDefault();
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            newValue = Math.max(parseInt(this.min), newValue - 1);
+            e.preventDefault();
+          } else if (e.key === 'Home') {
+            newValue = parseInt(this.min);
+            e.preventDefault();
+          } else if (e.key === 'End') {
+            newValue = parseInt(this.max);
+            e.preventDefault();
+          } else {
+            return; // Exit for other keys
+          }
+          
+          this.value = newValue;
+          this.setAttribute('aria-valuenow', newValue);
+          
+          // Update the displayed value
+          const sliderValue = document.querySelector('.slider-value');
+          if (sliderValue) {
+            sliderValue.textContent = newValue;
+          }
+          
+          // Trigger input event for any listeners
+          this.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+      }
+      
+      // Make table rows keyboard navigable
+      const tableRows = document.querySelectorAll('.table tbody tr');
+      tableRows.forEach(row => {
+        row.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            // Simulate click on row for keyboard users
+            this.click();
+            e.preventDefault();
+          }
+        });
+      });
+    });
+    
+    // Function to announce changes to screen readers
+    function announceThemeChange(message) {
+      let announcer = document.getElementById('sr-announcer');
+      
+      if (!announcer) {
+        announcer = document.createElement('div');
+        announcer.id = 'sr-announcer';
+        announcer.setAttribute('aria-live', 'polite');
+        announcer.setAttribute('aria-atomic', 'true');
+        announcer.classList.add('sr-only');
+        document.body.appendChild(announcer);
+      }
+      
+      // Set the message
+      announcer.textContent = message;
+      
+      // Clear after announcement
+      setTimeout(() => {
+        announcer.textContent = '';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

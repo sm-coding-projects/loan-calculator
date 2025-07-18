@@ -1,0 +1,156 @@
+/* 
+ * Accessibility CSS
+ * Styles for improving accessibility features
+ * Implements requirements 6.1, 6.2, 6.5, 6.6
+ */
+
+/* Focus styles for keyboard navigation */
+:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+}
+
+/* Ensure focus is visible in both themes */
+.dark-theme :focus {
+  outline-color: var(--primary-button-bg);
+}
+
+/* Skip to content link - hidden until focused */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-button-bg);
+  color: var(--primary-button-text);
+  padding: 8px 15px;
+  z-index: 1001;
+  transition: top 0.3s;
+  border-radius: 0 0 4px 0;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Improved focus indicators for interactive elements */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[role="button"]:focus,
+[tabindex]:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--primary-button-bg-rgb), 0.25);
+}
+
+/* Focus visible only when using keyboard */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.js-focus-visible .focus-visible {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--primary-button-bg-rgb), 0.25);
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  button, 
+  .form-button,
+  .toggle-slider,
+  .form-slider::-webkit-slider-thumb,
+  .form-slider::-moz-range-thumb {
+    forced-color-adjust: none;
+  }
+  
+  /* Ensure links are underlined in high contrast mode */
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Text scaling support */
+html {
+  /* Allow text scaling without breaking layouts */
+  font-size: 100%;
+}
+
+/* Support for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Improved contrast for form elements */
+.form-input::placeholder,
+.form-select::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+/* Ensure sufficient contrast for all text */
+.text-muted {
+  color: var(--text-muted);
+  /* Ensure this meets WCAG AA contrast requirements */
+}
+
+/* Improved focus for table rows */
+.table tbody tr:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: -2px;
+}
+
+/* Ensure toggle switches are accessible */
+.toggle-switch input:focus + .toggle-slider {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+}
+
+/* Ensure form sliders are accessible */
+.form-slider:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+}
+
+/* Support for larger text sizes */
+@media (max-width: 768px) and (min-width: 320px) {
+  body {
+    /* Slightly larger base font size for better readability on mobile */
+    font-size: 16px;
+  }
+  
+  /* Ensure buttons are large enough for touch targets */
+  button,
+  .form-button,
+  .pagination-item,
+  .toggle-switch {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+</content>
+</invoke>

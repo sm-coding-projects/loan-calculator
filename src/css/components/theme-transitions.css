@@ -1,0 +1,70 @@
+/**
+ * Theme Transitions
+ * Smooth transitions between light and dark themes
+ * Implements requirements 2.5, 6.5
+ */
+
+/* Apply transitions to common elements */
+body,
+.form-container,
+.results-display,
+.saved-calculations-manager,
+.calculation-card,
+.table-container,
+.form-input,
+.form-select,
+.form-button,
+.settings-dropdown,
+.breakdown-section,
+.summary-item,
+.chart-container,
+.comparison-view {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Apply transitions to form elements */
+.form-input,
+.form-select,
+.form-slider,
+.toggle-slider {
+  transition: background-color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Apply transitions to text elements */
+h1, h2, h3, h4, h5, h6,
+p, span, label, a,
+.summary-label,
+.summary-value,
+.detail-label,
+.detail-value,
+.breakdown-title,
+.chart-title {
+  transition: color 0.3s ease;
+}
+
+/* Apply transitions to table elements */
+.table th,
+.table td,
+.table tr {
+  transition: background-color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Apply transitions to chart elements */
+.breakdown-principal,
+.breakdown-interest,
+.legend-color {
+  transition: background-color 0.3s ease;
+}
+
+/* Disable transitions for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

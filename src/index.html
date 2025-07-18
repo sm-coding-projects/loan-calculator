@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Loan Calculator</title>
+  <meta name="description" content="Advanced loan calculator with amortization schedule, charts, and comparison tools">
+</head>
+<body>
+  <header>
+    <h1>Loan Calculator</h1>
+    <div class="header-controls">
+      <div id="glossary-container"></div>
+      <div id="settings-container"></div>
+    </div>
+  </header>
+  
+  <main>
+    <div class="container">
+      <div id="guidance-container" class="guidance-container"></div>
+      <div class="row">
+        <div class="col col-sm-12 col-md-12 col-lg-6" id="calculator-form-container">
+          <!-- Calculator form will be rendered here -->
+        </div>
+        <div class="col col-sm-12 col-md-12 col-lg-6" id="results-display-container">
+          <!-- Results will be rendered here -->
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col col-sm-12" id="amortization-table-container">
+          <!-- Amortization table will be rendered here -->
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col col-sm-12" id="charts-container">
+          <!-- Charts will be rendered here -->
+          <div class="charts-wrapper">
+            <div class="chart-item" id="principal-interest-chart"></div>
+            <div class="chart-item" id="payment-breakdown-chart"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col col-sm-12" id="saved-calculations-container">
+          <!-- Saved calculations will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; <span id="current-year"></span> Loan Calculator</p>
+  </footer>
+</body>
+</html>

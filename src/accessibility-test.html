@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Test Page</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: var(--card-background);
+      border: 1px solid var(--card-border);
+    }
+    
+    .test-title {
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+    
+    .test-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .test-item {
+      flex: 1 0 200px;
+      padding: 15px;
+      background-color: var(--background-color);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+    }
+    
+    .test-instructions {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: var(--background-color);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+    }
+    
+    .test-instructions h3 {
+      margin-bottom: 10px;
+    }
+    
+    .test-instructions ul {
+      margin-left: 20px;
+    }
+    
+    .test-instructions li {
+      margin-bottom: 5px;
+    }
+    
+    .keyboard-test-area {
+      padding: 15px;
+      border: 2px dashed var(--card-border);
+      margin-top: 20px;
+    }
+    
+    .keyboard-test-area:focus-within {
+      border-color: var(--primary-button-bg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to content link for keyboard users -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <div class="container">
+    <header role="banner">
+      <h1>Accessibility Test Page</h1>
+      <div class="theme-toggle" role="group" aria-labelledby="theme-toggle-label">
+        <span id="theme-toggle-label" class="sr-only">Theme Selection</span>
+        <span id="light-theme-label">Light</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="theme-toggle-checkbox" role="switch" aria-labelledby="theme-toggle-label" aria-describedby="light-theme-label dark-theme-label">
+          <span class="toggle-slider"></span>
+        </label>
+        <span id="dark-theme-label">Dark</span>
+      </div>
+    </header>
+    
+    <main id="main-content" role="main">
+      <div class="test-section">
+        <h2 class="test-title">Accessibility Testing Instructions</h2>
+        <div class="test-instructions">
+          <h3>Screen Reader Testing</h3>
+          <p>Use the following screen readers to test this page:</p>
+          <ul>
+            <li>VoiceOver (macOS): Turn on with <kbd>Command</kbd> + <kbd>F5</kbd></li>
+            <li>NVDA (Windows): Download from <a href="https://www.nvaccess.org/" target="_blank">nvaccess.org</a></li>
+            <li>JAWS (Windows): Commercial screen reader</li>
+          </ul>
+          
+          <h3>Keyboard Navigation Testing</h3>
+          <p>Test keyboard navigation using the following keys:</p>
+          <ul>
+            <li><kbd>Tab</kbd>: Move forward through interactive elements</li>
+            <li><kbd>Shift</kbd> + <kbd>Tab</kbd>: Move backward through interactive elements</li>
+            <li><kbd>Enter</kbd> or <kbd>Space</kbd>: Activate buttons, links, and other controls</li>
+            <li><kbd>Arrow keys</kbd>: Navigate within components like sliders and tab panels</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2 class="test-title">Form Controls</h2>
+        <div class="test-container">
+          <div class="test-item">
+            <div class="form-group">
+              <label class="form-label" for="loan-amount">Loan Amount</label>
+              <input type="text" id="loan-amount" class="form-input" placeholder="Enter loan amount" aria-describedby="loan-amount-help">
+              <div id="loan-amount-help" class="sr-only">Enter the total amount of the loan</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="loan-type">Loan Type</label>
+              <select id="loan-type" class="form-select" aria-describedby="loan-type-help">
+                <option value="mortgage">Mortgage</option>
+                <option value="auto">Auto Loan</option>
+                <option value="personal">Personal Loan</option>
+                <option value="student">Student Loan</option>
+              </select>
+              <div id="loan-type-help" class="sr-only">Select the type of loan you're calculating</div>
+            </div>
+          </div>
+          <div class="test-item">
+            <div class="form-group">
+              <label class="form-label" for="interest-rate">Interest Rate (%)</label>
+              <div class="form-slider-container">
+                <input type="range" id="interest-rate" class="form-slider" min="0" max="20" value="5" step="0.25"
+                       aria-valuemin="0" aria-valuemax="20" aria-valuenow="5" aria-describedby="interest-rate-help">
+                <div class="slider-labels">
+                  <span class="slider-min">0%</span>
+                  <span class="slider-value" aria-live="polite">5%</span>
+                  <span class="slider-max">20%</span>
+                </div>
+                <div id="interest-rate-help" class="sr-only">Adjust the interest rate between 0% and 20%</div>
+              </div>
+            </div>
+            <div class="form-buttons" role="group" aria-label="Form actions">
+              <button class="form-button" type="button">Calculate</button>
+              <button class="form-button secondary" type="button">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2 class="test-title">Interactive Components</h2>
+        <div class="test-container">
+          <div class="test-item">
+            <div role="tablist" aria-label="Loan Information Tabs">
+              <button role="tab" id="tab-summary" aria-selected="true" aria-controls="panel-summary" class="form-button">Summary</button>
+              <button role="tab" id="tab-details" aria-selected="false" aria-controls="panel-details" class="form-button secondary">Details</button>
+              <button role="tab" id="tab-comparison" aria-selected="false" aria-controls="panel-comparison" class="form-button secondary">Comparison</button>
+            </div>
+            <div role="tabpanel" id="panel-summary" aria-labelledby="tab-summary">
+              <h3>Loan Summary</h3>
+              <p>This is the summary tab content.</p>
+            </div>
+            <div role="tabpanel" id="panel-details" aria-labelledby="tab-details" hidden>
+              <h3>Loan Details</h3>
+              <p>This is the details tab content.</p>
+            </div>
+            <div role="tabpanel" id="panel-comparison" aria-labelledby="tab-comparison" hidden>
+              <h3>Loan Comparison</h3>
+              <p>This is the comparison tab content.</p>
+            </div>
+          </div>
+          <div class="test-item">
+            <h3 id="saved-calculations-heading">Saved Calculations</h3>
+            <ul role="list" aria-labelledby="saved-calculations-heading">
+              <li role="listitem" tabindex="0" class="calculation-item">
+                <div>Home Loan - 30 years</div>
+                <div>$300,000 at 4.5%</div>
+              </li>
+              <li role="listitem" tabindex="0" class="calculation-item">
+                <div>Car Loan - 5 years</div>
+                <div>$25,000 at 3.2%</div>
+              </li>
+              <li role="listitem" tabindex="0" class="calculation-item">
+                <div>Personal Loan - 3 years</div>
+                <div>$10,000 at 6.8%</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2 class="test-title">Data Table</h2>
+        <div class="table-container">
+          <table class="table" aria-label="Amortization Schedule">
+            <caption>Monthly payment schedule showing principal and interest breakdown</caption>
+            <thead>
+              <tr>
+                <th class="col-number" scope="col">#</th>
+                <th class="col-date" scope="col">Date</th>
+                <th class="col-amount" scope="col">Payment</th>
+                <th class="col-principal" scope="col">Principal</th>
+                <th class="col-interest" scope="col">Interest</th>
+                <th class="col-balance" scope="col">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr tabindex="0">
+                <td class="col-number">1</td>
+                <td class="col-date">Jan 2023</td>
+                <td class="col-amount">$1,250.00</td>
+                <td class="col-principal">$750.00</td>
+                <td class="col-interest">$500.00</td>
+                <td class="col-balance">$299,250.00</td>
+              </tr>
+              <tr tabindex="0">
+                <td class="col-number">2</td>
+                <td class="col-date">Feb 2023</td>
+                <td class="col-amount">$1,250.00</td>
+                <td class="col-principal">$753.13</td>
+                <td class="col-interest">$496.88</td>
+                <td class="col-balance">$298,496.88</td>
+              </tr>
+              <tr class="highlight-milestone" tabindex="0" aria-label="Milestone payment">
+                <td class="col-number">3</td>
+                <td class="col-date">Mar 2023</td>
+                <td class="col-amount">$1,250.00</td>
+                <td class="col-principal">$756.27</td>
+                <td class="col-interest">$493.73</td>
+                <td class="col-balance">$297,740.61</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2 class="test-title">Keyboard Navigation Test</h2>
+        <div class="keyboard-test-area">
+          <p>Use the keyboard to navigate through these elements:</p>
+          <div class="form-buttons" role="group" aria-label="Test buttons">
+            <button class="form-button" type="button">Button 1</button>
+            <button class="form-button" type="button">Button 2</button>
+            <button class="form-button" type="button">Button 3</button>
+          </div>
+          <div style="margin-top: 15px;">
+            <label class="form-label">
+              <input type="checkbox" id="test-checkbox"> Enable feature
+            </label>
+          </div>
+          <div style="margin-top: 15px;">
+            <fieldset>
+              <legend>Select an option:</legend>
+              <label>
+                <input type="radio" name="test-radio" value="option1"> Option 1
+              </label>
+              <label>
+                <input type="radio" name="test-radio" value="option2"> Option 2
+              </label>
+              <label>
+                <input type="radio" name="test-radio" value="option3"> Option 3
+              </label>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      
+      <div class="test-section">
+        <h2 class="test-title">Screen Reader Announcements</h2>
+        <div class="test-container">
+          <div class="test-item">
+            <button id="announce-button" class="form-button" type="button">Trigger Announcement</button>
+            <div id="announcement-result" aria-live="polite" class="form-group" style="margin-top: 15px;">
+              Announcements will appear here
+            </div>
+          </div>
+          <div class="test-item">
+            <h3>Live Region Test</h3>
+            <div class="form-group">
+              <label class="form-label" for="live-input">Type something:</label>
+              <input type="text" id="live-input" class="form-input">
+            </div>
+            <div aria-live="polite" id="live-region" style="margin-top: 10px; padding: 10px; border: 1px solid var(--card-border);">
+              Live region content will update as you type
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer role="contentinfo">
+      <div class="container">
+        <p>Accessibility Test Page - WCAG 2.1 AA Compliant</p>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Screen reader announcer -->
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  
+  <script>
+    // Theme toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeToggle = document.getElementById('theme-toggle-checkbox');
+      
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        themeToggle.checked = true;
+      }
+      
+      // Add event listener for theme toggle
+      themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+          document.body.classList.add('dark-theme');
+          localStorage.setItem('theme', 'dark');
+          announceThemeChange('Dark theme enabled');
+        } else {
+          document.body.classList.remove('dark-theme');
+          localStorage.setItem('theme', 'light');
+          announceThemeChange('Light theme enabled');
+        }
+      });
+      
+      // Add keyboard support for range slider
+      const rangeSlider = document.getElementById('interest-rate');
+      if (rangeSlider) {
+        rangeSlider.addEventListener('input', function() {
+          const sliderValue = document.querySelector('.slider-value');
+          if (sliderValue) {
+            sliderValue.textContent = this.value + '%';
+            this.setAttribute('aria-valuenow', this.value);
+          }
+        });
+        
+        // Add keyboard arrow key support for finer control
+        rangeSlider.addEventListener('keydown', function(e) {
+          let newValue = parseFloat(this.value);
+          let step = parseFloat(this.getAttribute('step')) || 1;
+          
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            newValue = Math.min(parseFloat(this.max), newValue + step);
+            e.preventDefault();
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            newValue = Math.max(parseFloat(this.min), newValue - step);
+            e.preventDefault();
+          } else if (e.key === 'Home') {
+            newValue = parseFloat(this.min);
+            e.preventDefault();
+          } else if (e.key === 'End') {
+            newValue = parseFloat(this.max);
+            e.preventDefault();
+          } else if (e.key === 'PageUp') {
+            newValue = Math.min(parseFloat(this.max), newValue + (step * 10));
+            e.preventDefault();
+          } else if (e.key === 'PageDown') {
+            newValue = Math.max(parseFloat(this.min), newValue - (step * 10));
+            e.preventDefault();
+          } else {
+            return; // Exit for other keys
+          }
+          
+          this.value = newValue;
+          this.setAttribute('aria-valuenow', newValue);
+          
+          // Update the displayed value
+          const sliderValue = document.querySelector('.slider-value');
+          if (sliderValue) {
+            sliderValue.textContent = newValue + '%';
+          }
+          
+          // Trigger input event for any listeners
+          this.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+      }
+      
+      // Tab panel functionality
+      const tabs = document.querySelectorAll('[role="tab"]');
+      const tabPanels = document.querySelectorAll('[role="tabpanel"]');
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Deselect all tabs
+          tabs.forEach(t => {
+            t.setAttribute('aria-selected', 'false');
+            t.classList.add('secondary');
+          });
+          
+          // Select clicked tab
+          this.setAttribute('aria-selected', 'true');
+          this.classList.remove('secondary');
+          
+          // Hide all panels
+          tabPanels.forEach(panel => {
+            panel.hidden = true;
+          });
+          
+          // Show the selected panel
+          const panelId = this.getAttribute('aria-controls');
+          const panel = document.getElementById(panelId);
+          if (panel) {
+            panel.hidden = false;
+          }
+        });
+        
+        // Add keyboard support
+        tab.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            const tabList = Array.from(tabs);
+            const currentIndex = tabList.indexOf(this);
+            let newIndex;
+            
+            if (e.key === 'ArrowRight') {
+              newIndex = (currentIndex + 1) % tabList.length;
+            } else {
+              newIndex = (currentIndex - 1 + tabList.length) % tabList.length;
+            }
+            
+            tabList[newIndex].focus();
+            tabList[newIndex].click();
+            e.preventDefault();
+          }
+        });
+      });
+      
+      // Make table rows keyboard navigable
+      const tableRows = document.querySelectorAll('.table tbody tr');
+      tableRows.forEach(row => {
+        row.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            // Simulate click on row for keyboard users
+            this.click();
+            e.preventDefault();
+          }
+        });
+      });
+      
+      // Announcement button
+      const announceButton = document.getElementById('announce-button');
+      if (announceButton) {
+        announceButton.addEventListener('click', function() {
+          const message = 'This is a screen reader announcement at ' + new Date().toLocaleTimeString();
+          announceThemeChange(message);
+          
+          const resultElement = document.getElementById('announcement-result');
+          if (resultElement) {
+            resultElement.textContent = message;
+          }
+        });
+      }
+      
+      // Live region test
+      const liveInput = document.getElementById('live-input');
+      if (liveInput) {
+        liveInput.addEventListener('input', function() {
+          const liveRegion = document.getElementById('live-region');
+          if (liveRegion) {
+            if (this.value) {
+              liveRegion.textContent = 'You typed: ' + this.value;
+            } else {
+              liveRegion.textContent = 'Live region content will update as you type';
+            }
+          }
+        });
+      }
+      
+      // Add keyboard support for list items
+      const listItems = document.querySelectorAll('[role="listitem"][tabindex="0"]');
+      listItems.forEach(item => {
+        item.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            // Simulate click for keyboard users
+            this.click();
+            e.preventDefault();
+          }
+        });
+        
+        item.addEventListener('click', function() {
+          announceThemeChange('Selected: ' + this.textContent.trim());
+        });
+      });
+      
+      // Setup skip to content link
+      const skipLink = document.querySelector('.skip-to-content');
+      if (skipLink) {
+        skipLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.setAttribute('tabindex', '-1');
+            target.focus();
+            
+            // Remove tabindex after focus
+            setTimeout(() => {
+              target.removeAttribute('tabindex');
+            }, 1000);
+          }
+        });
+      }
+    });
+    
+    // Function to announce changes to screen readers
+    function announceThemeChange(message) {
+      let announcer = document.getElementById('sr-announcer');
+      
+      if (!announcer) {
+        announcer = document.createElement('div');
+        announcer.id = 'sr-announcer';
+        announcer.setAttribute('aria-live', 'polite');
+        announcer.setAttribute('aria-atomic', 'true');
+        announcer.classList.add('sr-only');
+        document.body.appendChild(announcer);
+      }
+      
+      // Set the message
+      announcer.textContent = message;
+      
+      // Clear after announcement
+      setTimeout(() => {
+        announcer.textContent = '';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
+</content>

@@ -1,0 +1,347 @@
+/* 
+ * Responsive CSS
+ * Styles for responsive layouts across different device sizes
+ * Implements requirement 2.4
+ */
+
+/* Base responsive grid system */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col {
+  flex: 1;
+  padding: 0 15px;
+  margin-bottom: 20px;
+}
+
+/* Media Queries */
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .col-lg-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-lg-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-lg-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-lg-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-lg-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-lg-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-lg-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-lg-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-lg-12 { flex: 0 0 100%; max-width: 100%; }
+  
+  /* Desktop-specific styles */
+  .desktop-only { display: block; }
+  .tablet-only, .mobile-only { display: none; }
+  
+  /* Two-column layout with form on the left and results on the right */
+  #calculator-form-container {
+    flex: 0 0 40%;
+    max-width: 40%;
+  }
+  
+  #results-display-container {
+    flex: 0 0 60%;
+    max-width: 60%;
+  }
+  
+  /* Charts layout */
+  #charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  #charts-container .chart-container {
+    flex: 1 0 calc(50% - 20px);
+    min-width: 400px;
+  }
+  
+  /* Saved calculations grid */
+  .saved-calculations-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Medium devices (tablets, 768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .col-md-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-md-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-md-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-md-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-md-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-md-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-md-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-md-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-md-12 { flex: 0 0 100%; max-width: 100%; }
+  
+  /* Tablet-specific styles */
+  .tablet-only { display: block; }
+  .desktop-only, .mobile-only { display: none; }
+  
+  /* Stacked layout with form above results */
+  #calculator-form-container,
+  #results-display-container {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  /* Charts layout */
+  #charts-container .chart-container {
+    margin-bottom: 20px;
+  }
+  
+  /* Saved calculations grid */
+  .saved-calculations-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Adjust form layout for better tablet experience */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+  }
+  
+  .form-col {
+    flex: 1 0 50%;
+    padding: 0 10px;
+  }
+}
+
+/* Small devices (mobile phones, less than 768px) */
+@media (max-width: 767px) {
+  .col-sm-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
+  .col-sm-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
+  .col-sm-3 { flex: 0 0 25%; max-width: 25%; }
+  .col-sm-4 { flex: 0 0 33.333333%; max-width: 33.333333%; }
+  .col-sm-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+  .col-sm-6 { flex: 0 0 50%; max-width: 50%; }
+  .col-sm-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+  .col-sm-8 { flex: 0 0 66.666667%; max-width: 66.666667%; }
+  .col-sm-9 { flex: 0 0 75%; max-width: 75%; }
+  .col-sm-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
+  .col-sm-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
+  .col-sm-12 { flex: 0 0 100%; max-width: 100%; }
+  
+  /* Mobile-specific styles */
+  .mobile-only { display: block; }
+  .desktop-only, .tablet-only { display: none; }
+  
+  /* Single column layout */
+  .row {
+    flex-direction: column;
+  }
+  
+  .col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  /* Header adjustments */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+  
+  header h1 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+  
+  #settings-container {
+    align-self: flex-end;
+  }
+  
+  /* Form adjustments */
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-label {
+    font-size: 0.9rem;
+  }
+  
+  .form-input, 
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 10px;
+  }
+  
+  /* Button adjustments */
+  .form-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Results display adjustments */
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .results-actions {
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .results-actions button {
+    flex: 1;
+  }
+  
+  /* Amortization table adjustments */
+  .table-container {
+    margin-left: -15px;
+    margin-right: -15px;
+    width: calc(100% + 30px);
+    border-radius: 0;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+  }
+  
+  .filter-group {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  /* Charts adjustments */
+  .chart-container {
+    height: 250px;
+  }
+  
+  /* Saved calculations grid */
+  .saved-calculations-list {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Comparison view adjustments */
+  .comparison-table {
+    font-size: 0.8rem;
+  }
+  
+  /* Settings panel adjustments */
+  .settings-dropdown {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 0;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+}
+
+/* Extra small devices (small phones, less than 576px) */
+@media (max-width: 575px) {
+  /* Further refinements for very small screens */
+  
+  header h1 {
+    font-size: 1.2rem;
+  }
+  
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-container {
+    height: 200px;
+  }
+  
+  .pagination-item {
+    padding: 4px 8px;
+    min-width: 28px;
+    font-size: 0.8rem;
+  }
+  
+  /* Simplify some UI elements */
+  .breakdown-bar {
+    height: 30px;
+  }
+  
+  .breakdown-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white;
+    color: black;
+    font-size: 12pt;
+  }
+  
+  header, 
+  footer, 
+  #settings-container,
+  .no-print {
+    display: none !important;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .row {
+    display: block;
+  }
+  
+  .col {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  /* Ensure tables print well */
+  .table-container {
+    overflow: visible;
+    page-break-inside: avoid;
+  }
+  
+  /* Ensure charts print well */
+  .chart-container {
+    page-break-inside: avoid;
+  }
+  
+  /* Add page breaks where appropriate */
+  #amortization-table-container {
+    page-break-before: always;
+  }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
