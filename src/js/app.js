@@ -162,9 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // If we already have calculation results, render them
       if (calculatorForm && calculatorForm.getFormData()) {
         const loan = calculatorForm.getFormData();
-        const { AmortizationSchedule } = require('./models/amortization.model.js');
-        const amortizationSchedule = new AmortizationSchedule(loan);
-        amortizationTable.render(amortizationSchedule);
+        // Use dynamic import instead of require to avoid bundling issues
+        import('./models/amortization.model.js').then(({ AmortizationSchedule }) => {
+          const amortizationSchedule = new AmortizationSchedule(loan);
+          amortizationTable.render(amortizationSchedule);
+        }).catch(error => {
+          console.error('Failed to load amortization model:', error);
+        });
       }
     }).catch(error => {
       console.error('Failed to load amortization table:', error);
@@ -188,22 +192,26 @@ document.addEventListener('DOMContentLoaded', () => {
       // If we already have calculation results, render them
       if (calculatorForm && calculatorForm.getFormData()) {
         const loan = calculatorForm.getFormData();
-        const { AmortizationSchedule } = require('./models/amortization.model.js');
-        const amortizationSchedule = new AmortizationSchedule(loan);
+        // Use dynamic import instead of require
+        import('./models/amortization.model.js').then(({ AmortizationSchedule }) => {
+          const amortizationSchedule = new AmortizationSchedule(loan);
+          
+          // Render standard charts
+          charts.renderPrincipalVsInterestChart({ loan, amortizationSchedule });
+          charts.renderPaymentBreakdownPieChart({ loan, amortizationSchedule });
         
-        // Render standard charts
-        charts.renderPrincipalVsInterestChart({ loan, amortizationSchedule });
-        charts.renderPaymentBreakdownPieChart({ loan, amortizationSchedule });
-        
-        // Render inflation impact chart if inflation rate is provided
-        if (loan.inflationRate !== undefined && loan.inflationRate > 0) {
-          loadCalculatorService().then(serviceModule => {
-            const CalculatorService = serviceModule.default;
-            const calculatorService = new CalculatorService();
-            const inflationAdjusted = calculatorService.calculateInflationAdjusted(amortizationSchedule, loan.inflationRate);
-            charts.renderInflationImpactChart({ loan, amortizationSchedule, inflationAdjusted });
-          });
-        }
+          // Render inflation impact chart if inflation rate is provided
+          if (loan.inflationRate !== undefined && loan.inflationRate > 0) {
+            loadCalculatorService().then(serviceModule => {
+              const CalculatorService = serviceModule.default;
+              const calculatorService = new CalculatorService();
+              const inflationAdjusted = calculatorService.calculateInflationAdjusted(amortizationSchedule, loan.inflationRate);
+              charts.renderInflationImpactChart({ loan, amortizationSchedule, inflationAdjusted });
+            });
+          }
+        }).catch(error => {
+          console.error('Failed to load amortization model:', error);
+        });
       }
     }).catch(error => {
       console.error('Failed to load charts:', error);

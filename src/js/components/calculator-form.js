@@ -574,6 +574,28 @@ class CalculatorForm {
   handleCalculate() {
     const formData = this.getFormData();
     
+    // Validate form data before calculation
+    if (!this.validate()) {
+      // Show error message to user
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'error-message';
+      errorContainer.textContent = 'Please correct the errors in the form before calculating.';
+      
+      // Insert at the top of the form
+      const form = this.container.querySelector('#loan-calculator-form');
+      if (form) {
+        form.insertBefore(errorContainer, form.firstChild);
+        
+        // Remove error message after 5 seconds
+        setTimeout(() => {
+          if (errorContainer.parentNode) {
+            errorContainer.parentNode.removeChild(errorContainer);
+          }
+        }, 5000);
+      }
+      return;
+    }
+    
     // Create loan object from form data
     try {
       const loan = Loan.fromJSON(formData);
@@ -589,7 +611,24 @@ class CalculatorForm {
       }
     } catch (error) {
       console.error('Error calculating loan:', error);
-      // Could display error message to user here
+      
+      // Display error message to user
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'error-message';
+      errorContainer.textContent = `Calculation error: ${error.message || 'Unknown error occurred'}`;
+      
+      // Insert at the top of the form
+      const form = this.container.querySelector('#loan-calculator-form');
+      if (form) {
+        form.insertBefore(errorContainer, form.firstChild);
+        
+        // Remove error message after 5 seconds
+        setTimeout(() => {
+          if (errorContainer.parentNode) {
+            errorContainer.parentNode.removeChild(errorContainer);
+          }
+        }, 5000);
+      }
     }
   }
   

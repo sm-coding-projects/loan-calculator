@@ -396,14 +396,16 @@ class Loan {
     // Create a loan with the specified additional payment
     const enhancedLoan = this.update({ additionalPayment });
     
-    // Calculate amortization schedules for both loans
-    const baselineSchedule = new AmortizationSchedule(baselineLoan);
-    const enhancedSchedule = new AmortizationSchedule(enhancedLoan);
-    
-    // Calculate time saved
-    const baselinePayments = baselineSchedule.payments.length;
-    const enhancedPayments = enhancedSchedule.payments.length;
-    const paymentsSaved = baselinePayments - enhancedPayments;
+    // Dynamically import AmortizationSchedule to avoid circular dependency
+    return import('./amortization.model.js').then(({ AmortizationSchedule }) => {
+      // Calculate amortization schedules for both loans
+      const baselineSchedule = new AmortizationSchedule(baselineLoan);
+      const enhancedSchedule = new AmortizationSchedule(enhancedLoan);
+      
+      // Calculate time saved
+      const baselinePayments = baselineSchedule.payments.length;
+      const enhancedPayments = enhancedSchedule.payments.length;
+      const paymentsSaved = baselinePayments - enhancedPayments;
     
     // Calculate interest saved
     const baselineInterest = baselineSchedule.totalInterest;
@@ -535,79 +537,82 @@ class Loan {
       throw new Error('New interest rate is required for refinance calculation');
     }
     
-    // Create amortization schedule for current loan to get current balance
-    const currentSchedule = new AmortizationSchedule(this);
-    const currentBalance = currentSchedule.payments.length > 0 ? 
-      currentSchedule.payments[0].balance : this.totalLoanAmount;
+    // Return a promise that resolves with the refinance calculation
+    return import('./amortization.model.js').then(({ AmortizationSchedule }) => {
+      // Create amortization schedule for current loan to get current balance
+      const currentSchedule = new AmortizationSchedule(this);
+      const currentBalance = currentSchedule.payments.length > 0 ? 
+        currentSchedule.payments[0].balance : this.totalLoanAmount;
     
-    // Set up new loan options with defaults
-    const refinanceOptions = {
-      principal: newLoanOptions.principal || currentBalance,
-      interestRate: newLoanOptions.interestRate,
-      term: newLoanOptions.term || this.term,
-      paymentFrequency: newLoanOptions.paymentFrequency || this.paymentFrequency,
-      additionalPayment: newLoanOptions.additionalPayment || 0,
-      startDate: new Date(),
-      name: 'Refinance Option'
-    };
-    
-    // Create new loan
-    const newLoan = new Loan(refinanceOptions);
-    const newSchedule = new AmortizationSchedule(newLoan);
-    
-    // Calculate remaining payments and interest on current loan
-    const remainingPayments = currentSchedule.payments.length;
-    const remainingInterest = currentSchedule.totalInterest;
-    
-    // Calculate new payments and interest
-    const newPayments = newSchedule.payments.length;
-    const newInterest = newSchedule.totalInterest;
-    
-    // Calculate monthly savings
-    const oldPayment = this.paymentAmount;
-    const newPayment = newLoan.paymentAmount;
-    const monthlySavings = oldPayment - newPayment;
-    
-    // Calculate total cost comparison
-    const closingCosts = newLoanOptions.closingCosts || 0;
-    const currentTotalCost = remainingInterest + currentBalance;
-    const newTotalCost = newInterest + refinanceOptions.principal + closingCosts;
-    const lifetimeSavings = currentTotalCost - newTotalCost;
-    
-    // Calculate break-even point in months
-    const breakEvenMonths = monthlySavings > 0 ? 
-      Math.ceil(closingCosts / monthlySavings) : Infinity;
-    
-    return {
-      currentLoan: {
-        payment: oldPayment,
-        remainingBalance: currentBalance,
-        remainingPayments,
-        remainingInterest,
-        totalCost: currentTotalCost
-      },
-      newLoan: {
-        payment: newPayment,
-        principal: refinanceOptions.principal,
-        term: refinanceOptions.term,
-        interestRate: refinanceOptions.interestRate,
-        totalPayments: newPayments,
-        totalInterest: newInterest,
-        totalCost: newTotalCost
-      },
-      comparison: {
-        monthlySavings,
-        lifetimeSavings,
-        closingCosts,
-        breakEvenMonths,
-        isWorthwhile: lifetimeSavings > 0 && breakEvenMonths < newPayments
-      },
-      refinanceLoan: newLoan
-    };
+      // Set up new loan options with defaults
+      const refinanceOptions = {
+        principal: newLoanOptions.principal || currentBalance,
+        interestRate: newLoanOptions.interestRate,
+        term: newLoanOptions.term || this.term,
+        paymentFrequency: newLoanOptions.paymentFrequency || this.paymentFrequency,
+        additionalPayment: newLoanOptions.additionalPayment || 0,
+        startDate: new Date(),
+        name: 'Refinance Option'
+      };
+      
+      // Create new loan
+      const newLoan = new Loan(refinanceOptions);
+      const newSchedule = new AmortizationSchedule(newLoan);
+      
+      // Calculate remaining payments and interest on current loan
+      const remainingPayments = currentSchedule.payments.length;
+      const remainingInterest = currentSchedule.totalInterest;
+      
+      // Calculate new payments and interest
+      const newPayments = newSchedule.payments.length;
+      const newInterest = newSchedule.totalInterest;
+      
+      // Calculate monthly savings
+      const oldPayment = this.paymentAmount;
+      const newPayment = newLoan.paymentAmount;
+      const monthlySavings = oldPayment - newPayment;
+      
+      // Calculate total cost comparison
+      const closingCosts = newLoanOptions.closingCosts || 0;
+      const currentTotalCost = remainingInterest + currentBalance;
+      const newTotalCost = newInterest + refinanceOptions.principal + closingCosts;
+      const lifetimeSavings = currentTotalCost - newTotalCost;
+      
+      // Calculate break-even point in months
+      const breakEvenMonths = monthlySavings > 0 ? 
+        Math.ceil(closingCosts / monthlySavings) : Infinity;
+      
+      return {
+        currentLoan: {
+          payment: oldPayment,
+          remainingBalance: currentBalance,
+          remainingPayments,
+          remainingInterest,
+          totalCost: currentTotalCost
+        },
+        newLoan: {
+          payment: newPayment,
+          principal: refinanceOptions.principal,
+          term: refinanceOptions.term,
+          interestRate: refinanceOptions.interestRate,
+          totalPayments: newPayments,
+          totalInterest: newInterest,
+          totalCost: newTotalCost
+        },
+        comparison: {
+          monthlySavings,
+          lifetimeSavings,
+          closingCosts,
+          breakEvenMonths,
+          isWorthwhile: lifetimeSavings > 0 && breakEvenMonths < newPayments
+        },
+        refinanceLoan: newLoan
+      };
+    });
   }
 }
 
-// Import AmortizationSchedule for additional payment calculations
-import { AmortizationSchedule } from './amortization.model';
-
 export default Loan;
+
+// Note: AmortizationSchedule is imported dynamically in methods that need it
+// to avoid circular dependency issues

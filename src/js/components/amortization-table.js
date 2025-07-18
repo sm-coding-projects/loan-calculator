@@ -568,6 +568,21 @@ class AmortizationTable {
   }
   
   /**
+   * Update the table with new amortization schedule
+   * @param {Object} amortizationSchedule - Amortization schedule object
+   */
+  updateTable(amortizationSchedule) {
+    // Reset to first page when updating data
+    this.currentPage = 1;
+    
+    // Reset filters
+    this.filters = {};
+    
+    // Render with new data
+    this.render(amortizationSchedule);
+  }
+  
+  /**
    * Clear the table
    */
   clear() {
@@ -577,6 +592,9 @@ class AmortizationTable {
     
     // Reset pagination
     this.currentPage = 1;
+    
+    // Clear current data
+    this.currentData = [];
   }
 }
 

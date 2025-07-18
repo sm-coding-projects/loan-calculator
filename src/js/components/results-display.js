@@ -15,7 +15,11 @@ class ResultsDisplay {
    * @param {Object} [options.formatters] - Custom formatters
    */
   constructor(options = {}) {
-    this.container = options.container || document.getElementById('results-display');
+    // Handle both container and containerId options
+    this.container = options.container || 
+                    (options.containerId ? document.getElementById(options.containerId) : null) || 
+                    document.getElementById('results-display');
+    
     this.formatters = {
       currency: formatters.formatCurrency,
       percentage: formatters.formatPercentage,
@@ -24,6 +28,9 @@ class ResultsDisplay {
       duration: formatters.formatDuration,
       ...options.formatters
     };
+    
+    // Store onSave callback if provided
+    this.onSave = options.onSave || null;
     
     this.init();
   }
@@ -74,8 +81,12 @@ class ResultsDisplay {
     
     if (saveButton) {
       saveButton.addEventListener('click', () => {
-        // This will be implemented in a future task
-        console.log('Save calculation clicked');
+        // Use the onSave callback if provided
+        if (typeof this.onSave === 'function' && this._currentLoan && this._currentAmortizationSchedule) {
+          this.onSave(this._currentLoan, this._currentAmortizationSchedule);
+        } else {
+          console.log('Save calculation clicked, but no onSave handler or loan data available');
+        }
       });
     }
     
@@ -101,6 +112,10 @@ class ResultsDisplay {
     }
     
     const { loan, amortizationSchedule, inflationAdjusted, comparisonScenarios } = calculationResults;
+    
+    // Store current loan and amortization schedule for save functionality
+    this._currentLoan = loan;
+    this._currentAmortizationSchedule = amortizationSchedule;
     
     // Prepare summary data
     const summary = {
@@ -383,6 +398,20 @@ class ResultsDisplay {
    */
   update(calculationResults) {
     this.render(calculationResults);
+  }
+  
+  /**
+   * Update results with loan and amortization schedule
+   * @param {Loan} loan - Loan object
+   * @param {AmortizationSchedule} amortizationSchedule - Amortization schedule
+   * @param {Object} [inflationAdjusted] - Inflation-adjusted payment data
+   */
+  updateResults(loan, amortizationSchedule, inflationAdjusted = null) {
+    this.render({
+      loan,
+      amortizationSchedule,
+      inflationAdjusted
+    });
   }
 }
 

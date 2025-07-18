@@ -10,8 +10,21 @@ class CalculatorService {
   }
   
   calculatePayment(principal, rate, term, frequency) {
-    // Payment calculation will be implemented in task 2.2
-    return 0;
+    // Convert annual rate to decimal and then to periodic rate
+    const periodicRate = (rate / 100) / this._getPaymentsPerYear(frequency);
+    
+    // Calculate number of payments
+    const numberOfPayments = this._calculateNumberOfPayments(term, frequency);
+    
+    // Handle edge cases
+    if (principal <= 0) return 0;
+    if (periodicRate <= 0) return principal / numberOfPayments;
+    
+    // Standard loan payment formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+    const paymentAmount = principal * periodicRate * Math.pow(1 + periodicRate, numberOfPayments) / 
+                         (Math.pow(1 + periodicRate, numberOfPayments) - 1);
+    
+    return paymentAmount;
   }
   
   calculateAmortizationSchedule(principal, rate, term, frequency, additionalPayments) {
@@ -40,6 +53,36 @@ class CalculatorService {
    * @param {number} inflationRate - Annual inflation rate as a percentage (e.g., 2.5 for 2.5%)
    * @returns {Array} Array of inflation-adjusted payment objects
    */
+  /**
+   * Helper method to get payments per year based on frequency
+   * @private
+   * @param {string} frequency - Payment frequency (monthly, bi-weekly, weekly)
+   * @returns {number} Payments per year
+   */
+  _getPaymentsPerYear(frequency) {
+    switch (frequency) {
+      case 'weekly':
+        return 52;
+      case 'bi-weekly':
+        return 26;
+      case 'monthly':
+      default:
+        return 12;
+    }
+  }
+  
+  /**
+   * Helper method to calculate number of payments
+   * @private
+   * @param {number} term - Loan term in months
+   * @param {string} frequency - Payment frequency
+   * @returns {number} Total number of payments
+   */
+  _calculateNumberOfPayments(term, frequency) {
+    const paymentsPerYear = this._getPaymentsPerYear(frequency);
+    return Math.ceil(term * paymentsPerYear / 12);
+  }
+  
   calculateInflationAdjusted(schedule, inflationRate) {
     if (!schedule || !schedule.payments || !Array.isArray(schedule.payments) || schedule.payments.length === 0) {
       return [];
