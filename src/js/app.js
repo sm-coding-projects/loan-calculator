@@ -2,17 +2,17 @@
 import '../css/main.css';
 
 // Import core components
-import CalculatorForm from './components/calculator-form.js';
-import ResultsDisplay from './components/results-display.js';
-import SavedCalculationsManager from './components/saved-calculations-manager.js';
-import SettingsPanel from './components/settings-panel.js';
-import FinancialGlossary from './components/financial-glossary.js';
-import GuidanceManager from './components/guidance-manager.js';
+import CalculatorForm from './components/calculator-form';
+import ResultsDisplay from './components/results-display';
+import SavedCalculationsManager from './components/saved-calculations-manager';
+import SettingsPanel from './components/settings-panel';
+import FinancialGlossary from './components/financial-glossary';
+import GuidanceManager from './components/guidance-manager';
 
 // Import services
-import CalculationManagerService from './services/calculation-manager.service.js';
-import StorageService from './services/storage.service.js';
-import LanguageService from './services/language.service.js';
+import CalculationManagerService from './services/calculation-manager.service';
+import StorageService from './services/storage.service';
+import LanguageService from './services/language.service';
 
 // Lazy-loaded components
 const loadAmortizationTable = () => import(/* webpackChunkName: "amortization-table" */ './components/amortization-table.js');
@@ -42,7 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const currentLanguage = languageService.getLanguage();
   
   // Initialize components
-  let calculatorForm, resultsDisplay, amortizationTable, charts, savedCalculationsManager, settingsPanel, financialGlossary, guidanceManager;
+  let calculatorForm;
+  let resultsDisplay;
+  let amortizationTable;
+  let charts;
+  let savedCalculationsManager;
+  let settingsPanel;
+  let financialGlossary;
+  let guidanceManager;
   
   // Initialize calculator form
   const calculatorFormContainer = document.getElementById('calculator-form-container');
@@ -278,11 +285,9 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsPanel = new SettingsPanel({
       container: settingsContainer,
       onThemeChange: (theme) => {
-        console.log(`Theme changed to: ${theme}`);
         // Theme is automatically applied in the settings panel component
       },
       onLanguageChange: (language) => {
-        console.log(`Language changed to: ${language}`);
         // Update language in the language service
         languageService.setLanguage(language);
         
@@ -316,7 +321,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       onCurrencyChange: (currency) => {
-        console.log(`Currency changed to: ${currency}`);
         // Update currency format in all components that display monetary values
         if (resultsDisplay) {
           resultsDisplay.updateCurrencyFormat(currency);
@@ -337,5 +341,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  console.log('Loan Calculator application initialized');
+  // Application initialized
 });
