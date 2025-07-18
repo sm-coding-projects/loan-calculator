@@ -68,7 +68,7 @@ export function isValidDate(value) {
   if (value instanceof Date) {
     return !isNaN(value.getTime());
   }
-  
+
   const date = new Date(value);
   return !isNaN(date.getTime());
 }
@@ -98,8 +98,8 @@ export function getValidationErrorMessage(validationType, value, options = {}) {
     isValidInflationRate: 'Please enter a valid inflation rate between 0 and 20.',
     isValidLoanTerm: 'Please enter a valid loan term (positive whole number).',
     isValidDate: 'Please enter a valid date.',
-    isNotEmpty: 'This field is required.'
+    isNotEmpty: 'This field is required.',
   };
-  
+
   return messages[validationType] || 'Invalid input.';
 }

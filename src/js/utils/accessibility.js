@@ -22,25 +22,23 @@ export function setFocus(element) {
  */
 export function addKeyboardNavigation(container, selector = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])', loop = true) {
   if (!container) return;
-  
+
   const focusableElements = container.querySelectorAll(selector);
   if (focusableElements.length === 0) return;
-  
+
   container.addEventListener('keydown', (e) => {
     // Tab key navigation
     if (e.key === 'Tab') {
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
-      
+
       // Shift + Tab on first element
       if (e.shiftKey && document.activeElement === firstElement) {
         if (loop) {
           e.preventDefault();
           lastElement.focus();
         }
-      }
-      // Tab on last element
-      else if (!e.shiftKey && document.activeElement === lastElement) {
+      } else if (!e.shiftKey && document.activeElement === lastElement) { // Tab on last element
         if (loop) {
           e.preventDefault();
           firstElement.focus();
@@ -58,7 +56,7 @@ export function addKeyboardNavigation(container, selector = 'a, button, input, s
 export function announceToScreenReader(message, ariaLive = 'polite') {
   // Create or get the announcement element
   let announcer = document.getElementById('screen-reader-announcer');
-  
+
   if (!announcer) {
     announcer = document.createElement('div');
     announcer.id = 'screen-reader-announcer';
@@ -67,13 +65,13 @@ export function announceToScreenReader(message, ariaLive = 'polite') {
     announcer.classList.add('sr-only');
     document.body.appendChild(announcer);
   }
-  
+
   // Set the message
   announcer.textContent = '';
-  
+
   // Force a DOM reflow
   void announcer.offsetWidth;
-  
+
   // Set the message
   announcer.textContent = message;
 }
@@ -86,10 +84,10 @@ export function announceToScreenReader(message, ariaLive = 'polite') {
  */
 export function setInternationalizedText(element, textContent, language = 'en') {
   if (!element) return;
-  
+
   element.textContent = textContent;
   element.setAttribute('lang', language);
-  
+
   // Set text direction based on language
   const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
   if (rtlLanguages.includes(language)) {
@@ -105,7 +103,7 @@ export function setInternationalizedText(element, textContent, language = 'en') 
  */
 export function updateDocumentLanguage(language = 'en') {
   document.documentElement.setAttribute('lang', language);
-  
+
   // Set text direction based on language
   const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
   if (rtlLanguages.includes(language)) {
@@ -120,5 +118,5 @@ export default {
   addKeyboardNavigation,
   announceToScreenReader,
   setInternationalizedText,
-  updateDocumentLanguage
+  updateDocumentLanguage,
 };

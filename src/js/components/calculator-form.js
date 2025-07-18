@@ -22,45 +22,45 @@ class CalculatorForm {
       downPayment: validators.isNumber,
       additionalPayment: validators.isNumber,
       inflationRate: validators.isValidInflationRate,
-      ...options.validators
+      ...options.validators,
     };
-    
+
     // Language settings
     this.language = options.language || 'en';
     this.locale = formatters.getLocaleFromLanguage(this.language);
-    
+
     // Initialize with default loan
     this.formData = Loan.createDefault('mortgage').toJSON();
-    
+
     // Set default inflation rate if not present
     if (this.formData.inflationRate === undefined) {
       this.formData.inflationRate = 2.5;
     }
-    
+
     // Market rates component
     this.marketRatesComponent = null;
-    
+
     this.init();
   }
-  
+
   init() {
     this.render();
     this.bindEvents();
-    
+
     // Initialize market rates component
     this.initMarketRates();
-    
+
     // Trigger initial calculation
     this.handleCalculate();
   }
-  
+
   /**
    * Initialize market rates component
    */
   initMarketRates() {
     const marketRatesContainer = this.container.querySelector('#market-rates-container');
     if (!marketRatesContainer) return;
-    
+
     this.marketRatesComponent = new MarketRates({
       container: marketRatesContainer,
       language: this.language,
@@ -70,24 +70,24 @@ class CalculatorForm {
         // Update interest rate input and slider
         const interestRateInput = this.container.querySelector('#interestRate');
         const interestRateSlider = this.container.querySelector('#interestRate-slider');
-        
+
         if (interestRateInput && interestRateSlider) {
           interestRateInput.value = rate;
           interestRateSlider.value = rate;
-          
+
           // Trigger calculation update
           this.handleCalculate();
         }
-      }
+      },
     });
   }
-  
+
   render() {
     if (!this.container) return;
-    
+
     // Get translations based on current language
     const t = (key) => getTranslation(key, this.language);
-    
+
     const formHtml = `
       <div class="calculator-form">
         <h2>${t('form.title')}</h2>
@@ -100,10 +100,10 @@ class CalculatorForm {
             </label>
             <select id="loan-type" class="form-select" name="type">
               ${Object.entries(LOAN_TYPES).map(([key, value]) => {
-                const translationKey = `form.${key}`;
-                const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
-                return `<option value="${key}" ${this.formData.type === key ? 'selected' : ''}>${description}</option>`;
-              }).join('')}
+    const translationKey = `form.${key}`;
+    const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
+    return `<option value="${key}" ${this.formData.type === key ? 'selected' : ''}>${description}</option>`;
+  }).join('')}
             </select>
           </div>
           
@@ -246,10 +246,10 @@ class CalculatorForm {
             <label for="paymentFrequency" class="form-label">${t('form.paymentFrequency')}</label>
             <select id="paymentFrequency" class="form-select" name="paymentFrequency">
               ${Object.entries(PAYMENT_FREQUENCIES).map(([key, value]) => {
-                const translationKey = `form.${key}`;
-                const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
-                return `<option value="${key}" ${this.formData.paymentFrequency === key ? 'selected' : ''}>${description}</option>`;
-              }).join('')}
+    const translationKey = `form.${key}`;
+    const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
+    return `<option value="${key}" ${this.formData.paymentFrequency === key ? 'selected' : ''}>${description}</option>`;
+  }).join('')}
             </select>
           </div>
           
@@ -323,29 +323,29 @@ class CalculatorForm {
         </form>
       </div>
     `;
-    
+
     this.container.innerHTML = formHtml;
   }
-  
+
   bindEvents() {
     if (!this.container) return;
-    
+
     // Get form element
     const form = this.container.querySelector('#loan-calculator-form');
     if (!form) return;
-    
+
     // Form submission
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       this.handleCalculate();
     });
-    
+
     // Reset button
     const resetButton = this.container.querySelector('#reset-button');
     if (resetButton) {
       resetButton.addEventListener('click', () => this.reset());
     }
-    
+
     // Loan type change
     const loanTypeSelect = this.container.querySelector('#loan-type');
     if (loanTypeSelect) {
@@ -354,73 +354,73 @@ class CalculatorForm {
         this.updateLoanTypeParameters(loanType);
       });
     }
-    
+
     // Sync sliders with input fields
     this.bindSliderInputSync('principal');
     this.bindSliderInputSync('downPayment');
     this.bindSliderInputSync('interestRate');
     this.bindSliderInputSync('term');
     this.bindSliderInputSync('inflationRate');
-    
+
     // Term presets
     const termPresets = this.container.querySelectorAll('.term-preset');
-    termPresets.forEach(preset => {
+    termPresets.forEach((preset) => {
       preset.addEventListener('click', (e) => {
         const term = parseInt(e.target.dataset.term, 10);
         const termInput = this.container.querySelector('#term');
         const termSlider = this.container.querySelector('#term-slider');
-        
+
         if (termInput && termSlider) {
           termInput.value = term;
           termSlider.value = term;
-          
+
           // Trigger validation and real-time update
           this.validateField('term', term);
           this.handleCalculate();
         }
       });
     });
-    
+
     // Real-time validation for all inputs
     const inputs = form.querySelectorAll('input, select');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       input.addEventListener('input', (e) => {
         const field = e.target.name || e.target.id;
-        const value = e.target.value;
-        
+        const { value } = e.target;
+
         this.validateField(field, value);
-        
+
         // Update down payment max when principal changes
         if (field === 'principal') {
           const downPaymentInput = this.container.querySelector('#downPayment');
           const downPaymentSlider = this.container.querySelector('#downPayment-slider');
-          
+
           if (downPaymentInput && downPaymentSlider) {
             const principal = parseFloat(value);
             downPaymentInput.max = principal;
             downPaymentSlider.max = principal;
-            
+
             // Ensure down payment is not greater than principal
             if (parseFloat(downPaymentInput.value) > principal) {
               downPaymentInput.value = principal;
               downPaymentSlider.value = principal;
-              
+
               // Trigger input event to update formData
               const inputEvent = new Event('input');
               downPaymentInput.dispatchEvent(inputEvent);
             }
           }
         }
-        
+
         // Real-time calculation updates
         this.handleCalculate();
       });
     });
-    
+
     // Initialize tooltips
     initTooltips(this.container);
   }
-  
+
   /**
    * Bind slider and input field to sync with each other
    * @param {string} fieldName - Name of the field
@@ -428,40 +428,40 @@ class CalculatorForm {
   bindSliderInputSync(fieldName) {
     const input = this.container.querySelector(`#${fieldName}`);
     const slider = this.container.querySelector(`#${fieldName}-slider`);
-    
+
     if (input && slider) {
       // Update input when slider changes
       slider.addEventListener('input', (e) => {
         input.value = e.target.value;
         this.validateField(fieldName, e.target.value);
       });
-      
+
       // Update slider when input changes
       input.addEventListener('input', (e) => {
         slider.value = e.target.value;
       });
     }
   }
-  
+
   /**
    * Update form parameters based on loan type
    * @param {string} loanType - Type of loan
    */
   updateLoanTypeParameters(loanType) {
     if (!LOAN_TYPES[loanType]) return;
-    
+
     const typeDefaults = LOAN_TYPES[loanType];
-    
+
     // Update principal min/max
     const principalInput = this.container.querySelector('#principal');
     const principalSlider = this.container.querySelector('#principal-slider');
-    
+
     if (principalInput && principalSlider) {
       principalInput.min = typeDefaults.minAmount;
       principalInput.max = typeDefaults.maxAmount;
       principalSlider.min = typeDefaults.minAmount;
       principalSlider.max = typeDefaults.maxAmount;
-      
+
       // Update range display
       const rangeValues = principalSlider.parentElement.querySelector('.range-values');
       if (rangeValues) {
@@ -470,7 +470,7 @@ class CalculatorForm {
           <span>${formatters.formatCurrency(typeDefaults.maxAmount, this.formData.currency || 'USD', this.locale)}</span>
         `;
       }
-      
+
       // Adjust value if outside new range
       const currentValue = parseFloat(principalInput.value);
       if (currentValue < typeDefaults.minAmount) {
@@ -481,35 +481,35 @@ class CalculatorForm {
         principalSlider.value = typeDefaults.maxAmount;
       }
     }
-    
+
     // Update term default
     const termInput = this.container.querySelector('#term');
     const termSlider = this.container.querySelector('#term-slider');
-    
+
     if (termInput && termSlider) {
       termInput.value = typeDefaults.defaultTerm;
       termSlider.value = typeDefaults.defaultTerm;
     }
-    
+
     // Update interest rate default
     const interestRateInput = this.container.querySelector('#interestRate');
     const interestRateSlider = this.container.querySelector('#interestRate-slider');
-    
+
     if (interestRateInput && interestRateSlider) {
       interestRateInput.value = typeDefaults.defaultRate;
       interestRateSlider.value = typeDefaults.defaultRate;
     }
-    
+
     // Update market rates component with new loan type
     if (this.marketRatesComponent) {
       this.marketRatesComponent.updateLoanType(loanType);
       this.marketRatesComponent.updateCurrentRate(typeDefaults.defaultRate);
     }
-    
+
     // Trigger calculation with new defaults
     this.handleCalculate();
   }
-  
+
   /**
    * Validate a single field
    * @param {string} field - Field name
@@ -519,13 +519,13 @@ class CalculatorForm {
   validateField(field, value) {
     const validator = this.validators[field];
     if (!validator) return true;
-    
+
     const isValid = validator(value);
-    
+
     // Update UI
     const input = this.container.querySelector(`#${field}`);
     const errorElement = this.container.querySelector(`#${field}-error`);
-    
+
     if (input && errorElement) {
       if (isValid) {
         input.classList.remove('is-invalid');
@@ -533,16 +533,16 @@ class CalculatorForm {
       } else {
         input.classList.add('is-invalid');
         errorElement.textContent = validators.getValidationErrorMessage(
-          `is${validator.name.slice(2)}`, 
-          value, 
-          { min: input.min, max: input.max }
+          `is${validator.name.slice(2)}`,
+          value,
+          { min: input.min, max: input.max },
         );
       }
     }
-    
+
     return isValid;
   }
-  
+
   /**
    * Validate all form fields
    * @returns {boolean} True if all fields are valid
@@ -550,42 +550,42 @@ class CalculatorForm {
   validate() {
     let isValid = true;
     const form = this.container.querySelector('#loan-calculator-form');
-    
+
     if (!form) return false;
-    
+
     // Validate each field
     const inputs = form.querySelectorAll('input, select');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       const field = input.name || input.id;
-      const value = input.value;
-      
+      const { value } = input;
+
       if (this.validators[field]) {
         const fieldValid = this.validateField(field, value);
         isValid = isValid && fieldValid;
       }
     });
-    
+
     return isValid;
   }
-  
+
   /**
    * Handle form calculation
    */
   handleCalculate() {
     const formData = this.getFormData();
-    
+
     // Validate form data before calculation
     if (!this.validate()) {
       // Show error message to user
       const errorContainer = document.createElement('div');
       errorContainer.className = 'error-message';
       errorContainer.textContent = 'Please correct the errors in the form before calculating.';
-      
+
       // Insert at the top of the form
       const form = this.container.querySelector('#loan-calculator-form');
       if (form) {
         form.insertBefore(errorContainer, form.firstChild);
-        
+
         // Remove error message after 5 seconds
         setTimeout(() => {
           if (errorContainer.parentNode) {
@@ -595,33 +595,33 @@ class CalculatorForm {
       }
       return;
     }
-    
+
     // Create loan object from form data
     try {
       const loan = Loan.fromJSON(formData);
-      
+
       // Update market rates component with current interest rate
       if (this.marketRatesComponent) {
         this.marketRatesComponent.updateCurrentRate(formData.interestRate);
       }
-      
+
       // Call the calculation callback
       if (typeof this.onCalculate === 'function') {
         this.onCalculate(loan);
       }
     } catch (error) {
       console.error('Error calculating loan:', error);
-      
+
       // Display error message to user
       const errorContainer = document.createElement('div');
       errorContainer.className = 'error-message';
       errorContainer.textContent = `Calculation error: ${error.message || 'Unknown error occurred'}`;
-      
+
       // Insert at the top of the form
       const form = this.container.querySelector('#loan-calculator-form');
       if (form) {
         form.insertBefore(errorContainer, form.firstChild);
-        
+
         // Remove error message after 5 seconds
         setTimeout(() => {
           if (errorContainer.parentNode) {
@@ -631,7 +631,7 @@ class CalculatorForm {
       }
     }
   }
-  
+
   /**
    * Get form data from inputs
    * @returns {Object} Form data
@@ -639,34 +639,34 @@ class CalculatorForm {
   getFormData() {
     const form = this.container.querySelector('#loan-calculator-form');
     if (!form) return this.formData;
-    
+
     const formData = {
-      ...this.formData
+      ...this.formData,
     };
-    
+
     // Get values from form inputs
     const inputs = form.querySelectorAll('input, select');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       const field = input.name || input.id;
-      let value = input.value;
-      
+      let { value } = input;
+
       // Convert numeric values
       if (input.type === 'number' || input.type === 'range') {
         value = parseFloat(value);
       }
-      
+
       // Convert date values
       if (input.type === 'date') {
         value = new Date(value);
       }
-      
+
       formData[field] = value;
     });
-    
+
     this.formData = formData;
     return formData;
   }
-  
+
   /**
    * Set form data and update UI
    * @param {Object} data - Form data
@@ -674,53 +674,54 @@ class CalculatorForm {
   setFormData(data) {
     this.formData = {
       ...this.formData,
-      ...data
+      ...data,
     };
-    
+
     // Update form inputs
     const form = this.container.querySelector('#loan-calculator-form');
     if (!form) return;
-    
+
     Object.entries(data).forEach(([field, value]) => {
       const input = form.querySelector(`#${field}`);
       const slider = form.querySelector(`#${field}-slider`);
-      
+
       if (input) {
         // Handle date fields
         if (input.type === 'date' && value instanceof Date) {
-          input.value = value.toISOString().split('T')[0];
+          const [dateString] = value.toISOString().split('T');
+          input.value = dateString;
         } else {
           input.value = value;
         }
       }
-      
+
       // Update sliders
       if (slider) {
         slider.value = value;
       }
     });
-    
+
     // Validate and calculate
     this.validate();
     this.handleCalculate();
   }
-  
+
   /**
    * Reset form to defaults
    */
   reset() {
     const loanType = this.formData.type || 'mortgage';
     const defaultLoan = Loan.createDefault(loanType);
-    
+
     // Preserve inflation rate setting
     const inflationRate = this.formData.inflationRate || 2.5;
-    
+
     this.setFormData({
       ...defaultLoan.toJSON(),
-      inflationRate
+      inflationRate,
     });
   }
-  
+
   /**
    * Update language and re-render component
    * @param {string} language - Language code
@@ -731,17 +732,17 @@ class CalculatorForm {
       this.locale = formatters.getLocaleFromLanguage(language);
       this.render();
       this.bindEvents();
-      
+
       // Re-initialize market rates with new language
       this.initMarketRates();
-      
+
       // Update market rates component language if it exists
       if (this.marketRatesComponent) {
         this.marketRatesComponent.updateLanguage(language);
       }
     }
   }
-  
+
   /**
    * Update currency format
    * @param {string} currency - Currency code

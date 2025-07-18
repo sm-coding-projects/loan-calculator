@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -475,9 +475,7 @@
 <a name='L410'></a><a href='#L410'>410</a>
 <a name='L411'></a><a href='#L411'>411</a>
 <a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L413'></a><a href='#L413'>413</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -614,8 +612,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -672,7 +668,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -879,6 +874,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -910,11 +906,11 @@ class StorageService {
 <span class="fstat-no" title="function not covered" >  co</span>nstructor(options = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
 <span class="cstat-no" title="statement not covered" >    this.storageKey = options.storageKey || 'loan-calculator-data';</span>
 <span class="cstat-no" title="statement not covered" >    this.version = options.version || '1.0';</span>
-    
+&nbsp;
     // Initialize storage if needed
 <span class="cstat-no" title="statement not covered" >    this._initializeStorage();</span>
   }
-  
+&nbsp;
   /**
    * Initialize the storage with default structure if it doesn't exist
    * @private
@@ -923,15 +919,15 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       // Check if storage exists
       const data = <span class="cstat-no" title="statement not covered" >localStorage.getItem(this.storageKey);</span>
-      
+&nbsp;
       // If not, create default structure
 <span class="cstat-no" title="statement not covered" >      if (!data) {</span>
         const defaultData = <span class="cstat-no" title="statement not covered" >{</span>
           version: this.version,
           lastUpdated: new Date().toISOString(),
-          calculations: []
+          calculations: [],
         };
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        localStorage.setItem(this.storageKey, JSON.stringify(defaultData));</span>
       } else {
         // If it exists but has an old version, migrate it
@@ -944,7 +940,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      console.error('Error initializing storage:', error);</span>
     }
   }
-  
+&nbsp;
   /**
    * Migrate data from an older version to the current version
    * @param {Object} oldData - Data in the old format
@@ -953,18 +949,18 @@ class StorageService {
 <span class="fstat-no" title="function not covered" >  _m</span>igrateData(oldData) {
     // This is where version-specific migrations would happen
     // For now, we'll just update the version and save it back
-    
+&nbsp;
     const migratedData = <span class="cstat-no" title="statement not covered" >{</span>
       ...oldData,
       version: this.version,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
-    
+&nbsp;
     // Ensure calculations array exists
 <span class="cstat-no" title="statement not covered" >    if (!migratedData.calculations) {</span>
 <span class="cstat-no" title="statement not covered" >      migratedData.calculations = [];</span>
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.setItem(this.storageKey, JSON.stringify(migratedData));</span>
 <span class="cstat-no" title="statement not covered" >      console.log(`Storage data migrated to version ${this.version}`);</span>
@@ -972,7 +968,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      console.error('Error migrating storage data:', error);</span>
     }
   }
-  
+&nbsp;
   /**
    * Get all stored data
    * @returns {Object} The full storage data object
@@ -987,7 +983,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
   }
-  
+&nbsp;
   /**
    * Save data to storage
    * @param {Object} data - Data to save
@@ -998,25 +994,25 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       // Update the last updated timestamp
 <span class="cstat-no" title="statement not covered" >      data.lastUpdated = new Date().toISOString();</span>
-      
+&nbsp;
       // Save to localStorage
 <span class="cstat-no" title="statement not covered" >      localStorage.setItem(this.storageKey, JSON.stringify(data));</span>
 <span class="cstat-no" title="statement not covered" >      return true;</span>
     } catch (error) {
       // Handle storage errors (e.g., quota exceeded)
 <span class="cstat-no" title="statement not covered" >      console.error('Error saving to storage:', error);</span>
-      
+&nbsp;
       // If it's a quota error, try to free up space
-<span class="cstat-no" title="statement not covered" >      if (error.name === 'QuotaExceededError' || </span>
-          error.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
-          error.code === 22) {
+<span class="cstat-no" title="statement not covered" >      if (error.name === 'QuotaExceededError'</span>
+          || error.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+          || error.code === 22) {
 <span class="cstat-no" title="statement not covered" >        this._handleStorageLimit();</span>
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Handle storage limit errors by removing oldest calculations
    * @private
@@ -1024,26 +1020,24 @@ class StorageService {
 <span class="fstat-no" title="function not covered" >  _h</span>andleStorageLimit() {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (data &amp;&amp; data.calculations &amp;&amp; data.calculations.length &gt; 0) {</span>
         // Sort calculations by date (oldest first)
-<span class="cstat-no" title="statement not covered" >        data.calculations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          return new Date(a.updatedAt) - new Date(b.updatedAt);</span>
-        });
-        
+<span class="cstat-no" title="statement not covered" >        data.calculations.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(a.updatedAt) - new Date(b.updatedAt))</span>;</span>
+&nbsp;
         // Remove the oldest calculation
 <span class="cstat-no" title="statement not covered" >        data.calculations.shift();</span>
-        
+&nbsp;
         // Try to save again
 <span class="cstat-no" title="statement not covered" >        this._saveData(data);</span>
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        console.warn('Storage limit reached. Removed oldest calculation to free space.');</span>
       }
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error handling storage limit:', error);</span>
     }
   }
-  
+&nbsp;
   /**
    * Save a loan calculation to storage
    * @param {Loan} loan - Loan object to save
@@ -1055,23 +1049,23 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      if (!loan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No loan data provided');</span>
       }
-      
+&nbsp;
       // Get current data
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
 <span class="cstat-no" title="statement not covered" >      if (!data) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Could not access storage');</span>
       }
-      
+&nbsp;
       // Prepare calculation object
       const calculationData = <span class="cstat-no" title="statement not covered" >{</span>
         loan: loan.toJSON(),
         amortizationSchedule: amortizationSchedule ? amortizationSchedule.toJSON() : null,
-        savedAt: new Date().toISOString()
+        savedAt: new Date().toISOString(),
       };
-      
+&nbsp;
       // Check if this is an update or a new calculation
-      const existingIndex = <span class="cstat-no" title="statement not covered" >data.calculations.findIndex(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === loan.id)</span>;</span>
-      
+      const existingIndex = <span class="cstat-no" title="statement not covered" >data.calculations.findIndex(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === loan.id)</span>;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (existingIndex &gt;= 0) {</span>
         // Update existing calculation
 <span class="cstat-no" title="statement not covered" >        data.calculations[existingIndex] = calculationData;</span>
@@ -1079,19 +1073,18 @@ class StorageService {
         // Add new calculation
 <span class="cstat-no" title="statement not covered" >        data.calculations.push(calculationData);</span>
       }
-      
+&nbsp;
       // Save back to storage
 <span class="cstat-no" title="statement not covered" >      if (this._saveData(data)) {</span>
 <span class="cstat-no" title="statement not covered" >        return loan.id;</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        throw new Error('Failed to save calculation');</span>
       }
+<span class="cstat-no" title="statement not covered" >      throw new Error('Failed to save calculation');</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error saving calculation:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
   }
-  
+&nbsp;
   /**
    * Get all saved calculations
    * @returns {Array} Array of loan objects
@@ -1099,17 +1092,17 @@ class StorageService {
 <span class="fstat-no" title="function not covered" >  ge</span>tCalculations() {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!data || !data.calculations) {</span>
 <span class="cstat-no" title="statement not covered" >        return [];</span>
       }
-      
+&nbsp;
       // Convert stored JSON back to Loan objects
-<span class="cstat-no" title="statement not covered" >      return data.calculations.map(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      return data.calculations.map(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; {</span>
         const loan = <span class="cstat-no" title="statement not covered" >Loan.fromJSON(calc.loan);</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           loan,
-          savedAt: new Date(calc.savedAt)
+          savedAt: new Date(calc.savedAt),
         };
       });
     } catch (error) {
@@ -1117,7 +1110,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
   }
-  
+&nbsp;
   /**
    * Get a specific calculation by ID
    * @param {string} id - ID of the calculation to retrieve
@@ -1128,42 +1121,42 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      if (!id) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No ID provided');</span>
       }
-      
+&nbsp;
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!data || !data.calculations) {</span>
 <span class="cstat-no" title="statement not covered" >        return null;</span>
       }
-      
+&nbsp;
       // Find the calculation with the matching ID
-      const calculationData = <span class="cstat-no" title="statement not covered" >data.calculations.find(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === id)</span>;</span>
-      
+      const calculationData = <span class="cstat-no" title="statement not covered" >data.calculations.find(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === id)</span>;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!calculationData) {</span>
 <span class="cstat-no" title="statement not covered" >        return null;</span>
       }
-      
+&nbsp;
       // Convert stored JSON back to objects
       const loan = <span class="cstat-no" title="statement not covered" >Loan.fromJSON(calculationData.loan);</span>
       let amortizationSchedule = <span class="cstat-no" title="statement not covered" >null;</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (calculationData.amortizationSchedule) {</span>
 <span class="cstat-no" title="statement not covered" >        amortizationSchedule = AmortizationSchedule.fromJSON(</span>
           calculationData.amortizationSchedule,
-          loan
+          loan,
         );
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         loan,
         amortizationSchedule,
-        savedAt: new Date(calculationData.savedAt)
+        savedAt: new Date(calculationData.savedAt),
       };
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error retrieving calculation by ID:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
   }
-  
+&nbsp;
   /**
    * Update an existing calculation
    * @param {string} id - ID of the calculation to update
@@ -1176,12 +1169,12 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      if (!id || !updatedLoan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('ID and updated loan data are required');</span>
       }
-      
+&nbsp;
       // Ensure the ID matches
 <span class="cstat-no" title="statement not covered" >      if (updatedLoan.id !== id) {</span>
 <span class="cstat-no" title="statement not covered" >        updatedLoan.id = id;</span>
       }
-      
+&nbsp;
       // Use the save method to update
       const result = <span class="cstat-no" title="statement not covered" >this.saveCalculation(updatedLoan, updatedSchedule);</span>
 <span class="cstat-no" title="statement not covered" >      return result === id;</span>
@@ -1190,7 +1183,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Delete a calculation by ID
    * @param {string} id - ID of the calculation to delete
@@ -1201,23 +1194,23 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      if (!id) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No ID provided');</span>
       }
-      
+&nbsp;
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!data || !data.calculations) {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
-      
+&nbsp;
       // Find the index of the calculation with the matching ID
-      const index = <span class="cstat-no" title="statement not covered" >data.calculations.findIndex(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === id)</span>;</span>
-      
+      const index = <span class="cstat-no" title="statement not covered" >data.calculations.findIndex(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; <span class="cstat-no" title="statement not covered" >calc.loan.id === id)</span>;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (index === -1) {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
-      
+&nbsp;
       // Remove the calculation
 <span class="cstat-no" title="statement not covered" >      data.calculations.splice(index, 1);</span>
-      
+&nbsp;
       // Save back to storage
 <span class="cstat-no" title="statement not covered" >      return this._saveData(data);</span>
     } catch (error) {
@@ -1225,7 +1218,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Clear all saved calculations
    * @returns {boolean} Success status
@@ -1233,14 +1226,14 @@ class StorageService {
 <span class="fstat-no" title="function not covered" >  cl</span>earAllCalculations() {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const data = <span class="cstat-no" title="statement not covered" >this._getData();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!data) {</span>
 <span class="cstat-no" title="statement not covered" >        return false;</span>
       }
-      
+&nbsp;
       // Clear the calculations array
 <span class="cstat-no" title="statement not covered" >      data.calculations = [];</span>
-      
+&nbsp;
       // Save back to storage
 <span class="cstat-no" title="statement not covered" >      return this._saveData(data);</span>
     } catch (error) {
@@ -1248,7 +1241,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Check if local storage is available
    * @returns {boolean} Whether storage is available
@@ -1264,7 +1257,7 @@ class StorageService {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Get storage usage statistics
    * @returns {Object} Storage statistics including used space, available space, and item count
@@ -1274,13 +1267,13 @@ class StorageService {
       // Get all data
       const allData = <span class="cstat-no" title="statement not covered" >this._getData();</span>
       const serializedData = <span class="cstat-no" title="statement not covered" >JSON.stringify(allData);</span>
-      
+&nbsp;
       // Calculate size in bytes
       const usedBytes = <span class="cstat-no" title="statement not covered" >new Blob([serializedData]).size;</span>
-      
+&nbsp;
       // Estimate total available space (5MB is typical for most browsers)
       const totalBytes = <span class="cstat-no" title="statement not covered" >5 * 1024 * 1024;</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         usedBytes,
         usedKB: Math.round(usedBytes / 1024),
@@ -1288,7 +1281,7 @@ class StorageService {
         totalKB: Math.round(totalBytes / 1024),
         percentUsed: Math.round((usedBytes / totalBytes) * 100),
         itemCount: allData &amp;&amp; allData.calculations ? allData.calculations.length : 0,
-        isNearingLimit: usedBytes &gt; (totalBytes * 0.8) // Warning at 80% usage
+        isNearingLimit: usedBytes &gt; (totalBytes * 0.8), // Warning at 80% usage
       };
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error calculating storage stats:', error);</span>
@@ -1299,20 +1292,21 @@ class StorageService {
         totalKB: 0,
         percentUsed: 0,
         itemCount: 0,
-        isNearingLimit: false
+        isNearingLimit: false,
       };
     }
   }
 }
 &nbsp;
-export default StorageService;</pre></td></tr></table></pre>
+export default StorageService;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-18T00:06:22.486Z
+                at 2025-07-18T06:08:08.994Z
             </div>
         <script src="../prettify.js"></script>
         <script>

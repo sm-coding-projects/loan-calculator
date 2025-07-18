@@ -17,11 +17,11 @@ class LanguageService {
     this.currentLanguage = options.defaultLanguage || 'en';
     this.storageKey = 'loan-calculator-language';
     this.listeners = [];
-    
+
     // Load saved language
     this.loadLanguage();
   }
-  
+
   /**
    * Load language from local storage
    */
@@ -35,7 +35,7 @@ class LanguageService {
       console.error('Error loading language setting:', error);
     }
   }
-  
+
   /**
    * Save language to local storage
    */
@@ -46,7 +46,7 @@ class LanguageService {
       console.error('Error saving language setting:', error);
     }
   }
-  
+
   /**
    * Get current language
    * @returns {string} Current language code
@@ -54,7 +54,7 @@ class LanguageService {
   getLanguage() {
     return this.currentLanguage;
   }
-  
+
   /**
    * Get current locale based on language
    * @returns {string} Current locale
@@ -62,7 +62,7 @@ class LanguageService {
   getLocale() {
     return getLocaleFromLanguage(this.currentLanguage);
   }
-  
+
   /**
    * Set language
    * @param {string} language - Language code
@@ -71,20 +71,20 @@ class LanguageService {
     if (this.currentLanguage !== language) {
       this.currentLanguage = language;
       this.saveLanguage();
-      
+
       // Update document language for accessibility
       updateDocumentLanguage(language);
-      
+
       this.notifyListeners();
-      
+
       // Dispatch a custom event for components to react to language change
-      const languageChangeEvent = new CustomEvent('languagechange', { 
-        detail: { language } 
+      const languageChangeEvent = new CustomEvent('languagechange', {
+        detail: { language },
       });
       document.dispatchEvent(languageChangeEvent);
     }
   }
-  
+
   /**
    * Get translation for a key
    * @param {string} key - Translation key
@@ -93,7 +93,7 @@ class LanguageService {
   translate(key) {
     return getTranslation(key, this.currentLanguage);
   }
-  
+
   /**
    * Get all translations for current language
    * @returns {Object} Translations object
@@ -101,7 +101,7 @@ class LanguageService {
   getAllTranslations() {
     return getTranslations(this.currentLanguage);
   }
-  
+
   /**
    * Get available languages
    * @returns {Array} Array of language objects
@@ -109,7 +109,7 @@ class LanguageService {
   getAvailableLanguages() {
     return getAvailableLanguages();
   }
-  
+
   /**
    * Add language change listener
    * @param {Function} listener - Callback function
@@ -119,7 +119,7 @@ class LanguageService {
       this.listeners.push(listener);
     }
   }
-  
+
   /**
    * Remove language change listener
    * @param {Function} listener - Callback function to remove
@@ -130,12 +130,12 @@ class LanguageService {
       this.listeners.splice(index, 1);
     }
   }
-  
+
   /**
    * Notify all listeners of language change
    */
   notifyListeners() {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(this.currentLanguage);
       } catch (error) {

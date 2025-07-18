@@ -2,11 +2,11 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'json'],
   transform: {
-    '^.+\\.js$': 'babel-jest'$': 'babel-jest',
+    '^.+\\.js$': 'babel-jest',
   },
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$'$': '<rootDir>/tests/__mocks__/styleMock.js',
-    '\\.(gif|ttf|eot|svg|png)$'$': '<rootDir>/tests/__mocks__/fileMock.js',
+    '\\.(css|less|scss|sass)$': '<rootDir>/tests/__mocks__/styleMock.js',
+    '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/tests/__mocks__/fileMock.js',
   },
   testPathIgnorePatterns: [
     '/node_modules/',

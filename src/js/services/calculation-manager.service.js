@@ -27,13 +27,13 @@ class CalculationManagerService {
    */
   getAllCalculations() {
     const calculations = this.storageService.getCalculations();
-    
+
     // Add additional metadata and sort by date (newest first)
     return calculations
-      .map(calc => ({
+      .map((calc) => ({
         ...calc,
         isSelected: this.isSelected(calc.loan.id),
-        formattedDate: this._formatDate(calc.savedAt)
+        formattedDate: this._formatDate(calc.savedAt),
       }))
       .sort((a, b) => b.savedAt - a.savedAt);
   }
@@ -59,7 +59,7 @@ class CalculationManagerService {
     if (name && name.trim()) {
       loan = loan.update({ name: name.trim() });
     }
-    
+
     return this.storageService.saveCalculation(loan, amortizationSchedule);
   }
 
@@ -80,23 +80,23 @@ class CalculationManagerService {
 
     // Apply updates
     let updatedLoan = calculation.loan;
-    
+
     // Update name if provided
     if (updates.name) {
       updatedLoan = updatedLoan.update({ name: updates.name.trim() });
     }
-    
+
     // Apply other loan updates if provided
     if (updates.loanUpdates) {
       updatedLoan = updatedLoan.update(updates.loanUpdates);
     }
-    
+
     // Generate new amortization schedule if needed
     let updatedSchedule = calculation.amortizationSchedule;
     if (updates.loanUpdates) {
       updatedSchedule = new AmortizationSchedule(updatedLoan);
     }
-    
+
     // Save the updated calculation
     return this.storageService.updateCalculation(id, updatedLoan, updatedSchedule);
   }
@@ -109,7 +109,7 @@ class CalculationManagerService {
   deleteCalculation(id) {
     // Remove from selected calculations if present
     this.deselectCalculation(id);
-    
+
     // Delete from storage
     return this.storageService.deleteCalculation(id);
   }
@@ -124,12 +124,12 @@ class CalculationManagerService {
     if (this.isSelected(id)) {
       return true;
     }
-    
+
     // Check if we've reached the maximum number of comparisons
     if (this.selectedCalculations.length >= this.maxComparisons) {
       return false;
     }
-    
+
     // Add to selected calculations
     this.selectedCalculations.push(id);
     return true;
@@ -170,15 +170,15 @@ class CalculationManagerService {
    * @returns {Array} Array of selected calculation objects
    */
   getSelectedCalculations() {
-    return this.selectedCalculations.map(id => {
+    return this.selectedCalculations.map((id) => {
       const calculation = this.storageService.getCalculationById(id);
       return calculation ? {
         id,
         loan: calculation.loan,
         amortizationSchedule: calculation.amortizationSchedule,
-        savedAt: calculation.savedAt
+        savedAt: calculation.savedAt,
       } : null;
-    }).filter(calc => calc !== null);
+    }).filter((calc) => calc !== null);
   }
 
   /**
@@ -187,24 +187,24 @@ class CalculationManagerService {
    */
   compareCalculations() {
     const selected = this.getSelectedCalculations();
-    
+
     if (selected.length < 2) {
       return {
         success: false,
-        message: 'At least two calculations must be selected for comparison'
+        message: 'At least two calculations must be selected for comparison',
       };
     }
-    
+
     // Create comparison data structure
     const comparison = {
       calculations: selected,
       metrics: this._generateComparisonMetrics(selected),
-      differences: this._calculateDifferences(selected)
+      differences: this._calculateDifferences(selected),
     };
-    
+
     return {
       success: true,
-      comparison
+      comparison,
     };
   }
 
@@ -215,10 +215,10 @@ class CalculationManagerService {
    * @private
    */
   _generateComparisonMetrics(calculations) {
-    return calculations.map(calc => {
-      const loan = calc.loan;
+    return calculations.map((calc) => {
+      const { loan } = calc;
       const schedule = calc.amortizationSchedule;
-      
+
       return {
         id: calc.id,
         name: loan.name,
@@ -231,7 +231,7 @@ class CalculationManagerService {
         paymentAmount: loan.paymentAmount,
         totalInterest: schedule ? schedule.totalInterest : loan.totalInterest,
         totalPayment: schedule ? schedule.totalPayment : (loan.paymentAmount * loan.numberOfPayments),
-        payoffDate: schedule ? schedule.payoffDate : loan.payoffDate
+        payoffDate: schedule ? schedule.payoffDate : loan.payoffDate,
       };
     });
   }
@@ -246,11 +246,11 @@ class CalculationManagerService {
     if (calculations.length < 2) {
       return {};
     }
-    
+
     // Use the first calculation as the baseline
     const baseline = calculations[0];
     const differences = {};
-    
+
     // Compare each calculation to the baseline
     for (let i = 1; i < calculations.length; i++) {
       const current = calculations[i];
@@ -258,26 +258,23 @@ class CalculationManagerService {
         paymentDifference: current.loan.paymentAmount - baseline.loan.paymentAmount,
         interestDifference: 0,
         totalPaymentDifference: 0,
-        termDifference: current.loan.term - baseline.loan.term
+        termDifference: current.loan.term - baseline.loan.term,
       };
-      
+
       // Calculate interest and total payment differences if schedules are available
       if (baseline.amortizationSchedule && current.amortizationSchedule) {
-        diff.interestDifference = 
-          current.amortizationSchedule.totalInterest - baseline.amortizationSchedule.totalInterest;
-        diff.totalPaymentDifference = 
-          current.amortizationSchedule.totalPayment - baseline.amortizationSchedule.totalPayment;
+        diff.interestDifference = current.amortizationSchedule.totalInterest - baseline.amortizationSchedule.totalInterest;
+        diff.totalPaymentDifference = current.amortizationSchedule.totalPayment - baseline.amortizationSchedule.totalPayment;
       } else {
         // Estimate if schedules aren't available
-        diff.interestDifference = 
-          (current.loan.paymentAmount * current.loan.numberOfPayments) - 
-          (baseline.loan.paymentAmount * baseline.loan.numberOfPayments);
+        diff.interestDifference = (current.loan.paymentAmount * current.loan.numberOfPayments)
+          - (baseline.loan.paymentAmount * baseline.loan.numberOfPayments);
         diff.totalPaymentDifference = diff.interestDifference;
       }
-      
+
       differences[current.id] = diff;
     }
-    
+
     return differences;
   }
 
@@ -289,13 +286,13 @@ class CalculationManagerService {
    */
   _formatDate(date) {
     if (!date) return '';
-    
+
     return date.toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

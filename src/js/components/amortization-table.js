@@ -21,7 +21,7 @@ class AmortizationTable {
       percentage: formatters.formatPercentage,
       number: formatters.formatNumber,
       date: formatters.formatDate,
-      ...options.formatters
+      ...options.formatters,
     };
     this.pageSize = options.pageSize || 12;
     this.currentPage = 1;
@@ -29,10 +29,10 @@ class AmortizationTable {
     this.sortDirection = 'asc';
     this.filters = {};
     this.currentData = [];
-    
+
     this.init();
   }
-  
+
   /**
    * Initialize the component
    */
@@ -41,11 +41,11 @@ class AmortizationTable {
       console.error('Amortization table container not found');
       return;
     }
-    
+
     // Create filter controls
     this.createFilterControls();
   }
-  
+
   /**
    * Create filter controls for the table
    */
@@ -70,96 +70,96 @@ class AmortizationTable {
         <button id="reset-filters" class="btn-filter">Reset</button>
       </div>
     `;
-    
+
     // Add event listeners for filter controls
     const applyButton = filterControls.querySelector('#apply-filters');
     const resetButton = filterControls.querySelector('#reset-filters');
-    
+
     if (applyButton) {
       applyButton.addEventListener('click', () => this.applyFilters());
     }
-    
+
     if (resetButton) {
       resetButton.addEventListener('click', () => this.resetFilters());
     }
-    
+
     // Store filter controls for later use
     this.filterControls = filterControls;
   }
-  
+
   /**
    * Apply filters to the table data
    */
   applyFilters() {
     if (!this.filterControls) return;
-    
+
     const yearFilter = this.filterControls.querySelector('#year-filter').value;
     const minPayment = parseFloat(this.filterControls.querySelector('#min-payment').value) || 0;
     const maxPayment = parseFloat(this.filterControls.querySelector('#max-payment').value) || Infinity;
-    
+
     this.filters = {};
-    
+
     if (yearFilter) {
       this.filters.year = parseInt(yearFilter);
     }
-    
+
     if (minPayment > 0 || maxPayment < Infinity) {
       this.filters.paymentRange = { min: minPayment, max: maxPayment };
     }
-    
+
     // Re-render with current data and new filters
     if (this.currentData.length > 0) {
       this.render({ payments: this.currentData });
     }
   }
-  
+
   /**
    * Reset all filters
    */
   resetFilters() {
     if (!this.filterControls) return;
-    
+
     // Reset filter form
     this.filterControls.querySelector('#year-filter').value = '';
     this.filterControls.querySelector('#min-payment').value = '';
     this.filterControls.querySelector('#max-payment').value = '';
-    
+
     // Clear filters object
     this.filters = {};
-    
+
     // Re-render with current data
     if (this.currentData.length > 0) {
       this.render({ payments: this.currentData });
     }
   }
-  
+
   /**
    * Update year filter options based on available data
    * @param {Array} payments - Payment data
    */
   updateYearFilterOptions(payments) {
     if (!this.filterControls) return;
-    
+
     const yearFilter = this.filterControls.querySelector('#year-filter');
     if (!yearFilter) return;
-    
+
     // Clear existing options except the first one
     while (yearFilter.options.length > 1) {
       yearFilter.remove(1);
     }
-    
+
     // Get unique years from payments
-    const years = [...new Set(payments.map(payment => payment.date.getFullYear()))].sort();
-    
+    const years = [...new Set(payments.map((payment) => payment.date.getFullYear()))].sort();
+
     // Add year options
-    years.forEach(year => {
+    years.forEach((year) => {
       const option = document.createElement('option');
       option.value = year;
       option.textContent = year;
       yearFilter.appendChild(option);
     });
   }
-  
+
   /**
    * Render the amortization schedule
    * @param {Object} amortizationSchedule - Amortization schedule object
@@ -168,55 +168,55 @@ class AmortizationTable {
     if (!this.container || !amortizationSchedule) {
       return;
     }
-    
+
     // Store the full data set
     this.currentData = amortizationSchedule.payments || [];
-    
+
     // Clear the container
     this.container.innerHTML = '';
-    
+
     // Add filter controls
     this.container.appendChild(this.filterControls);
-    
+
     // Update year filter options
     this.updateYearFilterOptions(this.currentData);
-    
+
     // Create table container
     const tableContainer = document.createElement('div');
     tableContainer.className = 'table-container';
-    
+
     // Create table
     const table = document.createElement('table');
     table.className = 'table table-responsive';
-    
+
     // Create table header
     const tableHeader = this.createTableHeader();
     table.appendChild(tableHeader);
-    
+
     // Filter and sort data
-    let filteredData = this.filterData(this.currentData, this.filters);
+    const filteredData = this.filterData(this.currentData, this.filters);
     const sortedData = this.sortData(filteredData, this.sortColumn, this.sortDirection);
-    
+
     // Paginate data
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     const paginatedData = sortedData.slice(startIndex, endIndex);
-    
+
     // Create table body
     const tableBody = this.createTableBody(paginatedData);
     table.appendChild(tableBody);
-    
+
     // Add table to container
     tableContainer.appendChild(table);
     this.container.appendChild(tableContainer);
-    
+
     // Create pagination
     this.createPagination(sortedData.length);
-    
+
     // Add highlighting for key information
     this.highlightKeyInformation();
   }
-  
+
   /**
    * Create the table header
    * @returns {HTMLTableSectionElement} Table header element
@@ -224,7 +224,7 @@ class AmortizationTable {
   createTableHeader() {
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    
+
     // Define columns
     const columns = [
       { id: 'number', label: '#', sortable: true },
@@ -232,22 +232,22 @@ class AmortizationTable {
       { id: 'amount', label: 'Payment', sortable: true },
       { id: 'principal', label: 'Principal', sortable: true },
       { id: 'interest', label: 'Interest', sortable: true },
-      { id: 'balance', label: 'Remaining Balance', sortable: true }
+      { id: 'balance', label: 'Remaining Balance', sortable: true },
     ];
-    
+
     // Create header cells
-    columns.forEach(column => {
+    columns.forEach((column) => {
       const th = document.createElement('th');
       th.textContent = column.label;
-      
+
       if (column.sortable) {
         th.className = 'sortable';
-        
+
         // Add sort indicator if this is the current sort column
         if (column.id === this.sortColumn) {
           th.classList.add(this.sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
         }
-        
+
         // Add click event for sorting
         th.addEventListener('click', () => {
           // Toggle direction if already sorting by this column
@@ -257,19 +257,19 @@ class AmortizationTable {
             this.sortColumn = column.id;
             this.sortDirection = 'asc';
           }
-          
+
           // Re-render with new sort
           this.render({ payments: this.currentData });
         });
       }
-      
+
       headerRow.appendChild(th);
     });
-    
+
     thead.appendChild(headerRow);
     return thead;
   }
-  
+
   /**
    * Create the table body
    * @param {Array} payments - Payment data
@@ -277,7 +277,7 @@ class AmortizationTable {
    */
   createTableBody(payments) {
     const tbody = document.createElement('tbody');
-    
+
     if (!payments || payments.length === 0) {
       const emptyRow = document.createElement('tr');
       const emptyCell = document.createElement('td');
@@ -288,11 +288,11 @@ class AmortizationTable {
       tbody.appendChild(emptyRow);
       return tbody;
     }
-    
+
     // Create rows for each payment
-    payments.forEach(payment => {
+    payments.forEach((payment) => {
       const row = document.createElement('tr');
-      
+
       // Add data cells
       const cells = [
         { value: payment.number },
@@ -300,55 +300,55 @@ class AmortizationTable {
         { value: this.formatters.currency(payment.amount), raw: payment.amount },
         { value: this.formatters.currency(payment.principal), raw: payment.principal },
         { value: this.formatters.currency(payment.interest), raw: payment.interest },
-        { value: this.formatters.currency(payment.balance), raw: payment.balance }
+        { value: this.formatters.currency(payment.balance), raw: payment.balance },
       ];
-      
+
       cells.forEach((cell, index) => {
         const td = document.createElement('td');
         td.textContent = cell.value;
-        
+
         // Add data attributes for sorting and filtering
         if (cell.raw !== undefined) {
           td.setAttribute('data-value', cell.raw);
         }
-        
+
         // Add class for the column type
         const columnTypes = ['number', 'date', 'amount', 'principal', 'interest', 'balance'];
         td.classList.add(`col-${columnTypes[index]}`);
-        
+
         row.appendChild(td);
       });
-      
+
       // Add data attributes to the row for filtering
       row.setAttribute('data-payment-number', payment.number);
       row.setAttribute('data-payment-year', payment.date.getFullYear());
       row.setAttribute('data-payment-month', payment.date.getMonth() + 1);
-      
+
       tbody.appendChild(row);
     });
-    
+
     return tbody;
   }
-  
+
   /**
    * Create pagination controls
    * @param {number} totalItems - Total number of items
    */
   createPagination(totalItems) {
     if (!this.container) return;
-    
+
     // Calculate total pages
     const totalPages = Math.ceil(totalItems / this.pageSize);
-    
+
     // Don't show pagination if only one page
     if (totalPages <= 1) {
       return;
     }
-    
+
     // Create pagination container
     const pagination = document.createElement('div');
     pagination.className = 'pagination';
-    
+
     // Previous button
     const prevButton = document.createElement('div');
     prevButton.className = 'pagination-item';
@@ -360,17 +360,17 @@ class AmortizationTable {
       }
     });
     pagination.appendChild(prevButton);
-    
+
     // Page numbers
     const maxVisiblePages = 5;
     let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
-    
+
     // First page button if not visible
     if (startPage > 1) {
       const firstPageButton = document.createElement('div');
@@ -381,7 +381,7 @@ class AmortizationTable {
         this.render({ payments: this.currentData });
       });
       pagination.appendChild(firstPageButton);
-      
+
       // Ellipsis if needed
       if (startPage > 2) {
         const ellipsis = document.createElement('div');
@@ -390,7 +390,7 @@ class AmortizationTable {
         pagination.appendChild(ellipsis);
       }
     }
-    
+
     // Page buttons
     for (let i = startPage; i <= endPage; i++) {
       const pageButton = document.createElement('div');
@@ -405,7 +405,7 @@ class AmortizationTable {
       });
       pagination.appendChild(pageButton);
     }
-    
+
     // Last page button if not visible
     if (endPage < totalPages) {
       // Ellipsis if needed
@@ -415,7 +415,7 @@ class AmortizationTable {
         ellipsis.textContent = '...';
         pagination.appendChild(ellipsis);
       }
-      
+
       const lastPageButton = document.createElement('div');
       lastPageButton.className = 'pagination-item';
       lastPageButton.textContent = totalPages;
@@ -425,7 +425,7 @@ class AmortizationTable {
       });
       pagination.appendChild(lastPageButton);
     }
-    
+
     // Next button
     const nextButton = document.createElement('div');
     nextButton.className = 'pagination-item';
@@ -437,11 +437,11 @@ class AmortizationTable {
       }
     });
     pagination.appendChild(nextButton);
-    
+
     // Add pagination to container
     this.container.appendChild(pagination);
   }
-  
+
   /**
    * Sort data by column
    * @param {Array} data - Data to sort
@@ -453,12 +453,13 @@ class AmortizationTable {
     if (!data || !Array.isArray(data) || data.length === 0) {
       return [];
     }
-    
+
     const sortedData = [...data];
-    
+
     sortedData.sort((a, b) => {
-      let valueA, valueB;
-      
+      let valueA; let
+        valueB;
+
       // Get values based on column
       switch (column) {
         case 'date':
@@ -477,7 +478,7 @@ class AmortizationTable {
           valueA = a.number;
           valueB = b.number;
       }
-      
+
       // Compare values
       if (valueA < valueB) {
         return direction === 'asc' ? -1 : 1;
@@ -487,10 +488,10 @@ class AmortizationTable {
       }
       return 0;
     });
-    
+
     return sortedData;
   }
-  
+
   /**
    * Filter data based on criteria
    * @param {Array} data - Data to filter
@@ -501,17 +502,17 @@ class AmortizationTable {
     if (!data || !Array.isArray(data) || data.length === 0) {
       return [];
     }
-    
+
     if (!filters || Object.keys(filters).length === 0) {
       return data;
     }
-    
-    return data.filter(payment => {
+
+    return data.filter((payment) => {
       // Filter by year
       if (filters.year && payment.date.getFullYear() !== filters.year) {
         return false;
       }
-      
+
       // Filter by payment range
       if (filters.paymentRange) {
         const { min, max } = filters.paymentRange;
@@ -519,33 +520,33 @@ class AmortizationTable {
           return false;
         }
       }
-      
+
       return true;
     });
   }
-  
+
   /**
    * Highlight key information in the table
    */
   highlightKeyInformation() {
     if (!this.container) return;
-    
+
     // Highlight rows with significant principal reduction
     const rows = this.container.querySelectorAll('tbody tr');
-    rows.forEach(row => {
+    rows.forEach((row) => {
       const principalCell = row.querySelector('.col-principal');
       const interestCell = row.querySelector('.col-interest');
-      
+
       if (principalCell && interestCell) {
         const principal = parseFloat(principalCell.getAttribute('data-value') || 0);
         const interest = parseFloat(interestCell.getAttribute('data-value') || 0);
-        
+
         // If principal is significantly higher than interest
         if (principal > interest * 2) {
           row.classList.add('highlight-principal');
           principalCell.setAttribute('title', 'Significant principal reduction');
         }
-        
+
         // If interest is higher than principal
         if (interest > principal) {
           row.classList.add('highlight-interest');
@@ -553,9 +554,9 @@ class AmortizationTable {
         }
       }
     });
-    
+
     // Highlight milestone payments (e.g., every 12th payment)
-    rows.forEach(row => {
+    rows.forEach((row) => {
       const numberCell = row.querySelector('.col-number');
       if (numberCell) {
         const paymentNumber = parseInt(numberCell.textContent);
@@ -566,7 +567,7 @@ class AmortizationTable {
       }
     });
   }
-  
+
   /**
    * Update the table with new amortization schedule
    * @param {Object} amortizationSchedule - Amortization schedule object
@@ -574,14 +575,14 @@ class AmortizationTable {
   updateTable(amortizationSchedule) {
     // Reset to first page when updating data
     this.currentPage = 1;
-    
+
     // Reset filters
     this.filters = {};
-    
+
     // Render with new data
     this.render(amortizationSchedule);
   }
-  
+
   /**
    * Clear the table
    */
@@ -589,10 +590,10 @@ class AmortizationTable {
     if (this.container) {
       this.container.innerHTML = '';
     }
-    
+
     // Reset pagination
     this.currentPage = 1;
-    
+
     // Clear current data
     this.currentData = [];
   }

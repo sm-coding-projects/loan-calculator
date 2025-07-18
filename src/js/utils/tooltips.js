@@ -10,8 +10,8 @@
  */
 export function initTooltips(container = document) {
   const tooltipElements = container.querySelectorAll('[data-tooltip]');
-  
-  tooltipElements.forEach(element => {
+
+  tooltipElements.forEach((element) => {
     // Create tooltip element if it doesn't exist
     let tooltip = element.querySelector('.tooltip');
     if (!tooltip) {
@@ -19,31 +19,31 @@ export function initTooltips(container = document) {
       tooltip.className = 'tooltip';
       tooltip.setAttribute('role', 'tooltip');
       tooltip.setAttribute('aria-hidden', 'true');
-      
+
       // Add tooltip content
       const tooltipContent = element.getAttribute('data-tooltip');
       tooltip.textContent = tooltipContent;
-      
+
       // Add tooltip to element
       element.appendChild(tooltip);
-      
+
       // Set position relative for proper tooltip positioning
       if (getComputedStyle(element).position === 'static') {
         element.style.position = 'relative';
       }
     }
-    
+
     // Add event listeners
     element.addEventListener('mouseenter', showTooltip);
     element.addEventListener('mouseleave', hideTooltip);
     element.addEventListener('focus', showTooltip);
     element.addEventListener('blur', hideTooltip);
-    
+
     // Add accessibility attributes
     if (!element.hasAttribute('tabindex')) {
       element.setAttribute('tabindex', '0');
     }
-    
+
     const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
     tooltip.id = tooltipId;
     element.setAttribute('aria-describedby', tooltipId);
@@ -57,15 +57,15 @@ export function initTooltips(container = document) {
 function showTooltip(event) {
   const element = event.currentTarget;
   const tooltip = element.querySelector('.tooltip');
-  
+
   if (tooltip) {
     // Position tooltip
     positionTooltip(element, tooltip);
-    
+
     // Show tooltip
     tooltip.classList.add('visible');
     tooltip.setAttribute('aria-hidden', 'false');
-    
+
     // Announce tooltip for screen readers
     const tooltipContent = element.getAttribute('data-tooltip');
     announceTooltip(tooltipContent);
@@ -79,7 +79,7 @@ function showTooltip(event) {
 function hideTooltip(event) {
   const element = event.currentTarget;
   const tooltip = element.querySelector('.tooltip');
-  
+
   if (tooltip) {
     tooltip.classList.remove('visible');
     tooltip.setAttribute('aria-hidden', 'true');
@@ -94,19 +94,19 @@ function hideTooltip(event) {
 function positionTooltip(element, tooltip) {
   // Get position preference from data attribute
   const position = element.getAttribute('data-tooltip-position') || 'top';
-  
+
   // Remove all position classes
   tooltip.classList.remove('tooltip-top', 'tooltip-bottom', 'tooltip-left', 'tooltip-right');
-  
+
   // Add position class
   tooltip.classList.add(`tooltip-${position}`);
-  
+
   // Adjust position if tooltip would go off screen
   setTimeout(() => {
     const tooltipRect = tooltip.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // Check if tooltip is off screen
     if (tooltipRect.left < 0) {
       tooltip.classList.remove(`tooltip-${position}`);
@@ -131,7 +131,7 @@ function positionTooltip(element, tooltip) {
 function announceTooltip(content) {
   // Create or get the announcement element
   let announcer = document.getElementById('tooltip-announcer');
-  
+
   if (!announcer) {
     announcer = document.createElement('div');
     announcer.id = 'tooltip-announcer';
@@ -140,13 +140,13 @@ function announceTooltip(content) {
     announcer.classList.add('sr-only');
     document.body.appendChild(announcer);
   }
-  
+
   // Set the message
   announcer.textContent = '';
-  
+
   // Force a DOM reflow
   void announcer.offsetWidth;
-  
+
   // Set the message
   announcer.textContent = content;
 }
@@ -159,10 +159,10 @@ function announceTooltip(content) {
  */
 export function addTooltip(element, content, position = 'top') {
   if (!element) return;
-  
+
   element.setAttribute('data-tooltip', content);
   element.setAttribute('data-tooltip-position', position);
-  
+
   // Initialize tooltip
   initTooltips(element.parentNode);
 }
@@ -177,12 +177,12 @@ export function addTooltip(element, content, position = 'top') {
  */
 export function createGuidancePanel(container, title, content, id) {
   if (!container) return null;
-  
+
   // Create guidance panel
   const panel = document.createElement('div');
   panel.className = 'guidance-panel';
   panel.id = id || `guidance-${Math.random().toString(36).substr(2, 9)}`;
-  
+
   // Create panel content
   panel.innerHTML = `
     <div class="guidance-header">
@@ -193,28 +193,28 @@ export function createGuidancePanel(container, title, content, id) {
       ${content}
     </div>
   `;
-  
+
   // Add event listener for close button
   const closeButton = panel.querySelector('.guidance-close');
   if (closeButton) {
     closeButton.addEventListener('click', () => {
       panel.classList.add('guidance-hidden');
-      
+
       // Remove panel after animation
       setTimeout(() => {
         panel.remove();
       }, 300);
     });
   }
-  
+
   // Add panel to container
   container.appendChild(panel);
-  
+
   // Show panel with animation
   setTimeout(() => {
     panel.classList.add('guidance-visible');
   }, 10);
-  
+
   return panel;
 }
 
@@ -225,17 +225,17 @@ export function createGuidancePanel(container, title, content, id) {
  */
 export function createTutorial(steps, onComplete) {
   if (!steps || !steps.length) return;
-  
+
   let currentStep = 0;
-  
+
   // Create tutorial overlay
   const overlay = document.createElement('div');
   overlay.className = 'tutorial-overlay';
   document.body.appendChild(overlay);
-  
+
   // Show first step
   showTutorialStep(steps[currentStep]);
-  
+
   /**
    * Show a tutorial step
    * @param {Object} step - Tutorial step
@@ -248,10 +248,10 @@ export function createTutorial(steps, onComplete) {
       nextStep();
       return;
     }
-    
+
     // Position highlight around target
     positionHighlight(target);
-    
+
     // Create tooltip
     const tooltip = document.createElement('div');
     tooltip.className = 'tutorial-tooltip';
@@ -266,38 +266,38 @@ export function createTutorial(steps, onComplete) {
         <button class="tutorial-next">${currentStep === steps.length - 1 ? 'Finish' : 'Next'}</button>
       </div>
     `;
-    
+
     // Position tooltip
     positionTooltipNearTarget(tooltip, target, step.position || 'bottom');
-    
+
     // Add tooltip to document
     document.body.appendChild(tooltip);
-    
+
     // Add event listeners
     const prevButton = tooltip.querySelector('.tutorial-prev');
     const nextButton = tooltip.querySelector('.tutorial-next');
-    
+
     if (prevButton) {
       prevButton.addEventListener('click', prevStep);
     }
-    
+
     if (nextButton) {
       nextButton.addEventListener('click', nextStep);
     }
-    
+
     // Execute step action if provided
     if (step.action && typeof step.action === 'function') {
       step.action(target);
     }
   }
-  
+
   /**
    * Position highlight around target element
    * @param {HTMLElement} target - Target element
    */
   function positionHighlight(target) {
     const rect = target.getBoundingClientRect();
-    
+
     // Create highlight element if it doesn't exist
     let highlight = document.querySelector('.tutorial-highlight');
     if (!highlight) {
@@ -305,14 +305,14 @@ export function createTutorial(steps, onComplete) {
       highlight.className = 'tutorial-highlight';
       overlay.appendChild(highlight);
     }
-    
+
     // Position highlight
     highlight.style.top = `${rect.top - 10}px`;
     highlight.style.left = `${rect.left - 10}px`;
     highlight.style.width = `${rect.width + 20}px`;
     highlight.style.height = `${rect.height + 20}px`;
   }
-  
+
   /**
    * Position tooltip near target element
    * @param {HTMLElement} tooltip - Tooltip element
@@ -322,7 +322,7 @@ export function createTutorial(steps, onComplete) {
   function positionTooltipNearTarget(tooltip, target, position) {
     const rect = target.getBoundingClientRect();
     const tooltipRect = tooltip.getBoundingClientRect();
-    
+
     // Set initial position
     switch (position) {
       case 'top':
@@ -345,24 +345,24 @@ export function createTutorial(steps, onComplete) {
         tooltip.style.top = `${rect.bottom + 20}px`;
         tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltipRect.width / 2)}px`;
     }
-    
+
     // Adjust if tooltip is off screen
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     if (parseFloat(tooltip.style.left) < 20) {
       tooltip.style.left = '20px';
     } else if (parseFloat(tooltip.style.left) + tooltipRect.width > viewportWidth - 20) {
       tooltip.style.left = `${viewportWidth - tooltipRect.width - 20}px`;
     }
-    
+
     if (parseFloat(tooltip.style.top) < 20) {
       tooltip.style.top = '20px';
     } else if (parseFloat(tooltip.style.top) + tooltipRect.height > viewportHeight - 20) {
       tooltip.style.top = `${viewportHeight - tooltipRect.height - 20}px`;
     }
   }
-  
+
   /**
    * Go to previous step
    */
@@ -373,13 +373,13 @@ export function createTutorial(steps, onComplete) {
       if (tooltip) {
         tooltip.remove();
       }
-      
+
       // Go to previous step
       currentStep--;
       showTutorialStep(steps[currentStep]);
     }
   }
-  
+
   /**
    * Go to next step
    */
@@ -389,25 +389,25 @@ export function createTutorial(steps, onComplete) {
     if (tooltip) {
       tooltip.remove();
     }
-    
+
     // Check if tutorial is complete
     if (currentStep === steps.length - 1) {
       completeTutorial();
       return;
     }
-    
+
     // Go to next step
     currentStep++;
     showTutorialStep(steps[currentStep]);
   }
-  
+
   /**
    * Complete tutorial
    */
   function completeTutorial() {
     // Remove overlay and highlight
     overlay.remove();
-    
+
     // Call onComplete callback
     if (onComplete && typeof onComplete === 'function') {
       onComplete();
@@ -419,5 +419,5 @@ export default {
   initTooltips,
   addTooltip,
   createGuidancePanel,
-  createTutorial
+  createTutorial,
 };

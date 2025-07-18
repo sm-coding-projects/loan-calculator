@@ -8,7 +8,7 @@
  * @returns {string} Unique identifier
  */
 export function generateUniqueId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
 /**
@@ -17,17 +17,17 @@ export function generateUniqueId() {
  * @returns {Object} Cloned object
  */
 export function deepClone(obj) {
-    if (obj === null || typeof obj !== 'object') return obj;
-    if (obj instanceof Date) return new Date(obj.getTime());
-    if (obj instanceof Array) return obj.map(item => deepClone(item));
-    
-    const cloned = {};
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            cloned[key] = deepClone(obj[key]);
-        }
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj instanceof Date) return new Date(obj.getTime());
+  if (obj instanceof Array) return obj.map((item) => deepClone(item));
+
+  const cloned = {};
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      cloned[key] = deepClone(obj[key]);
     }
-    return cloned;
+  }
+  return cloned;
 }
 
 /**
@@ -37,15 +37,15 @@ export function deepClone(obj) {
  * @returns {Function} Debounced function
  */
 export function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
     };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 /**
@@ -54,5 +54,5 @@ export function debounce(func, wait) {
  * @returns {boolean} True if valid number
  */
 export function isValidNumber(value) {
-    return !isNaN(value) && isFinite(value) && value !== null && value !== '';
+  return !isNaN(value) && isFinite(value) && value !== null && value !== '';
 }

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.16% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/72</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.36% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/44</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.54% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/22</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.28% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/70</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -384,9 +384,7 @@
 <a name='L319'></a><a href='#L319'>319</a>
 <a name='L320'></a><a href='#L320'>320</a>
 <a name='L321'></a><a href='#L321'>321</a>
-<a name='L322'></a><a href='#L322'>322</a>
-<a name='L323'></a><a href='#L323'>323</a>
-<a name='L324'></a><a href='#L324'>324</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L322'></a><a href='#L322'>322</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -404,9 +402,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -652,14 +650,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -706,6 +701,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -726,10 +722,10 @@ class CalculationManagerService {
    * @param {StorageService} [options.storageService] - Storage service instance
    * @param {number} [options.maxComparisons] - Maximum number of calculations that can be compared
    */
-  constructor(options = {}) {
-    this.storageService = options.storageService || new StorageService();
-    this.maxComparisons = options.maxComparisons || 3;
-    this.selectedCalculations = [];
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(options = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
+<span class="cstat-no" title="statement not covered" >    this.storageService = options.storageService || new StorageService();</span>
+<span class="cstat-no" title="statement not covered" >    this.maxComparisons = options.maxComparisons || 3;</span>
+<span class="cstat-no" title="statement not covered" >    this.selectedCalculations = [];</span>
   }
 &nbsp;
   /**
@@ -738,13 +734,13 @@ class CalculationManagerService {
    */
 <span class="fstat-no" title="function not covered" >  ge</span>tAllCalculations() {
     const calculations = <span class="cstat-no" title="statement not covered" >this.storageService.getCalculations();</span>
-    
+&nbsp;
     // Add additional metadata and sort by date (newest first)
 <span class="cstat-no" title="statement not covered" >    return calculations</span>
-      .map(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      .map(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         ...calc,
         isSelected: this.isSelected(calc.loan.id),
-        formattedDate: this._formatDate(calc.savedAt)
+        formattedDate: this._formatDate(calc.savedAt),
       }))
       .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b.savedAt - a.savedAt)</span>;
   }
@@ -770,7 +766,7 @@ class CalculationManagerService {
 <span class="cstat-no" title="statement not covered" >    if (name &amp;&amp; name.trim()) {</span>
 <span class="cstat-no" title="statement not covered" >      loan = loan.update({ name: name.trim() });</span>
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return this.storageService.saveCalculation(loan, amortizationSchedule);</span>
   }
 &nbsp;
@@ -791,23 +787,23 @@ class CalculationManagerService {
 &nbsp;
     // Apply updates
     let updatedLoan = <span class="cstat-no" title="statement not covered" >calculation.loan;</span>
-    
+&nbsp;
     // Update name if provided
 <span class="cstat-no" title="statement not covered" >    if (updates.name) {</span>
 <span class="cstat-no" title="statement not covered" >      updatedLoan = updatedLoan.update({ name: updates.name.trim() });</span>
     }
-    
+&nbsp;
     // Apply other loan updates if provided
 <span class="cstat-no" title="statement not covered" >    if (updates.loanUpdates) {</span>
 <span class="cstat-no" title="statement not covered" >      updatedLoan = updatedLoan.update(updates.loanUpdates);</span>
     }
-    
+&nbsp;
     // Generate new amortization schedule if needed
     let updatedSchedule = <span class="cstat-no" title="statement not covered" >calculation.amortizationSchedule;</span>
 <span class="cstat-no" title="statement not covered" >    if (updates.loanUpdates) {</span>
 <span class="cstat-no" title="statement not covered" >      updatedSchedule = new AmortizationSchedule(updatedLoan);</span>
     }
-    
+&nbsp;
     // Save the updated calculation
 <span class="cstat-no" title="statement not covered" >    return this.storageService.updateCalculation(id, updatedLoan, updatedSchedule);</span>
   }
@@ -820,7 +816,7 @@ class CalculationManagerService {
 <span class="fstat-no" title="function not covered" >  de</span>leteCalculation(id) {
     // Remove from selected calculations if present
 <span class="cstat-no" title="statement not covered" >    this.deselectCalculation(id);</span>
-    
+&nbsp;
     // Delete from storage
 <span class="cstat-no" title="statement not covered" >    return this.storageService.deleteCalculation(id);</span>
   }
@@ -835,12 +831,12 @@ class CalculationManagerService {
 <span class="cstat-no" title="statement not covered" >    if (this.isSelected(id)) {</span>
 <span class="cstat-no" title="statement not covered" >      return true;</span>
     }
-    
+&nbsp;
     // Check if we've reached the maximum number of comparisons
 <span class="cstat-no" title="statement not covered" >    if (this.selectedCalculations.length &gt;= this.maxComparisons) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
-    
+&nbsp;
     // Add to selected calculations
 <span class="cstat-no" title="statement not covered" >    this.selectedCalculations.push(id);</span>
 <span class="cstat-no" title="statement not covered" >    return true;</span>
@@ -881,15 +877,15 @@ class CalculationManagerService {
    * @returns {Array} Array of selected calculation objects
    */
 <span class="fstat-no" title="function not covered" >  ge</span>tSelectedCalculations() {
-<span class="cstat-no" title="statement not covered" >    return this.selectedCalculations.map(<span class="fstat-no" title="function not covered" >id</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return this.selectedCalculations.map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; {</span>
       const calculation = <span class="cstat-no" title="statement not covered" >this.storageService.getCalculationById(id);</span>
 <span class="cstat-no" title="statement not covered" >      return calculation ? {</span>
         id,
         loan: calculation.loan,
         amortizationSchedule: calculation.amortizationSchedule,
-        savedAt: calculation.savedAt
+        savedAt: calculation.savedAt,
       } : null;
-    }).filter(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; <span class="cstat-no" title="statement not covered" >calc !== null)</span>;
+    }).filter(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; <span class="cstat-no" title="statement not covered" >calc !== null)</span>;
   }
 &nbsp;
   /**
@@ -898,24 +894,24 @@ class CalculationManagerService {
    */
 <span class="fstat-no" title="function not covered" >  co</span>mpareCalculations() {
     const selected = <span class="cstat-no" title="statement not covered" >this.getSelectedCalculations();</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (selected.length &lt; 2) {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         success: false,
-        message: 'At least two calculations must be selected for comparison'
+        message: 'At least two calculations must be selected for comparison',
       };
     }
-    
+&nbsp;
     // Create comparison data structure
     const comparison = <span class="cstat-no" title="statement not covered" >{</span>
       calculations: selected,
       metrics: this._generateComparisonMetrics(selected),
-      differences: this._calculateDifferences(selected)
+      differences: this._calculateDifferences(selected),
     };
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
       success: true,
-      comparison
+      comparison,
     };
   }
 &nbsp;
@@ -926,10 +922,10 @@ class CalculationManagerService {
    * @private
    */
 <span class="fstat-no" title="function not covered" >  _g</span>enerateComparisonMetrics(calculations) {
-<span class="cstat-no" title="statement not covered" >    return calculations.map(<span class="fstat-no" title="function not covered" >ca</span>lc =&gt; {</span>
-      const loan = <span class="cstat-no" title="statement not covered" >calc.loan;</span>
+<span class="cstat-no" title="statement not covered" >    return calculations.map(<span class="fstat-no" title="function not covered" >(c</span>alc) =&gt; {</span>
+      const { loan } = <span class="cstat-no" title="statement not covered" >calc;</span>
       const schedule = <span class="cstat-no" title="statement not covered" >calc.amortizationSchedule;</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return {</span>
         id: calc.id,
         name: loan.name,
@@ -942,7 +938,7 @@ class CalculationManagerService {
         paymentAmount: loan.paymentAmount,
         totalInterest: schedule ? schedule.totalInterest : loan.totalInterest,
         totalPayment: schedule ? schedule.totalPayment : (loan.paymentAmount * loan.numberOfPayments),
-        payoffDate: schedule ? schedule.payoffDate : loan.payoffDate
+        payoffDate: schedule ? schedule.payoffDate : loan.payoffDate,
       };
     });
   }
@@ -957,11 +953,11 @@ class CalculationManagerService {
 <span class="cstat-no" title="statement not covered" >    if (calculations.length &lt; 2) {</span>
 <span class="cstat-no" title="statement not covered" >      return {};</span>
     }
-    
+&nbsp;
     // Use the first calculation as the baseline
     const baseline = <span class="cstat-no" title="statement not covered" >calculations[0];</span>
     const differences = <span class="cstat-no" title="statement not covered" >{};</span>
-    
+&nbsp;
     // Compare each calculation to the baseline
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt; calculations.length; i++) {</span>
       const current = <span class="cstat-no" title="statement not covered" >calculations[i];</span>
@@ -969,26 +965,23 @@ class CalculationManagerService {
         paymentDifference: current.loan.paymentAmount - baseline.loan.paymentAmount,
         interestDifference: 0,
         totalPaymentDifference: 0,
-        termDifference: current.loan.term - baseline.loan.term
+        termDifference: current.loan.term - baseline.loan.term,
       };
-      
+&nbsp;
       // Calculate interest and total payment differences if schedules are available
 <span class="cstat-no" title="statement not covered" >      if (baseline.amortizationSchedule &amp;&amp; current.amortizationSchedule) {</span>
-<span class="cstat-no" title="statement not covered" >        diff.interestDifference = </span>
-          current.amortizationSchedule.totalInterest - baseline.amortizationSchedule.totalInterest;
-<span class="cstat-no" title="statement not covered" >        diff.totalPaymentDifference = </span>
-          current.amortizationSchedule.totalPayment - baseline.amortizationSchedule.totalPayment;
+<span class="cstat-no" title="statement not covered" >        diff.interestDifference = current.amortizationSchedule.totalInterest - baseline.amortizationSchedule.totalInterest;</span>
+<span class="cstat-no" title="statement not covered" >        diff.totalPaymentDifference = current.amortizationSchedule.totalPayment - baseline.amortizationSchedule.totalPayment;</span>
       } else {
         // Estimate if schedules aren't available
-<span class="cstat-no" title="statement not covered" >        diff.interestDifference = </span>
-          (current.loan.paymentAmount * current.loan.numberOfPayments) - 
-          (baseline.loan.paymentAmount * baseline.loan.numberOfPayments);
+<span class="cstat-no" title="statement not covered" >        diff.interestDifference = (current.loan.paymentAmount * current.loan.numberOfPayments)</span>
+          - (baseline.loan.paymentAmount * baseline.loan.numberOfPayments);
 <span class="cstat-no" title="statement not covered" >        diff.totalPaymentDifference = diff.interestDifference;</span>
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      differences[current.id] = diff;</span>
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return differences;</span>
   }
 &nbsp;
@@ -1000,13 +993,13 @@ class CalculationManagerService {
    */
 <span class="fstat-no" title="function not covered" >  _f</span>ormatDate(date) {
 <span class="cstat-no" title="statement not covered" >    if (!date) <span class="cstat-no" title="statement not covered" >return '';</span></span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return date.toLocaleDateString(undefined, {</span>
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 &nbsp;
@@ -1032,14 +1025,15 @@ class CalculationManagerService {
   }
 }
 &nbsp;
-export default CalculationManagerService;</pre></td></tr></table></pre>
+export default CalculationManagerService;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-18T00:06:22.507Z
+                at 2025-07-18T06:08:09.020Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -188,13 +188,13 @@ module.exports = (env, argv) => {
             priority: 10,
           },
           charts: {
-            test: /[\\/]src[\\/]js[\\/]components[\\/]charts\.js/,
+            test: /[\\/]src[\\/]js[\\/]components[\\/]charts/,
             name: 'charts',
             chunks: 'async',
             priority: 20,
           },
           amortization: {
-            test: /[\\/]src[\\/]js[\\/]components[\\/]amortization-table\.js/,
+            test: /[\\/]src[\\/]js[\\/]components[\\/]amortization-table/,
             name: 'amortization',
             chunks: 'async',
             priority: 20,

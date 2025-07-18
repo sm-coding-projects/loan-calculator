@@ -20,15 +20,15 @@ class SavedCalculationsManager {
     this.calculationManager = options.calculationManager || new CalculationManagerService();
     this.onLoadCalculation = options.onLoadCalculation || (() => {});
     this.onCompareCalculations = options.onCompareCalculations || (() => {});
-    
+
     this.container = null;
     this.calculationsList = null;
     this.comparisonView = null;
     this.isComparisonMode = false;
-    
+
     this.initialize();
   }
-  
+
   /**
    * Initialize the component
    */
@@ -39,18 +39,18 @@ class SavedCalculationsManager {
       console.error(`Container with ID "${this.containerId}" not found`);
       return;
     }
-    
+
     this.render();
     this.attachEventListeners();
   }
-  
+
   /**
    * Render the component
    */
   render() {
     // Clear the container
     this.container.innerHTML = '';
-    
+
     // Create the main structure
     const template = `
       <div class="saved-calculations-manager">
@@ -77,20 +77,20 @@ class SavedCalculationsManager {
         </div>
       </div>
     `;
-    
+
     this.container.innerHTML = template;
-    
+
     // Store references to elements
     this.calculationsList = document.getElementById('saved-calculations-list');
     this.comparisonView = document.getElementById('comparison-view');
     this.comparisonContent = document.getElementById('comparison-content');
     this.compareButton = document.getElementById('compare-button');
     this.clearSelectionButton = document.getElementById('clear-selection-button');
-    
+
     // Load saved calculations
     this.loadCalculations();
   }
-  
+
   /**
    * Attach event listeners
    */
@@ -100,26 +100,26 @@ class SavedCalculationsManager {
     if (compareButton) {
       compareButton.addEventListener('click', () => this.showComparison());
     }
-    
+
     // Clear selection button
     const clearSelectionButton = document.getElementById('clear-selection-button');
     if (clearSelectionButton) {
       clearSelectionButton.addEventListener('click', () => this.clearSelection());
     }
-    
+
     // Close comparison button
     const closeComparisonButton = document.getElementById('close-comparison-button');
     if (closeComparisonButton) {
       closeComparisonButton.addEventListener('click', () => this.hideComparison());
     }
   }
-  
+
   /**
    * Load and display saved calculations
    */
   loadCalculations() {
     const calculations = this.calculationManager.getAllCalculations();
-    
+
     if (calculations.length === 0) {
       // Show empty state
       this.calculationsList.innerHTML = `
@@ -127,20 +127,20 @@ class SavedCalculationsManager {
       `;
       return;
     }
-    
+
     // Clear the list
     this.calculationsList.innerHTML = '';
-    
+
     // Create a card for each calculation
-    calculations.forEach(calc => {
+    calculations.forEach((calc) => {
       const card = this.createCalculationCard(calc);
       this.calculationsList.appendChild(card);
     });
-    
+
     // Update button states
     this.updateButtonStates();
   }
-  
+
   /**
    * Create a card element for a calculation
    * @param {Object} calculation - Calculation object
@@ -148,17 +148,17 @@ class SavedCalculationsManager {
    */
   createCalculationCard(calculation) {
     const { loan, savedAt, isSelected } = calculation;
-    
+
     // Format currency
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
-    
+
     const card = document.createElement('div');
     card.className = `calculation-card ${isSelected ? 'selected' : ''}`;
     card.dataset.id = loan.id;
-    
+
     card.innerHTML = `
       <div class="calculation-card-header">
         <h3 class="calculation-name">${loan.name || 'Unnamed Calculation'}</h3>
@@ -195,14 +195,14 @@ class SavedCalculationsManager {
         </div>
       </div>
     `;
-    
+
     // Add event listeners
     const loadBtn = card.querySelector('.load-btn');
     loadBtn.addEventListener('click', () => this.loadCalculation(loan.id));
-    
+
     const deleteBtn = card.querySelector('.delete-btn');
     deleteBtn.addEventListener('click', () => this.deleteCalculation(loan.id));
-    
+
     const selectCheckbox = card.querySelector('.select-checkbox');
     selectCheckbox.addEventListener('change', (e) => {
       if (e.target.checked) {
@@ -211,10 +211,10 @@ class SavedCalculationsManager {
         this.deselectCalculation(loan.id, card);
       }
     });
-    
+
     return card;
   }
-  
+
   /**
    * Load a calculation
    * @param {string} id - Calculation ID
@@ -225,7 +225,7 @@ class SavedCalculationsManager {
       this.onLoadCalculation(calculation);
     }
   }
-  
+
   /**
    * Delete a calculation
    * @param {string} id - Calculation ID
@@ -238,7 +238,7 @@ class SavedCalculationsManager {
       }
     }
   }
-  
+
   /**
    * Select a calculation for comparison
    * @param {string} id - Calculation ID
@@ -246,23 +246,23 @@ class SavedCalculationsManager {
    */
   selectCalculation(id, card) {
     const success = this.calculationManager.selectCalculation(id);
-    
+
     if (!success) {
       // If selection failed (e.g., max comparisons reached), uncheck the checkbox
       const checkbox = card.querySelector('.select-checkbox');
       checkbox.checked = false;
-      
+
       alert(`You can only select up to ${this.calculationManager.maxComparisons} calculations for comparison.`);
       return;
     }
-    
+
     // Add selected class to card
     card.classList.add('selected');
-    
+
     // Update button states
     this.updateButtonStates();
   }
-  
+
   /**
    * Deselect a calculation
    * @param {string} id - Calculation ID
@@ -270,68 +270,68 @@ class SavedCalculationsManager {
    */
   deselectCalculation(id, card) {
     this.calculationManager.deselectCalculation(id);
-    
+
     // Remove selected class from card
     card.classList.remove('selected');
-    
+
     // Update button states
     this.updateButtonStates();
   }
-  
+
   /**
    * Clear all selected calculations
    */
   clearSelection() {
     this.calculationManager.clearSelection();
-    
+
     // Update UI
     const selectedCards = this.calculationsList.querySelectorAll('.calculation-card.selected');
-    selectedCards.forEach(card => {
+    selectedCards.forEach((card) => {
       card.classList.remove('selected');
       const checkbox = card.querySelector('.select-checkbox');
       checkbox.checked = false;
     });
-    
+
     // Update button states
     this.updateButtonStates();
   }
-  
+
   /**
    * Update button states based on selection
    */
   updateButtonStates() {
     const selectedCount = this.calculationManager.selectedCalculations.length;
-    
+
     // Compare button
     this.compareButton.disabled = selectedCount < 2;
-    
+
     // Clear selection button
     this.clearSelectionButton.disabled = selectedCount === 0;
   }
-  
+
   /**
    * Show comparison view
    */
   showComparison() {
     const result = this.calculationManager.compareCalculations();
-    
+
     if (!result.success) {
       alert(result.message);
       return;
     }
-    
+
     // Switch to comparison mode
     this.isComparisonMode = true;
     this.calculationsList.style.display = 'none';
     this.comparisonView.style.display = 'block';
-    
+
     // Render comparison
     this.renderComparison(result.comparison);
-    
+
     // Notify parent component
     this.onCompareCalculations(result.comparison);
   }
-  
+
   /**
    * Hide comparison view
    */
@@ -341,52 +341,52 @@ class SavedCalculationsManager {
     this.calculationsList.style.display = 'block';
     this.comparisonView.style.display = 'none';
   }
-  
+
   /**
    * Render comparison view
    * @param {Object} comparison - Comparison data
    */
   renderComparison(comparison) {
     const { calculations, metrics, differences } = comparison;
-    
+
     // Format currency
     const formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
-    
+
     // Create table header
     let tableHtml = `
       <table class="comparison-table">
         <thead>
           <tr>
             <th>Metric</th>
-            ${metrics.map(m => `<th>${m.name || 'Unnamed'}</th>`).join('')}
+            ${metrics.map((m) => `<th>${m.name || 'Unnamed'}</th>`).join('')}
           </tr>
         </thead>
         <tbody>
     `;
-    
+
     // Add rows for each metric
     const metricRows = [
-      { label: 'Loan Amount', key: 'loanAmount', format: val => formatter.format(val) },
-      { label: 'Interest Rate', key: 'interestRate', format: val => `${val}%` },
-      { label: 'Term', key: 'term', format: val => `${val} months` },
-      { label: 'Payment Frequency', key: 'paymentFrequency', format: val => val },
-      { label: 'Payment Amount', key: 'paymentAmount', format: val => formatter.format(val) },
-      { label: 'Total Interest', key: 'totalInterest', format: val => formatter.format(val) },
-      { label: 'Total Payment', key: 'totalPayment', format: val => formatter.format(val) }
+      { label: 'Loan Amount', key: 'loanAmount', format: (val) => formatter.format(val) },
+      { label: 'Interest Rate', key: 'interestRate', format: (val) => `${val}%` },
+      { label: 'Term', key: 'term', format: (val) => `${val} months` },
+      { label: 'Payment Frequency', key: 'paymentFrequency', format: (val) => val },
+      { label: 'Payment Amount', key: 'paymentAmount', format: (val) => formatter.format(val) },
+      { label: 'Total Interest', key: 'totalInterest', format: (val) => formatter.format(val) },
+      { label: 'Total Payment', key: 'totalPayment', format: (val) => formatter.format(val) },
     ];
-    
-    metricRows.forEach(row => {
+
+    metricRows.forEach((row) => {
       tableHtml += `
         <tr>
           <td>${row.label}</td>
-          ${metrics.map(m => `<td>${row.format(m[row.key])}</td>`).join('')}
+          ${metrics.map((m) => `<td>${row.format(m[row.key])}</td>`).join('')}
         </tr>
       `;
     });
-    
+
     // Add difference rows if there are multiple calculations
     if (metrics.length > 1) {
       tableHtml += `
@@ -394,12 +394,12 @@ class SavedCalculationsManager {
           <td colspan="${metrics.length + 1}">Differences (compared to ${metrics[0].name || 'first calculation'})</td>
         </tr>
       `;
-      
+
       // Skip the first calculation (baseline)
       for (let i = 1; i < metrics.length; i++) {
         const metric = metrics[i];
         const diff = differences[metric.id];
-        
+
         if (diff) {
           tableHtml += `
             <tr>
@@ -424,15 +424,15 @@ class SavedCalculationsManager {
         }
       }
     }
-    
+
     tableHtml += `
         </tbody>
       </table>
     `;
-    
+
     this.comparisonContent.innerHTML = tableHtml;
   }
-  
+
   /**
    * Refresh the component
    */

@@ -11,8 +11,8 @@
  */
 export function getLocaleFromLanguage(language) {
   const localeMap = {
-    'en': 'en-US',
-    'es': 'es-ES'
+    en: 'en-US',
+    es: 'es-ES',
   };
   return localeMap[language] || 'en-US';
 }
@@ -25,7 +25,7 @@ export function getLocaleFromLanguage(language) {
 export function getDateFormatForLocale(locale) {
   const formatMap = {
     'en-US': 'MM/DD/YYYY',
-    'es-ES': 'DD/MM/YYYY'
+    'es-ES': 'DD/MM/YYYY',
   };
   return formatMap[locale] || 'MM/DD/YYYY';
 }
@@ -40,7 +40,7 @@ export function getDateFormatForLocale(locale) {
 export function formatNumber(value, decimals = 2, locale = 'en-US') {
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
+    maximumFractionDigits: decimals,
   }).format(value);
 }
 
@@ -54,7 +54,7 @@ export function formatNumber(value, decimals = 2, locale = 'en-US') {
 export function formatCurrency(value, currencyCode = 'USD', locale = 'en-US') {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: currencyCode
+    currency: currencyCode,
   }).format(value);
 }
 
@@ -67,23 +67,23 @@ export function formatCurrency(value, currencyCode = 'USD', locale = 'en-US') {
  */
 export function formatDate(date, format = null, locale = 'en-US') {
   const dateObj = date instanceof Date ? date : new Date(date);
-  
+
   // Use Intl.DateTimeFormat for locale-aware formatting
   if (!format) {
     return new Intl.DateTimeFormat(locale).format(dateObj);
   }
-  
+
   // Use custom format if specified
   format = format || getDateFormatForLocale(locale);
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
   const year = dateObj.getFullYear();
-  
+
   let formatted = format;
   formatted = formatted.replace('MM', month);
   formatted = formatted.replace('DD', day);
   formatted = formatted.replace('YYYY', year);
-  
+
   return formatted;
 }
 
@@ -105,18 +105,18 @@ export function formatPercentage(value, decimals = 2) {
 export function formatDuration(months) {
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
-  
+
   let result = '';
   if (years > 0) {
     result += `${years} year${years !== 1 ? 's' : ''}`;
   }
-  
+
   if (remainingMonths > 0) {
     if (result.length > 0) {
       result += ' and ';
     }
     result += `${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;
   }
-  
+
   return result;
 }

@@ -15,7 +15,7 @@ class MarketRates {
     this.currentLoanType = options.loanType || 'mortgage';
     this.currentRate = options.currentRate || 0;
     this.onRateSelect = options.onRateSelect || (() => {});
-    
+
     // Market rates data - in a real application, this would come from an API
     this.marketRatesData = {
       mortgage: {
@@ -23,34 +23,34 @@ class MarketRates {
         min: 5.85,
         max: 7.65,
         trend: 'stable',
-        lastUpdated: new Date('2025-07-15')
+        lastUpdated: new Date('2025-07-15'),
       },
       auto: {
         average: 7.25,
         min: 6.50,
         max: 9.75,
         trend: 'up',
-        lastUpdated: new Date('2025-07-16')
+        lastUpdated: new Date('2025-07-16'),
       },
       personal: {
         average: 11.50,
         min: 8.75,
         max: 17.99,
         trend: 'up',
-        lastUpdated: new Date('2025-07-16')
+        lastUpdated: new Date('2025-07-16'),
       },
       student: {
         average: 5.50,
         min: 4.99,
         max: 7.25,
         trend: 'down',
-        lastUpdated: new Date('2025-07-14')
-      }
+        lastUpdated: new Date('2025-07-14'),
+      },
     };
-    
+
     this.init();
   }
-  
+
   /**
    * Initialize the component
    */
@@ -58,30 +58,30 @@ class MarketRates {
     this.render();
     this.bindEvents();
   }
-  
+
   /**
    * Render the market rates component
    */
   render() {
     if (!this.container) return;
-    
+
     // Get translations based on current language
     const t = (key) => getTranslation(key, this.language);
-    
+
     // Get market rates for current loan type
     const ratesData = this.marketRatesData[this.currentLoanType] || this.marketRatesData.mortgage;
-    
+
     // Format date based on locale
     const locale = formatters.getLocaleFromLanguage(this.language);
     const formattedDate = ratesData.lastUpdated.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
-    
+
     // Get trend icon
     const trendIcon = this.getTrendIcon(ratesData.trend);
-    
+
     // Create market rates HTML
     const marketRatesHtml = `
       <div class="market-rates">
@@ -130,16 +130,16 @@ class MarketRates {
         </div>
       </div>
     `;
-    
+
     this.container.innerHTML = marketRatesHtml;
   }
-  
+
   /**
    * Bind event listeners
    */
   bindEvents() {
     if (!this.container) return;
-    
+
     // Use average rate button
     const useAverageRateButton = this.container.querySelector('#use-average-rate');
     if (useAverageRateButton) {
@@ -149,7 +149,7 @@ class MarketRates {
       });
     }
   }
-  
+
   /**
    * Get trend icon based on trend direction
    * @param {string} trend - Trend direction (up, down, stable)
@@ -165,7 +165,7 @@ class MarketRates {
         return '<span class="trend-icon trend-stable" aria-hidden="true">→</span>';
     }
   }
-  
+
   /**
    * Get CSS class for rate comparison
    * @param {number} currentRate - Current rate
@@ -174,16 +174,15 @@ class MarketRates {
    */
   getRateComparisonClass(currentRate, averageRate) {
     const difference = currentRate - averageRate;
-    
+
     if (Math.abs(difference) <= 0.25) {
       return 'rate-average';
-    } else if (difference < 0) {
+    } if (difference < 0) {
       return 'rate-below';
-    } else {
-      return 'rate-above';
     }
+    return 'rate-above';
   }
-  
+
   /**
    * Format rate difference
    * @param {number} currentRate - Current rate
@@ -193,16 +192,15 @@ class MarketRates {
   formatRateDifference(currentRate, averageRate) {
     const difference = currentRate - averageRate;
     const t = (key) => getTranslation(key, this.language);
-    
+
     if (Math.abs(difference) <= 0.1) {
       return t('marketRates.sameAsAverage');
-    } else if (difference < 0) {
+    } if (difference < 0) {
       return `${Math.abs(difference).toFixed(2)}% ${t('marketRates.belowAverage')}`;
-    } else {
-      return `${difference.toFixed(2)}% ${t('marketRates.aboveAverage')}`;
     }
+    return `${difference.toFixed(2)}% ${t('marketRates.aboveAverage')}`;
   }
-  
+
   /**
    * Update current loan type and re-render
    * @param {string} loanType - Loan type
@@ -214,7 +212,7 @@ class MarketRates {
       this.bindEvents();
     }
   }
-  
+
   /**
    * Update current interest rate and re-render
    * @param {number} rate - Interest rate
@@ -226,7 +224,7 @@ class MarketRates {
       this.bindEvents();
     }
   }
-  
+
   /**
    * Update language and re-render component
    * @param {string} language - Language code

@@ -586,7 +586,8 @@
 <a name='L521'></a><a href='#L521'>521</a>
 <a name='L522'></a><a href='#L522'>522</a>
 <a name='L523'></a><a href='#L523'>523</a>
-<a name='L524'></a><a href='#L524'>524</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,6 +608,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -626,6 +628,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1059,7 +1062,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1077,7 +1079,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1105,6 +1106,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1115,6 +1117,7 @@
  * Implements requirements 2.7, 3.4, 3.5, 5.4
  */
 &nbsp;
+// eslint-disable-next-line new-cap
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import Papa from 'papaparse';
@@ -1134,7 +1137,7 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >    this.appUrl = options.appUrl || window.location.origin;</span>
 <span class="cstat-no" title="statement not covered" >    console.log('Export Service initialized');</span>
   }
-  
+&nbsp;
   /**
    * Export loan calculation to PDF
    * @param {Object} calculationData - Calculation data to export
@@ -1147,22 +1150,23 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!calculationData || !calculationData.loan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Invalid calculation data');</span>
       }
-      
+&nbsp;
       const { loan, amortizationSchedule } = <span class="cstat-no" title="statement not covered" >calculationData;</span>
+      // eslint-disable-next-line new-cap
       const doc = <span class="cstat-no" title="statement not covered" >new jsPDF();</span>
       const pageWidth = <span class="cstat-no" title="statement not covered" >doc.internal.pageSize.width;</span>
-      
+&nbsp;
       // Add header
 <span class="cstat-no" title="statement not covered" >      doc.setFontSize(20);</span>
 <span class="cstat-no" title="statement not covered" >      doc.text(this.appName, pageWidth / 2, 15, { align: 'center' });</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      doc.setFontSize(16);</span>
 <span class="cstat-no" title="statement not covered" >      doc.text(`Loan Summary: ${loan.name}`, pageWidth / 2, 25, { align: 'center' });</span>
-      
+&nbsp;
       // Add loan details
 <span class="cstat-no" title="statement not covered" >      doc.setFontSize(12);</span>
 <span class="cstat-no" title="statement not covered" >      doc.text('Loan Details', 14, 35);</span>
-      
+&nbsp;
       const loanDetails = <span class="cstat-no" title="statement not covered" >[</span>
         ['Loan Type', this._getLoanTypeDescription(loan.type)],
         ['Principal Amount', formatCurrency(loan.principal)],
@@ -1173,68 +1177,68 @@ class ExportService {
         ['Payment Frequency', this._getPaymentFrequencyDescription(loan.paymentFrequency)],
         ['Payment Amount', formatCurrency(loan.paymentAmount)],
         ['Start Date', formatDate(loan.startDate)],
-        ['Payoff Date', formatDate(loan.payoffDate)]
+        ['Payoff Date', formatDate(loan.payoffDate)],
       ];
-      
+&nbsp;
       // Add additional payment info if applicable
 <span class="cstat-no" title="statement not covered" >      if (loan.additionalPayment &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >        loanDetails.push(['Additional Payment', formatCurrency(loan.additionalPayment)]);</span>
-        
+&nbsp;
         // Calculate impact of additional payments
         const impact = <span class="cstat-no" title="statement not covered" >loan.calculateAdditionalPaymentImpact();</span>
 <span class="cstat-no" title="statement not covered" >        loanDetails.push(['Interest Saved', formatCurrency(impact.interestSaved)]);</span>
 <span class="cstat-no" title="statement not covered" >        loanDetails.push(['Time Saved', this._formatTimeSaved(impact.timeSavedYears, impact.timeSavedMonths)]);</span>
       }
-      
+&nbsp;
       // Add loan details table
 <span class="cstat-no" title="statement not covered" >      doc.autoTable({</span>
         startY: 40,
         head: [['Parameter', 'Value']],
         body: loanDetails,
         theme: 'striped',
-        headStyles: { fillColor: [66, 133, 244] }
+        headStyles: { fillColor: [66, 133, 244] },
       });
-      
+&nbsp;
       // Add summary section
       const summaryY = <span class="cstat-no" title="statement not covered" >doc.previousAutoTable.finalY + 10;</span>
 <span class="cstat-no" title="statement not covered" >      doc.text('Payment Summary', 14, summaryY);</span>
-      
+&nbsp;
       const summaryDetails = <span class="cstat-no" title="statement not covered" >[</span>
         ['Monthly Payment', formatCurrency(loan.paymentAmount)],
         ['Total Principal', formatCurrency(loan.totalLoanAmount)],
         ['Total Interest', formatCurrency(loan.totalInterest)],
-        ['Total Cost', formatCurrency(loan.totalLoanAmount + loan.totalInterest)]
+        ['Total Cost', formatCurrency(loan.totalLoanAmount + loan.totalInterest)],
       ];
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      doc.autoTable({</span>
         startY: summaryY + 5,
         body: summaryDetails,
         theme: 'striped',
-        headStyles: { fillColor: [66, 133, 244] }
+        headStyles: { fillColor: [66, 133, 244] },
       });
-      
+&nbsp;
       // Add amortization schedule if available
 <span class="cstat-no" title="statement not covered" >      if (amortizationSchedule &amp;&amp; amortizationSchedule.payments &amp;&amp; amortizationSchedule.payments.length &gt; 0) {</span>
         const scheduleY = <span class="cstat-no" title="statement not covered" >doc.previousAutoTable.finalY + 10;</span>
 <span class="cstat-no" title="statement not covered" >        doc.text('Amortization Schedule', 14, scheduleY);</span>
-        
+&nbsp;
         // Prepare amortization data (limit to first 50 payments to keep PDF manageable)
         const maxPayments = <span class="cstat-no" title="statement not covered" >Math.min(amortizationSchedule.payments.length, 50);</span>
-        const scheduleData = <span class="cstat-no" title="statement not covered" >amortizationSchedule.payments.slice(0, maxPayments).map(<span class="fstat-no" title="function not covered" >pa</span>yment =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+        const scheduleData = <span class="cstat-no" title="statement not covered" >amortizationSchedule.payments.slice(0, maxPayments).map(<span class="fstat-no" title="function not covered" >(p</span>ayment) =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
           payment.number,
           formatDate(payment.date),
           formatCurrency(payment.amount),
           formatCurrency(payment.principal),
           formatCurrency(payment.interest),
-          formatCurrency(payment.balance)
+          formatCurrency(payment.balance),
         ]);
-        
+&nbsp;
         // Add note if we're limiting the displayed payments
 <span class="cstat-no" title="statement not covered" >        if (amortizationSchedule.payments.length &gt; maxPayments) {</span>
 <span class="cstat-no" title="statement not covered" >          doc.setFontSize(10);</span>
 <span class="cstat-no" title="statement not covered" >          doc.text(`Note: Showing first ${maxPayments} of ${amortizationSchedule.payments.length} payments`, 14, scheduleY + 5);</span>
         }
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        doc.autoTable({</span>
           startY: scheduleY + (amortizationSchedule.payments.length &gt; maxPayments ? 10 : 5),
           head: [['#', 'Date', 'Payment', 'Principal', 'Interest', 'Balance']],
@@ -1247,11 +1251,11 @@ class ExportService {
             2: { cellWidth: 30 },
             3: { cellWidth: 30 },
             4: { cellWidth: 30 },
-            5: { cellWidth: 30 }
-          }
+            5: { cellWidth: 30 },
+          },
         });
       }
-      
+&nbsp;
       // Add footer with date and page numbers
       const totalPages = <span class="cstat-no" title="statement not covered" >doc.internal.getNumberOfPages();</span>
 <span class="cstat-no" title="statement not covered" >      for (let i = <span class="cstat-no" title="statement not covered" >1;</span> i &lt;= totalPages; i++) {</span>
@@ -1260,7 +1264,7 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >        doc.text(`Generated on ${formatDate(new Date())}`, 14, doc.internal.pageSize.height - 10);</span>
 <span class="cstat-no" title="statement not covered" >        doc.text(`Page ${i} of ${totalPages}`, pageWidth - 14, doc.internal.pageSize.height - 10, { align: 'right' });</span>
       }
-      
+&nbsp;
       // Save the PDF
 <span class="cstat-no" title="statement not covered" >      doc.save(`${this._sanitizeFilename(loan.name)}_loan_summary.pdf`);</span>
 <span class="cstat-no" title="statement not covered" >      return true;</span>
@@ -1269,7 +1273,7 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
   }
-  
+&nbsp;
   /**
    * Export loan calculation to CSV
    * @param {Object} calculationData - Calculation data to export
@@ -1282,9 +1286,9 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!calculationData || !calculationData.loan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Invalid calculation data');</span>
       }
-      
+&nbsp;
       const { loan, amortizationSchedule } = <span class="cstat-no" title="statement not covered" >calculationData;</span>
-      
+&nbsp;
       // Prepare loan details
       const loanDetails = <span class="cstat-no" title="statement not covered" >{</span>
         'Loan Name': loan.name,
@@ -1300,40 +1304,40 @@ class ExportService {
         'Payoff Date': formatDate(loan.payoffDate),
         'Additional Payment': loan.additionalPayment,
         'Total Interest': loan.totalInterest,
-        'Total Cost': loan.totalLoanAmount + loan.totalInterest
+        'Total Cost': loan.totalLoanAmount + loan.totalInterest,
       };
-      
+&nbsp;
       // Convert loan details to CSV
       const loanDetailsCSV = <span class="cstat-no" title="statement not covered" >Papa.unparse([loanDetails]);</span>
-      
+&nbsp;
       // If we have an amortization schedule, add it as a separate section
       let amortizationCSV = <span class="cstat-no" title="statement not covered" >'';</span>
 <span class="cstat-no" title="statement not covered" >      if (amortizationSchedule &amp;&amp; amortizationSchedule.payments &amp;&amp; amortizationSchedule.payments.length &gt; 0) {</span>
-        const scheduleData = <span class="cstat-no" title="statement not covered" >amortizationSchedule.payments.map(<span class="fstat-no" title="function not covered" >pa</span>yment =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        const scheduleData = <span class="cstat-no" title="statement not covered" >amortizationSchedule.payments.map(<span class="fstat-no" title="function not covered" >(p</span>ayment) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
           'Payment Number': payment.number,
-          'Date': formatDate(payment.date),
+          Date: formatDate(payment.date),
           'Payment Amount': payment.amount,
-          'Principal': payment.principal,
-          'Interest': payment.interest,
-          'Balance': payment.balance
+          Principal: payment.principal,
+          Interest: payment.interest,
+          Balance: payment.balance,
         }));
-        
-<span class="cstat-no" title="statement not covered" >        amortizationCSV = '\n\nAmortization Schedule\n' + Papa.unparse(scheduleData);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        amortizationCSV = `\n\nAmortization Schedule\n${Papa.unparse(scheduleData)}`;</span>
       }
-      
+&nbsp;
       // Combine the sections
       const csvContent = <span class="cstat-no" title="statement not covered" >loanDetailsCSV + amortizationCSV;</span>
-      
+&nbsp;
       // Trigger download
 <span class="cstat-no" title="statement not covered" >      this._downloadCSV(csvContent, `${this._sanitizeFilename(loan.name)}_loan_details.csv`);</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return csvContent;</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error exporting to CSV:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
   }
-  
+&nbsp;
   /**
    * Generate a shareable link for the loan calculation
    * @param {Object} calculationData - Calculation data to share
@@ -1345,9 +1349,9 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!calculationData || !calculationData.loan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Invalid calculation data');</span>
       }
-      
+&nbsp;
       const { loan } = <span class="cstat-no" title="statement not covered" >calculationData;</span>
-      
+&nbsp;
       // Create a simplified object with just the essential loan parameters
       const shareableData = <span class="cstat-no" title="statement not covered" >{</span>
         name: loan.name,
@@ -1358,23 +1362,23 @@ class ExportService {
         paymentFrequency: loan.paymentFrequency,
         downPayment: loan.downPayment,
         additionalPayment: loan.additionalPayment,
-        startDate: loan.startDate.toISOString()
+        startDate: loan.startDate.toISOString(),
       };
-      
+&nbsp;
       // Convert to base64
       const encodedData = <span class="cstat-no" title="statement not covered" >btoa(JSON.stringify(shareableData));</span>
-      
+&nbsp;
       // Create URL with data as a parameter
       const shareableUrl = <span class="cstat-no" title="statement not covered" >new URL(this.appUrl);</span>
 <span class="cstat-no" title="statement not covered" >      shareableUrl.searchParams.append('loan', encodedData);</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return shareableUrl.toString();</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error generating shareable link:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
   }
-  
+&nbsp;
   /**
    * Import loan data from JSON
    * @param {string} jsonData - JSON string with loan data
@@ -1385,18 +1389,18 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!jsonData) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No JSON data provided');</span>
       }
-      
+&nbsp;
       // Parse the JSON
       const parsedData = <span class="cstat-no" title="statement not covered" >typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;</span>
-      
+&nbsp;
       // Validate that it contains loan data
 <span class="cstat-no" title="statement not covered" >      if (!parsedData || !parsedData.loan) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Invalid JSON format: missing loan data');</span>
       }
-      
+&nbsp;
       // Create loan object
       const loan = <span class="cstat-no" title="statement not covered" >Loan.fromJSON(parsedData.loan);</span>
-      
+&nbsp;
       // Create amortization schedule if available
       let amortizationSchedule = <span class="cstat-no" title="statement not covered" >null;</span>
 <span class="cstat-no" title="statement not covered" >      if (parsedData.amortizationSchedule) {</span>
@@ -1405,14 +1409,14 @@ class ExportService {
         // Generate a new schedule if not provided
 <span class="cstat-no" title="statement not covered" >        amortizationSchedule = new AmortizationSchedule(loan);</span>
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return { loan, amortizationSchedule };</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error importing from JSON:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
   }
-  
+&nbsp;
   /**
    * Import loan data from CSV
    * @param {string} csvData - CSV string with loan data
@@ -1423,17 +1427,17 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!csvData) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No CSV data provided');</span>
       }
-      
+&nbsp;
       // Parse the CSV
       const parsedData = <span class="cstat-no" title="statement not covered" >Papa.parse(csvData, { header: true });</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!parsedData.data || parsedData.data.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('Invalid CSV format or empty data');</span>
       }
-      
+&nbsp;
       // Extract loan details from the first row
       const loanData = <span class="cstat-no" title="statement not covered" >parsedData.data[0];</span>
-      
+&nbsp;
       // Map CSV fields to loan properties
       const loanOptions = <span class="cstat-no" title="statement not covered" >{</span>
         name: loanData['Loan Name'] || 'Imported Loan',
@@ -1444,22 +1448,22 @@ class ExportService {
         paymentFrequency: this._getPaymentFrequencyFromDescription(loanData['Payment Frequency']) || 'monthly',
         downPayment: parseFloat(loanData['Down Payment']) || 0,
         additionalPayment: parseFloat(loanData['Additional Payment']) || 0,
-        startDate: loanData['Start Date'] ? new Date(loanData['Start Date']) : new Date()
+        startDate: loanData['Start Date'] ? new Date(loanData['Start Date']) : new Date(),
       };
-      
+&nbsp;
       // Create loan object
       const loan = <span class="cstat-no" title="statement not covered" >new Loan(loanOptions);</span>
-      
+&nbsp;
       // Generate amortization schedule
       const amortizationSchedule = <span class="cstat-no" title="statement not covered" >new AmortizationSchedule(loan);</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      return { loan, amortizationSchedule };</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error importing from CSV:', error);</span>
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
   }
-  
+&nbsp;
   /**
    * Parse a shareable link to extract loan data
    * @param {string} url - Shareable link URL
@@ -1470,18 +1474,18 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      if (!url) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No URL provided');</span>
       }
-      
+&nbsp;
       // Parse the URL
       const parsedUrl = <span class="cstat-no" title="statement not covered" >new URL(url);</span>
       const encodedData = <span class="cstat-no" title="statement not covered" >parsedUrl.searchParams.get('loan');</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (!encodedData) {</span>
 <span class="cstat-no" title="statement not covered" >        throw new Error('No loan data found in URL');</span>
       }
-      
+&nbsp;
       // Decode the base64 data
       const jsonData = <span class="cstat-no" title="statement not covered" >atob(encodedData);</span>
-      
+&nbsp;
       // Parse the JSON
 <span class="cstat-no" title="statement not covered" >      return this.importFromJSON(jsonData);</span>
     } catch (error) {
@@ -1489,7 +1493,7 @@ class ExportService {
 <span class="cstat-no" title="statement not covered" >      return null;</span>
     }
   }
-  
+&nbsp;
   /**
    * Get loan type description
    * @param {string} type - Loan type
@@ -1501,12 +1505,12 @@ class ExportService {
       mortgage: 'Home Mortgage',
       auto: 'Auto Loan',
       personal: 'Personal Loan',
-      student: 'Student Loan'
+      student: 'Student Loan',
     };
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return descriptions[type] || type;</span>
   }
-  
+&nbsp;
   /**
    * Get loan type from description
    * @param {string} description - Loan type description
@@ -1518,12 +1522,12 @@ class ExportService {
       'Home Mortgage': 'mortgage',
       'Auto Loan': 'auto',
       'Personal Loan': 'personal',
-      'Student Loan': 'student'
+      'Student Loan': 'student',
     };
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return types[description] || 'mortgage';</span>
   }
-  
+&nbsp;
   /**
    * Get payment frequency description
    * @param {string} frequency - Payment frequency
@@ -1534,12 +1538,12 @@ class ExportService {
     const descriptions = <span class="cstat-no" title="statement not covered" >{</span>
       monthly: 'Monthly',
       'bi-weekly': 'Bi-Weekly',
-      weekly: 'Weekly'
+      weekly: 'Weekly',
     };
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return descriptions[frequency] || frequency;</span>
   }
-  
+&nbsp;
   /**
    * Get payment frequency from description
    * @param {string} description - Payment frequency description
@@ -1548,14 +1552,14 @@ class ExportService {
    */
 <span class="fstat-no" title="function not covered" >  _g</span>etPaymentFrequencyFromDescription(description) {
     const frequencies = <span class="cstat-no" title="statement not covered" >{</span>
-      'Monthly': 'monthly',
+      Monthly: 'monthly',
       'Bi-Weekly': 'bi-weekly',
-      'Weekly': 'weekly'
+      Weekly: 'weekly',
     };
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return frequencies[description] || 'monthly';</span>
   }
-  
+&nbsp;
   /**
    * Format loan term
    * @param {number} months - Term in months
@@ -1565,16 +1569,15 @@ class ExportService {
 <span class="fstat-no" title="function not covered" >  _f</span>ormatTerm(months) {
     const years = <span class="cstat-no" title="statement not covered" >Math.floor(months / 12);</span>
     const remainingMonths = <span class="cstat-no" title="statement not covered" >months % 12;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (years === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${months} months`;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (remainingMonths === 0) {</span>
+    } <span class="cstat-no" title="statement not covered" >if (remainingMonths === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${years} year${years !== 1 ? 's' : ''}`;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      return `${years} year${years !== 1 ? 's' : ''} and ${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;</span>
     }
+<span class="cstat-no" title="statement not covered" >    return `${years} year${years !== 1 ? 's' : ''} and ${remainingMonths} month${remainingMonths !== 1 ? 's' : ''}`;</span>
   }
-  
+&nbsp;
   /**
    * Format time saved
    * @param {number} years - Years saved
@@ -1585,15 +1588,14 @@ class ExportService {
 <span class="fstat-no" title="function not covered" >  _f</span>ormatTimeSaved(years, months) {
 <span class="cstat-no" title="statement not covered" >    if (years === 0 &amp;&amp; months === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return 'None';</span>
-    } else <span class="cstat-no" title="statement not covered" >if (years === 0) {</span>
+    } <span class="cstat-no" title="statement not covered" >if (years === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${months} month${months !== 1 ? 's' : ''}`;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (months === 0) {</span>
+    } <span class="cstat-no" title="statement not covered" >if (months === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return `${years} year${years !== 1 ? 's' : ''}`;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      return `${years} year${years !== 1 ? 's' : ''} and ${months} month${months !== 1 ? 's' : ''}`;</span>
     }
+<span class="cstat-no" title="statement not covered" >    return `${years} year${years !== 1 ? 's' : ''} and ${months} month${months !== 1 ? 's' : ''}`;</span>
   }
-  
+&nbsp;
   /**
    * Sanitize a string for use as a filename
    * @param {string} name - Name to sanitize
@@ -1603,7 +1605,7 @@ class ExportService {
 <span class="fstat-no" title="function not covered" >  _s</span>anitizeFilename(name) {
 <span class="cstat-no" title="statement not covered" >    return name.replace(/[^a-z0-9]/gi, '_').toLowerCase();</span>
   }
-  
+&nbsp;
   /**
    * Download CSV content as a file
    * @param {string} csvContent - CSV content
@@ -1613,7 +1615,7 @@ class ExportService {
 <span class="fstat-no" title="function not covered" >  _d</span>ownloadCSV(csvContent, filename) {
     const blob = <span class="cstat-no" title="statement not covered" >new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });</span>
     const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
-    
+&nbsp;
     // Create a download link
 <span class="cstat-no" title="statement not covered" >    if (navigator.msSaveBlob) {</span>
       // IE 10+
@@ -1632,14 +1634,15 @@ class ExportService {
   }
 }
 &nbsp;
-export default ExportService;</pre></td></tr></table></pre>
+export default ExportService;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-18T00:06:22.486Z
+                at 2025-07-18T06:08:08.994Z
             </div>
         <script src="../prettify.js"></script>
         <script>

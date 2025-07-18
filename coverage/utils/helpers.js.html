@@ -120,7 +120,8 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +178,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Helper utility functions for the loan calculator application
  * This module contains general-purpose helper functions used across the application
@@ -187,7 +189,7 @@
  * @returns {string} Unique identifier
  */
 export function <span class="fstat-no" title="function not covered" >generateUniqueId(</span>) {
-<span class="cstat-no" title="statement not covered" >    return Date.now().toString(36) + Math.random().toString(36).substr(2);</span>
+<span class="cstat-no" title="statement not covered" >  return Date.now().toString(36) + Math.random().toString(36).substr(2);</span>
 }
 &nbsp;
 /**
@@ -196,17 +198,17 @@ export function <span class="fstat-no" title="function not covered" >generateUni
  * @returns {Object} Cloned object
  */
 export function <span class="fstat-no" title="function not covered" >deepClone(</span>obj) {
-<span class="cstat-no" title="statement not covered" >    if (obj === null || typeof obj !== 'object') <span class="cstat-no" title="statement not covered" >return obj;</span></span>
-<span class="cstat-no" title="statement not covered" >    if (obj instanceof Date) <span class="cstat-no" title="statement not covered" >return new Date(obj.getTime());</span></span>
-<span class="cstat-no" title="statement not covered" >    if (obj instanceof Array) <span class="cstat-no" title="statement not covered" >return obj.map(<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >deepClone(item))</span>;</span></span>
-    
-    const cloned = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >    for (let key in obj) {</span>
-<span class="cstat-no" title="statement not covered" >        if (obj.hasOwnProperty(key)) {</span>
-<span class="cstat-no" title="statement not covered" >            cloned[key] = deepClone(obj[key]);</span>
-        }
+<span class="cstat-no" title="statement not covered" >  if (obj === null || typeof obj !== 'object') <span class="cstat-no" title="statement not covered" >return obj;</span></span>
+<span class="cstat-no" title="statement not covered" >  if (obj instanceof Date) <span class="cstat-no" title="statement not covered" >return new Date(obj.getTime());</span></span>
+<span class="cstat-no" title="statement not covered" >  if (obj instanceof Array) <span class="cstat-no" title="statement not covered" >return obj.map(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >deepClone(item))</span>;</span></span>
+&nbsp;
+  const cloned = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >  for (const key in obj) {</span>
+<span class="cstat-no" title="statement not covered" >    if (obj.hasOwnProperty(key)) {</span>
+<span class="cstat-no" title="statement not covered" >      cloned[key] = deepClone(obj[key]);</span>
     }
-<span class="cstat-no" title="statement not covered" >    return cloned;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  return cloned;</span>
 }
 &nbsp;
 /**
@@ -216,15 +218,15 @@ export function <span class="fstat-no" title="function not covered" >deepClone(<
  * @returns {Function} Debounced function
  */
 export function <span class="fstat-no" title="function not covered" >debounce(</span>func, wait) {
-    let timeout;
-<span class="cstat-no" title="statement not covered" >    return function <span class="fstat-no" title="function not covered" >executedFunction(</span>...args) {</span>
-        const later = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            clearTimeout(timeout);</span>
-<span class="cstat-no" title="statement not covered" >            func(...args);</span>
-        };
-<span class="cstat-no" title="statement not covered" >        clearTimeout(timeout);</span>
-<span class="cstat-no" title="statement not covered" >        timeout = setTimeout(later, wait);</span>
+  let timeout;
+<span class="cstat-no" title="statement not covered" >  return function <span class="fstat-no" title="function not covered" >executedFunction(</span>...args) {</span>
+    const later = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      clearTimeout(timeout);</span>
+<span class="cstat-no" title="statement not covered" >      func(...args);</span>
     };
+<span class="cstat-no" title="statement not covered" >    clearTimeout(timeout);</span>
+<span class="cstat-no" title="statement not covered" >    timeout = setTimeout(later, wait);</span>
+  };
 }
 &nbsp;
 /**
@@ -233,15 +235,16 @@ export function <span class="fstat-no" title="function not covered" >debounce(</
  * @returns {boolean} True if valid number
  */
 export function <span class="fstat-no" title="function not covered" >isValidNumber(</span>value) {
-<span class="cstat-no" title="statement not covered" >    return !isNaN(value) &amp;&amp; isFinite(value) &amp;&amp; value !== null &amp;&amp; value !== '';</span>
-}</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >  return !isNaN(value) &amp;&amp; isFinite(value) &amp;&amp; value !== null &amp;&amp; value !== '';</span>
+}
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-18T00:06:22.507Z
+                at 2025-07-18T06:08:09.020Z
             </div>
         <script src="../prettify.js"></script>
         <script>
