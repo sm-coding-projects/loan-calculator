@@ -1,57 +1,103 @@
 /* 
- * Dark Theme
+ * Dark Theme - Modern Design System
  * Alternative color scheme for the loan calculator
  * Optimized for accessibility with proper contrast ratios
  */
 
 .dark-theme {
-  /* Base colors */
-  --background-color: #121212;
-  --text-color: #ffffff;
-  --text-muted: #bdc3c7; /* Lightened for better contrast */
-  --primary-color: #2196f3; /* Added primary color for header/footer */
+  /* Primary Colors - Modern blue gradient (dark variants) */
+  --primary-50: #1e3a8a;
+  --primary-100: #1e40af;
+  --primary-200: #1d4ed8;
+  --primary-300: #2563eb;
+  --primary-400: #3b82f6;
+  --primary-500: #60a5fa;
+  --primary-600: #93c5fd;
+  --primary-700: #bfdbfe;
+  --primary-800: #dbeafe;
+  --primary-900: #eff6ff;
+  
+  /* Neutral Colors - Dark variants */
+  --neutral-50: #1c1917;
+  --neutral-100: #292524;
+  --neutral-200: #44403c;
+  --neutral-300: #57534e;
+  --neutral-400: #78716c;
+  --neutral-500: #a8a29e;
+  --neutral-600: #d6d3d1;
+  --neutral-700: #e7e5e4;
+  --neutral-800: #f5f5f4;
+  --neutral-900: #fafaf9;
+  
+  /* Semantic Colors - Dark variants */
+  --success-50: #047857;
+  --success-100: #059669;
+  --success-500: #10b981;
+  --success-600: #34d399;
+  --success-700: #6ee7b7;
+  
+  --warning-50: #b45309;
+  --warning-100: #d97706;
+  --warning-500: #f59e0b;
+  --warning-600: #fbbf24;
+  --warning-700: #fcd34d;
+  
+  --error-50: #b91c1c;
+  --error-100: #dc2626;
+  --error-500: #ef4444;
+  --error-600: #f87171;
+  --error-700: #fca5a5;
+  
+  /* Base colors - mapped to modern dark palette */
+  --background-color: var(--neutral-50);
+  --text-color: var(--neutral-900);
+  --text-muted: var(--neutral-500);
+  --primary-color: var(--primary-500);
   
   /* Component colors */
-  --card-background: #1e1e1e;
-  --card-border: #424242;
-  --card-border-rgb: 66, 66, 66;
-  --card-shadow: rgba(0, 0, 0, 0.5);
+  --card-background: var(--neutral-100);
+  --card-border: var(--neutral-300);
+  --card-border-rgb: 87, 83, 78;
+  --card-shadow: rgba(0, 0, 0, 0.25);
   
   /* Form elements */
-  --input-background: #2c2c2c;
-  --input-border: #424242;
-  --input-text: #ffffff;
-  --input-focus-border: #64b5f6; /* Lightened for better contrast */
-  --input-focus-shadow: rgba(100, 181, 246, 0.4);
+  --input-background: var(--neutral-200);
+  --input-border: var(--neutral-400);
+  --input-text: var(--neutral-800);
+  --input-focus-border: var(--primary-500);
+  --input-focus-shadow: rgba(96, 165, 250, 0.25);
   
   /* Buttons */
-  --primary-button-bg: #2196f3; /* Lightened for better contrast */
-  --primary-button-text: #ffffff;
-  --primary-button-hover: #1976d2;
-  --secondary-button-bg: #757575; /* Lightened for better contrast */
-  --secondary-button-text: #ffffff;
-  --secondary-button-hover: #616161;
+  --primary-button-bg: var(--primary-500);
+  --primary-button-text: var(--neutral-50);
+  --primary-button-hover: var(--primary-400);
+  --secondary-button-bg: var(--neutral-400);
+  --secondary-button-text: var(--neutral-50);
+  --secondary-button-hover: var(--neutral-300);
   
   /* Tables */
-  --table-header-bg: #2c2c2c;
-  --table-border: #424242;
-  --table-row-hover: rgba(33, 150, 243, 0.15);
+  --table-header-bg: var(--neutral-200);
+  --table-border: var(--neutral-300);
+  --table-row-hover: rgba(96, 165, 250, 0.1);
   
   /* Charts */
-  --chart-principal-color: #64b5f6; /* Lightened for better contrast */
-  --chart-interest-color: #ef5350; /* Lightened for better contrast */
-  --chart-grid-color: #424242;
-  --chart-axis-color: #bdc3c7;
+  --chart-principal-color: var(--primary-500);
+  --chart-interest-color: var(--error-500);
+  --chart-grid-color: var(--neutral-300);
+  --chart-axis-color: var(--neutral-500);
   
   /* Alerts and notifications */
-  --success-color: #4caf50; /* Lightened for better contrast */
-  --success-color-rgb: 76, 175, 80;
-  --warning-color: #ffca28; /* Lightened for better contrast */
-  --warning-color-rgb: 255, 202, 40;
-  --danger-color: #ef5350; /* Lightened for better contrast */
-  --danger-color-rgb: 239, 83, 80;
-  --info-color: #29b6f6; /* Lightened for better contrast */
-  --info-color-rgb: 41, 182, 246;
+  --success-color: var(--success-500);
+  --success-color-rgb: 16, 185, 129;
+  --warning-color: var(--warning-500);
+  --warning-color-rgb: 245, 158, 11;
+  --danger-color: var(--error-500);
+  --danger-color-rgb: 239, 68, 68;
+  --info-color: var(--primary-500);
+  --info-color-rgb: 96, 165, 250;
+  
+  /* Typography System - Inherits from light theme */
+  /* Font family and sizes are the same, only colors change */
 }
 
 body.dark-theme {
