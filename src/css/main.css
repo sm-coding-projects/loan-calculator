@@ -19,13 +19,77 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Modern Layout System */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
+/* Main layout using CSS Grid */
+.main-layout {
+  min-height: calc(100vh - 120px); /* Account for header and footer */
+  padding: var(--space-6) 0;
+}
+
+/* Calculator Grid - Two column layout on desktop */
+.calculator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* Section styling */
+.calculator-form-section,
+.results-section,
+.table-section,
+.charts-section,
+.saved-calculations-section {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.calculator-form-section:hover,
+.results-section:hover,
+.table-section:hover,
+.charts-section:hover,
+.saved-calculations-section:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Guidance section */
+.guidance-section {
+  background-color: var(--primary-50);
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+/* Charts Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.chart-item {
+  background-color: var(--neutral-50);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  min-height: 300px;
+}
+
+/* Legacy support - keeping for backward compatibility */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -38,13 +102,25 @@ body {
   margin-bottom: var(--space-5);
 }
 
+/* Modern Header Layout */
 header {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
   color: white;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-6);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header h1 {
+  color: white;
+  margin: 0;
+  font-weight: var(--font-bold);
+  font-size: var(--text-2xl);
 }
 
 .header-controls {
@@ -53,12 +129,20 @@ header {
   gap: var(--space-4);
 }
 
+/* Modern Footer Layout */
 footer {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
   color: white;
   text-align: center;
-  padding: var(--space-4);
-  margin-top: var(--space-8);
+  padding: var(--space-6);
+  margin-top: var(--space-12);
+  box-shadow: var(--shadow-lg);
+}
+
+footer p {
+  margin: 0;
+  font-size: var(--text-sm);
+  opacity: 0.9;
 }
 
 /* Typography Utilities */
@@ -188,17 +272,52 @@ p {
 .gap-6 { gap: var(--space-6); }
 .gap-8 { gap: var(--space-8); }
 
-/* Responsive styles */
+/* Mobile-first responsive typography and spacing */
 @media (max-width: 768px) {
+  /* Adjust container spacing for mobile */
+  .container {
+    padding: 0 var(--space-3);
+    gap: var(--space-6);
+  }
+  
+  /* Mobile typography scale */
+  h1 { 
+    font-size: var(--text-2xl); 
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-4);
+  }
+  h2 { 
+    font-size: var(--text-xl); 
+    margin-bottom: var(--space-3);
+  }
+  h3 { 
+    font-size: var(--text-lg); 
+    margin-bottom: var(--space-3);
+  }
+  h4, h5, h6 { 
+    font-size: var(--text-base); 
+    margin-bottom: var(--space-2);
+  }
+  
+  /* Adjust section spacing for mobile */
+  .calculator-form-section,
+  .results-section,
+  .table-section,
+  .charts-section,
+  .saved-calculations-section {
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+  
+  /* Legacy responsive support */
   .row {
     flex-direction: column;
+    margin: 0;
   }
   
   .col {
     flex: 1 0 100%;
+    padding: 0;
+    margin-bottom: var(--space-4);
   }
-  
-  h1 { font-size: var(--text-3xl); }
-  h2 { font-size: var(--text-2xl); }
-  h3 { font-size: var(--text-xl); }
 }

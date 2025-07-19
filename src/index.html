@@ -15,39 +15,34 @@
     </div>
   </header>
   
-  <main>
+  <main class="main-layout">
     <div class="container">
-      <div id="guidance-container" class="guidance-container"></div>
-      <div class="row">
-        <div class="col col-sm-12 col-md-12 col-lg-6" id="calculator-form-container">
+      <div id="guidance-container" class="guidance-section"></div>
+      
+      <div class="calculator-grid">
+        <section class="calculator-form-section" id="calculator-form-container">
           <!-- Calculator form will be rendered here -->
-        </div>
-        <div class="col col-sm-12 col-md-12 col-lg-6" id="results-display-container">
+        </section>
+        <section class="results-section" id="results-display-container">
           <!-- Results will be rendered here -->
-        </div>
+        </section>
       </div>
       
-      <div class="row">
-        <div class="col col-sm-12" id="amortization-table-container">
-          <!-- Amortization table will be rendered here -->
-        </div>
-      </div>
+      <section class="table-section" id="amortization-table-container">
+        <!-- Amortization table will be rendered here -->
+      </section>
       
-      <div class="row">
-        <div class="col col-sm-12" id="charts-container">
-          <!-- Charts will be rendered here -->
-          <div class="charts-wrapper">
-            <div class="chart-item" id="principal-interest-chart"></div>
-            <div class="chart-item" id="payment-breakdown-chart"></div>
-          </div>
+      <section class="charts-section" id="charts-container">
+        <!-- Charts will be rendered here -->
+        <div class="charts-grid">
+          <div class="chart-item" id="principal-interest-chart"></div>
+          <div class="chart-item" id="payment-breakdown-chart"></div>
         </div>
-      </div>
+      </section>
       
-      <div class="row">
-        <div class="col col-sm-12" id="saved-calculations-container">
-          <!-- Saved calculations will be rendered here -->
-        </div>
-      </div>
+      <section class="saved-calculations-section" id="saved-calculations-container">
+        <!-- Saved calculations will be rendered here -->
+      </section>
     </div>
   </main>
   

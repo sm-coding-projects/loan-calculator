@@ -4,30 +4,61 @@
  * Implements requirement 2.4
  */
 
-/* Base responsive grid system */
+/* Modern Responsive Layout System */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 
+/* Responsive breakpoints for calculator grid */
+.calculator-grid {
+  display: grid;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* Legacy support for existing components */
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
+  margin: 0 calc(-1 * var(--space-4));
 }
 
 .col {
   flex: 1;
-  padding: 0 15px;
-  margin-bottom: 20px;
+  padding: 0 var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 /* Media Queries */
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
+  /* Modern grid layout for desktop */
+  .calculator-grid {
+    grid-template-columns: 2fr 3fr; /* Form takes 40%, results take 60% */
+  }
+  
+  /* Charts grid - two columns on desktop */
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  /* Desktop-specific styles */
+  .desktop-only { display: block; }
+  .tablet-only, .mobile-only { display: none; }
+  
+  /* Saved calculations grid */
+  .saved-calculations-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Legacy column support */
   .col-lg-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
   .col-lg-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
   .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
@@ -40,42 +71,44 @@
   .col-lg-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
   .col-lg-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
   .col-lg-12 { flex: 0 0 100%; max-width: 100%; }
-  
-  /* Desktop-specific styles */
-  .desktop-only { display: block; }
-  .tablet-only, .mobile-only { display: none; }
-  
-  /* Two-column layout with form on the left and results on the right */
-  #calculator-form-container {
-    flex: 0 0 40%;
-    max-width: 40%;
-  }
-  
-  #results-display-container {
-    flex: 0 0 60%;
-    max-width: 60%;
-  }
-  
-  /* Charts layout */
-  #charts-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  #charts-container .chart-container {
-    flex: 1 0 calc(50% - 20px);
-    min-width: 400px;
-  }
-  
-  /* Saved calculations grid */
-  .saved-calculations-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 /* Medium devices (tablets, 768px to 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
+  /* Single column layout for tablets */
+  .calculator-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  
+  /* Charts grid - single column on tablet */
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  /* Tablet-specific styles */
+  .tablet-only { display: block; }
+  .desktop-only, .mobile-only { display: none; }
+  
+  /* Saved calculations grid */
+  .saved-calculations-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Adjust form layout for better tablet experience */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 calc(-1 * var(--space-2));
+  }
+  
+  .form-col {
+    flex: 1 0 50%;
+    padding: 0 var(--space-2);
+  }
+  
+  /* Legacy column support */
   .col-md-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
   .col-md-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
   .col-md-3 { flex: 0 0 25%; max-width: 25%; }
@@ -88,43 +121,72 @@
   .col-md-10 { flex: 0 0 83.333333%; max-width: 83.333333%; }
   .col-md-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
   .col-md-12 { flex: 0 0 100%; max-width: 100%; }
-  
-  /* Tablet-specific styles */
-  .tablet-only { display: block; }
-  .desktop-only, .mobile-only { display: none; }
-  
-  /* Stacked layout with form above results */
-  #calculator-form-container,
-  #results-display-container {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  
-  /* Charts layout */
-  #charts-container .chart-container {
-    margin-bottom: 20px;
-  }
-  
-  /* Saved calculations grid */
-  .saved-calculations-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  /* Adjust form layout for better tablet experience */
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -10px;
-  }
-  
-  .form-col {
-    flex: 1 0 50%;
-    padding: 0 10px;
-  }
 }
 
 /* Small devices (mobile phones, less than 768px) */
 @media (max-width: 767px) {
+  /* Mobile layout adjustments */
+  .container {
+    padding: 0 var(--space-3);
+    gap: var(--space-6);
+  }
+  
+  /* Single column layout for mobile */
+  .calculator-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  /* Charts grid - single column on mobile */
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  
+  /* Mobile-specific styles */
+  .mobile-only { display: block; }
+  .desktop-only, .tablet-only { display: none; }
+  
+  /* Section padding adjustments for mobile */
+  .calculator-form-section,
+  .results-section,
+  .table-section,
+  .charts-section,
+  .saved-calculations-section {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+  
+  /* Header adjustments */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-3);
+    position: relative; /* Remove sticky on mobile for better UX */
+  }
+  
+  header h1 {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-xl);
+  }
+  
+  .header-controls {
+    align-self: flex-end;
+    margin-top: var(--space-2);
+  }
+  
+  /* Legacy column support */
+  .row {
+    flex-direction: column;
+    margin: 0;
+  }
+  
+  .col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   .col-sm-1 { flex: 0 0 8.333333%; max-width: 8.333333%; }
   .col-sm-2 { flex: 0 0 16.666667%; max-width: 16.666667%; }
   .col-sm-3 { flex: 0 0 25%; max-width: 25%; }
@@ -138,56 +200,61 @@
   .col-sm-11 { flex: 0 0 91.666667%; max-width: 91.666667%; }
   .col-sm-12 { flex: 0 0 100%; max-width: 100%; }
   
-  /* Mobile-specific styles */
-  .mobile-only { display: block; }
-  .desktop-only, .tablet-only { display: none; }
-  
-  /* Single column layout */
-  .row {
-    flex-direction: column;
-  }
-  
-  .col {
-    flex: 0 0 100%;
-    max-width: 100%;
-  }
-  
-  /* Header adjustments */
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-  }
-  
-  header h1 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-  }
-  
-  #settings-container {
-    align-self: flex-end;
-  }
-  
-  /* Form adjustments */
+  /* Mobile-optimized form elements */
   .form-group {
-    margin-bottom: 12px;
+    margin-bottom: var(--space-4);
   }
   
   .form-label {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-2);
+    display: block;
   }
   
   .form-input, 
   .form-select {
     font-size: 16px; /* Prevents zoom on iOS */
-    padding: 10px;
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    min-height: 44px; /* Touch-friendly minimum size */
+    border-radius: var(--radius-md);
+    border: 2px solid var(--input-border);
+    background-color: var(--input-background);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   
-  /* Button adjustments */
+  .form-input:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 3px var(--input-focus-shadow);
+  }
+  
+  /* Touch-friendly buttons */
   .form-button {
     width: 100%;
-    padding: 12px;
-    margin-top: 5px;
+    min-height: 48px; /* Touch-friendly minimum size */
+    padding: var(--space-3) var(--space-6);
+    margin-top: var(--space-2);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    border-radius: var(--radius-md);
+    border: none;
+    background-color: var(--primary-button-bg);
+    color: var(--primary-button-text);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .form-button:hover,
+  .form-button:focus {
+    background-color: var(--primary-button-hover);
+  }
+  
+  .form-button:active {
+    transform: translateY(1px);
   }
   
   /* Results display adjustments */
@@ -205,53 +272,113 @@
     flex: 1;
   }
   
-  /* Amortization table adjustments */
+  /* Mobile-optimized table */
   .table-container {
-    margin-left: -15px;
-    margin-right: -15px;
-    width: calc(100% + 30px);
+    margin-left: calc(-1 * var(--space-3));
+    margin-right: calc(-1 * var(--space-3));
+    width: calc(100% + calc(2 * var(--space-3)));
     border-radius: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
+  .table {
+    min-width: 600px; /* Ensure table doesn't get too cramped */
+    font-size: var(--text-sm);
+  }
+  
+  .table th,
+  .table td {
+    padding: var(--space-2) var(--space-3);
+    white-space: nowrap;
+  }
+  
+  /* Touch-friendly filter controls */
   .filter-controls {
     flex-direction: column;
-    padding: 10px;
+    padding: var(--space-4);
+    gap: var(--space-3);
   }
   
   .filter-row {
     flex-direction: column;
+    gap: var(--space-3);
   }
   
   .filter-group {
     width: 100%;
-    margin-bottom: 10px;
   }
   
-  /* Charts adjustments */
+  .filter-group select,
+  .filter-group input {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  
+  /* Mobile-optimized charts */
   .chart-container {
-    height: 250px;
+    height: 280px;
+    padding: var(--space-3);
   }
   
-  /* Saved calculations grid */
+  .chart-item {
+    min-height: 250px;
+    padding: var(--space-3);
+  }
+  
+  /* Single column saved calculations */
   .saved-calculations-list {
     grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
   
-  /* Comparison view adjustments */
+  .saved-calculation-item {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+  
+  /* Mobile-friendly comparison table */
   .comparison-table {
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
-  /* Settings panel adjustments */
+  /* Full-screen settings panel on mobile */
   .settings-dropdown {
     position: fixed;
-    top: 60px;
+    top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     width: 100%;
+    height: 100%;
     border-radius: 0;
-    max-height: calc(100vh - 60px);
+    z-index: 1000;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Touch-friendly interactive elements */
+  .interactive-element,
+  .clickable,
+  .button,
+  .tab,
+  .accordion-header {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Improve touch targets for small elements */
+  .close-button,
+  .icon-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--space-2);
   }
 }
 
@@ -343,5 +470,118 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+/* Mobi
+le-specific enhancements */
+@media (max-width: 767px) {
+  /* Improve scrolling performance */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Mobile-friendly focus states */
+  .form-input:focus,
+  .form-select:focus,
+  .form-button:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+  
+  /* Optimize text selection on mobile */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Mobile-friendly tooltips */
+  .tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: calc(100vw - 2rem);
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+  }
+  
+  /* Improve mobile navigation */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--card-background);
+    border-top: 1px solid var(--card-border);
+    padding: var(--space-2);
+    display: flex;
+    justify-content: space-around;
+    z-index: 100;
+  }
+  
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-2);
+    min-height: 44px;
+    min-width: 44px;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+  
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active {
+    color: var(--primary-600);
+  }
+  
+  /* Mobile-specific loading states */
+  .mobile-loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  /* Improve mobile form experience */
+  .form-section {
+    margin-bottom: var(--space-6);
+  }
+  
+  .form-section:last-child {
+    margin-bottom: var(--space-8); /* Extra space for mobile keyboard */
+  }
+  
+  /* Mobile-friendly error messages */
+  .error-message {
+    font-size: var(--text-sm);
+    color: var(--error-600);
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+    background-color: var(--error-50);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--error-500);
+  }
+  
+  /* Success messages */
+  .success-message {
+    font-size: var(--text-sm);
+    color: var(--success-700);
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+    background-color: var(--success-50);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--success-500);
   }
 }
