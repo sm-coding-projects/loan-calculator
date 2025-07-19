@@ -94,34 +94,39 @@ class CalculatorForm {
         <form id="loan-calculator-form">
           <!-- Loan Type Selector -->
           <div class="form-group">
-            <label for="loan-type" class="form-label">
-              ${t('form.loanType')}
-              <span class="info-icon" data-tooltip="${t('tooltips.loanType')}" data-tooltip-position="top">?</span>
-            </label>
-            <select id="loan-type" class="form-select" name="type">
-              ${Object.entries(LOAN_TYPES).map(([key, value]) => {
+            <div class="form-input-wrapper">
+              <select id="loan-type" class="form-select" name="type">
+                ${Object.entries(LOAN_TYPES).map(([key, value]) => {
     const translationKey = `form.${key}`;
     const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
     return `<option value="${key}" ${this.formData.type === key ? 'selected' : ''}>${description}</option>`;
   }).join('')}
-            </select>
+              </select>
+              <label for="loan-type" class="form-label floating">
+                ${t('form.loanType')}
+                <span class="info-icon" data-tooltip="${t('tooltips.loanType')}" data-tooltip-position="top">?</span>
+              </label>
+            </div>
           </div>
           
           <!-- Loan Amount -->
           <div class="form-group">
-            <label for="principal" class="form-label">
-              ${t('form.loanAmount')} (${this.formData.currency || 'USD'})
-            </label>
-            <input 
-              type="number" 
-              id="principal" 
-              class="form-input" 
-              name="principal" 
-              value="${this.formData.principal}" 
-              min="${LOAN_TYPES[this.formData.type].minAmount}" 
-              max="${LOAN_TYPES[this.formData.type].maxAmount}" 
-              step="1000"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="principal" 
+                class="form-input" 
+                name="principal" 
+                value="${this.formData.principal}" 
+                min="${LOAN_TYPES[this.formData.type].minAmount}" 
+                max="${LOAN_TYPES[this.formData.type].maxAmount}" 
+                step="1000"
+                placeholder=" "
+              >
+              <label for="principal" class="form-label">
+                ${t('form.loanAmount')} (${this.formData.currency || 'USD'})
+              </label>
+            </div>
             <div class="range-container">
               <input 
                 type="range" 
@@ -142,17 +147,20 @@ class CalculatorForm {
           
           <!-- Down Payment -->
           <div class="form-group">
-            <label for="downPayment" class="form-label">${t('form.downPayment')} (${this.formData.currency || 'USD'})</label>
-            <input 
-              type="number" 
-              id="downPayment" 
-              class="form-input" 
-              name="downPayment" 
-              value="${this.formData.downPayment}" 
-              min="0" 
-              max="${this.formData.principal}" 
-              step="1000"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="downPayment" 
+                class="form-input" 
+                name="downPayment" 
+                value="${this.formData.downPayment}" 
+                min="0" 
+                max="${this.formData.principal}" 
+                step="1000"
+                placeholder=" "
+              >
+              <label for="downPayment" class="form-label">${t('form.downPayment')} (${this.formData.currency || 'USD'})</label>
+            </div>
             <div class="range-container">
               <input 
                 type="range" 
@@ -173,17 +181,20 @@ class CalculatorForm {
           
           <!-- Interest Rate -->
           <div class="form-group">
-            <label for="interestRate" class="form-label">${t('form.interestRate')} (%)</label>
-            <input 
-              type="number" 
-              id="interestRate" 
-              class="form-input" 
-              name="interestRate" 
-              value="${this.formData.interestRate}" 
-              min="0" 
-              max="30" 
-              step="0.125"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="interestRate" 
+                class="form-input" 
+                name="interestRate" 
+                value="${this.formData.interestRate}" 
+                min="0" 
+                max="30" 
+                step="0.125"
+                placeholder=" "
+              >
+              <label for="interestRate" class="form-label">${t('form.interestRate')} (%)</label>
+            </div>
             <div class="range-container">
               <input 
                 type="range" 
@@ -207,17 +218,20 @@ class CalculatorForm {
           
           <!-- Loan Term -->
           <div class="form-group">
-            <label for="term" class="form-label">${t('form.loanTerm')} (${t('form.months')})</label>
-            <input 
-              type="number" 
-              id="term" 
-              class="form-input" 
-              name="term" 
-              value="${this.formData.term}" 
-              min="1" 
-              max="600" 
-              step="1"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="term" 
+                class="form-input" 
+                name="term" 
+                value="${this.formData.term}" 
+                min="1" 
+                max="600" 
+                step="1"
+                placeholder=" "
+              >
+              <label for="term" class="form-label">${t('form.loanTerm')} (${t('form.months')})</label>
+            </div>
             <div class="range-container">
               <input 
                 type="range" 
@@ -234,69 +248,80 @@ class CalculatorForm {
               </div>
             </div>
             <div class="term-presets">
-              <button type="button" class="term-preset" data-term="60">5 ${t('form.years')}</button>
-              <button type="button" class="term-preset" data-term="180">15 ${t('form.years')}</button>
-              <button type="button" class="term-preset" data-term="360">30 ${t('form.years')}</button>
+              <button type="button" class="term-preset outline small" data-term="60">5 ${t('form.years')}</button>
+              <button type="button" class="term-preset outline small" data-term="180">15 ${t('form.years')}</button>
+              <button type="button" class="term-preset outline small" data-term="360">30 ${t('form.years')}</button>
             </div>
             <div class="invalid-feedback" id="term-error"></div>
           </div>
           
           <!-- Payment Frequency -->
           <div class="form-group">
-            <label for="paymentFrequency" class="form-label">${t('form.paymentFrequency')}</label>
-            <select id="paymentFrequency" class="form-select" name="paymentFrequency">
-              ${Object.entries(PAYMENT_FREQUENCIES).map(([key, value]) => {
+            <div class="form-input-wrapper">
+              <select id="paymentFrequency" class="form-select" name="paymentFrequency">
+                ${Object.entries(PAYMENT_FREQUENCIES).map(([key, value]) => {
     const translationKey = `form.${key}`;
     const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
     return `<option value="${key}" ${this.formData.paymentFrequency === key ? 'selected' : ''}>${description}</option>`;
   }).join('')}
-            </select>
+              </select>
+              <label for="paymentFrequency" class="form-label floating">${t('form.paymentFrequency')}</label>
+            </div>
           </div>
           
           <!-- Start Date -->
           <div class="form-group">
-            <label for="startDate" class="form-label">${t('form.startDate')}</label>
-            <input 
-              type="date" 
-              id="startDate" 
-              class="form-input" 
-              name="startDate" 
-              value="${new Date(this.formData.startDate).toISOString().split('T')[0]}"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="date" 
+                id="startDate" 
+                class="form-input" 
+                name="startDate" 
+                value="${new Date(this.formData.startDate).toISOString().split('T')[0]}"
+                placeholder=" "
+              >
+              <label for="startDate" class="form-label">${t('form.startDate')}</label>
+            </div>
             <div class="invalid-feedback" id="startDate-error"></div>
           </div>
           
           <!-- Additional Payment -->
           <div class="form-group">
-            <label for="additionalPayment" class="form-label">${t('form.additionalPayment')} (${this.formData.currency || 'USD'})</label>
-            <input 
-              type="number" 
-              id="additionalPayment" 
-              class="form-input" 
-              name="additionalPayment" 
-              value="${this.formData.additionalPayment}" 
-              min="0" 
-              step="10"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="additionalPayment" 
+                class="form-input" 
+                name="additionalPayment" 
+                value="${this.formData.additionalPayment}" 
+                min="0" 
+                step="10"
+                placeholder=" "
+              >
+              <label for="additionalPayment" class="form-label">${t('form.additionalPayment')} (${this.formData.currency || 'USD'})</label>
+            </div>
             <div class="invalid-feedback" id="additionalPayment-error"></div>
           </div>
           
           <!-- Inflation Rate -->
           <div class="form-group">
-            <label for="inflationRate" class="form-label">
-              ${t('form.inflationRate') || 'Inflation Rate'} (%)
-              <span class="info-icon" data-tooltip="${t('tooltips.inflationRate') || 'Annual inflation rate used to calculate the real value of future payments.'}" data-tooltip-position="top">?</span>
-            </label>
-            <input 
-              type="number" 
-              id="inflationRate" 
-              class="form-input" 
-              name="inflationRate" 
-              value="${this.formData.inflationRate || 2.5}" 
-              min="0" 
-              max="20" 
-              step="0.1"
-            >
+            <div class="form-input-wrapper">
+              <input 
+                type="number" 
+                id="inflationRate" 
+                class="form-input" 
+                name="inflationRate" 
+                value="${this.formData.inflationRate || 2.5}" 
+                min="0" 
+                max="20" 
+                step="0.1"
+                placeholder=" "
+              >
+              <label for="inflationRate" class="form-label">
+                ${t('form.inflationRate') || 'Inflation Rate'} (%)
+                <span class="info-icon" data-tooltip="${t('tooltips.inflationRate') || 'Annual inflation rate used to calculate the real value of future payments.'}" data-tooltip-position="top">?</span>
+              </label>
+            </div>
             <div class="range-container">
               <input 
                 type="range" 
@@ -317,8 +342,10 @@ class CalculatorForm {
           
           <!-- Calculate Button -->
           <div class="form-group">
-            <button type="submit" class="form-button" id="calculate-button">${t('form.calculate')}</button>
-            <button type="button" class="form-button" id="reset-button">${t('form.reset')}</button>
+            <div class="form-buttons">
+              <button type="submit" class="form-button" id="calculate-button">${t('form.calculate')}</button>
+              <button type="button" class="form-button secondary" id="reset-button">${t('form.reset')}</button>
+            </div>
           </div>
         </form>
       </div>
@@ -419,6 +446,9 @@ class CalculatorForm {
 
     // Initialize tooltips
     initTooltips(this.container);
+
+    // Initialize floating labels
+    this.initFloatingLabels();
   }
 
   /**
@@ -661,10 +691,12 @@ class CalculatorForm {
       return;
     }
 
-    // Disable calculate button during calculation
+    // Add loading state to calculate button
     const calculateButton = this.container.querySelector('#calculate-button');
     if (calculateButton) {
       calculateButton.disabled = true;
+      calculateButton.classList.add('loading');
+      calculateButton.setAttribute('data-original-text', calculateButton.textContent);
       calculateButton.textContent = 'Calculating...';
     }
 
@@ -685,10 +717,12 @@ class CalculatorForm {
       console.error('Error calculating loan:', error);
       this.showFormError(`Calculation error: ${error.message || 'Unknown error occurred'}`);
     } finally {
-      // Re-enable calculate button
+      // Remove loading state from calculate button
       if (calculateButton) {
         calculateButton.disabled = false;
-        calculateButton.textContent = 'Calculate';
+        calculateButton.classList.remove('loading');
+        const originalText = calculateButton.getAttribute('data-original-text') || 'Calculate';
+        calculateButton.textContent = originalText;
       }
     }
   }
@@ -849,6 +883,55 @@ class CalculatorForm {
       this.formData.currency = currency;
       this.render();
       this.bindEvents();
+    }
+  }
+
+  /**
+   * Initialize floating label behavior
+   */
+  initFloatingLabels() {
+    if (!this.container) return;
+
+    const inputs = this.container.querySelectorAll('.form-input, .form-select');
+    
+    inputs.forEach((input) => {
+      const label = input.nextElementSibling;
+      if (!label || !label.classList.contains('form-label')) return;
+
+      // Check if input has value on load
+      this.updateFloatingLabel(input, label);
+
+      // Handle focus events
+      input.addEventListener('focus', () => {
+        label.classList.add('floating');
+      });
+
+      // Handle blur events
+      input.addEventListener('blur', () => {
+        this.updateFloatingLabel(input, label);
+      });
+
+      // Handle input events
+      input.addEventListener('input', () => {
+        this.updateFloatingLabel(input, label);
+      });
+    });
+  }
+
+  /**
+   * Update floating label state based on input value
+   * @param {HTMLElement} input - Input element
+   * @param {HTMLElement} label - Label element
+   */
+  updateFloatingLabel(input, label) {
+    const hasValue = input.value && input.value.trim() !== '';
+    const isSelect = input.tagName.toLowerCase() === 'select';
+    const isDate = input.type === 'date';
+    
+    if (hasValue || isSelect || isDate) {
+      label.classList.add('floating');
+    } else {
+      label.classList.remove('floating');
     }
   }
 }
