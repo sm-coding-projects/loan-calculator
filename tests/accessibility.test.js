@@ -95,7 +95,7 @@ describe('Accessibility Compliance', () => {
     // Check for basic styling (color or background-color)
     const hasColor = style.color !== '' && style.color !== 'rgba(0, 0, 0, 0)';
     const hasBackgroundColor = style.backgroundColor !== '' && style.backgroundColor !== 'rgba(0, 0, 0, 0)';
-    
+
     // For a basic test, we just ensure some styling is present
     // In a real app, you'd use tools like axe-core for proper contrast checking
     expect(hasColor || hasBackgroundColor || true).toBe(true); // Always pass for now

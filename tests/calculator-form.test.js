@@ -84,10 +84,21 @@ jest.mock('../src/js/models/loan.model', () => {
     })),
   };
 
+  const MockLoan = jest.fn().mockImplementation(() => mockLoan);
+  MockLoan.createDefault = jest.fn(() => mockLoan);
+  MockLoan.fromJSON = jest.fn(() => mockLoan);
+  MockLoan.calculateAffordableLoan = jest.fn(() => ({
+    affordablePrincipal: 200000,
+    totalPurchasePrice: 240000,
+    downPayment: 40000,
+    monthlyPayment: 1200,
+    totalInterest: 150000,
+    loan: mockLoan,
+  }));
+
   return {
     __esModule: true,
-    default: jest.fn().mockImplementation(() => mockLoan),
-    createDefault: jest.fn(() => mockLoan),
+    default: MockLoan,
     fromJSON: jest.fn(() => mockLoan),
     LOAN_TYPES: MockLoanTypes,
     PAYMENT_FREQUENCIES: MockPaymentFrequencies,
