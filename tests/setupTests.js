@@ -1,6 +1,11 @@
 // This file is run before each test file
 // Add any global setup needed for tests here
 
+// Fix for TextEncoder/TextDecoder not being available in Jest environment
+const { TextEncoder, TextDecoder } = require('util');
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
 // Example: Mock localStorage
 Object.defineProperty(window, 'localStorage', {
   value: {
