@@ -185,9 +185,35 @@ Build and run with Docker:
 # Build the Docker image
 docker build -t loan-calculator .
 
-# Run the container
-docker run -d -p 8080:80 loan-calculator
+# Run the container in background
+docker run -d -p 8080:80 --name loan-calculator loan-calculator
+
+# Access the application
+open http://localhost:8080
+
+# View container logs
+docker logs loan-calculator
+
+# Stop the container
+docker stop loan-calculator
+
+# Start the container again
+docker start loan-calculator
+
+# Remove the container (must be stopped first)
+docker rm loan-calculator
+
+# Stop and remove in one command
+docker stop loan-calculator && docker rm loan-calculator
+
+# Remove the image
+docker rmi loan-calculator
+
+# Complete cleanup (remove container and image)
+docker stop loan-calculator && docker rm loan-calculator && docker rmi loan-calculator
 ```
+
+**Docker Build Status**: ✅ **FIXED** - Docker builds successfully after removing problematic image optimization dependencies.
 
 **Note**: The application builds successfully and is ready for deployment. Current CI/CD pipeline builds the Docker image correctly but may require GitHub Container Registry permissions for automated deployment.
 
@@ -270,6 +296,18 @@ lsof -ti:9000
 npm start -- --port 3000
 ```
 
+**Docker Build Issues**:
+```bash
+# Build without cache
+docker build -t loan-calculator . --no-cache
+
+# Check Docker logs
+docker logs <container-id>
+
+# Remove all containers and images to start fresh
+docker system prune -a
+```
+
 **CSS/Styling Issues**:
 - Ensure all CSS files are properly imported in `src/js/app.js`
 - Check browser developer tools for CSS loading errors
@@ -325,6 +363,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ### Build System Enhancements
 - ✅ **Fixed CSS Import Issues**: Resolved webpack CSS processing errors
+- ✅ **Fixed Docker Build**: Removed problematic image optimization dependencies
 - ✅ **Optimized Bundle Structure**: Improved asset organization and loading
 - ✅ **Enhanced Development Workflow**: Better hot reload and error reporting
 

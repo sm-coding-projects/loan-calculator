@@ -5,7 +5,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CompressionPlugin = require('compression-webpack-plugin');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -93,38 +92,6 @@ module.exports = (env, argv) => {
           test: /\.(js|css|html|svg)$/,
           threshold: 10240,
           minRatio: 0.8,
-        }),
-        new ImageMinimizerPlugin({
-          minimizer: {
-            implementation: ImageMinimizerPlugin.imageminMinify,
-            options: {
-              plugins: [
-                ['gifsicle', { interlaced: true }],
-                ['jpegtran', { progressive: true }],
-                ['optipng', { optimizationLevel: 5 }],
-                [
-                  'svgo',
-                  {
-                    plugins: [
-                      {
-                        name: 'preset-default',
-                        params: {
-                          overrides: {
-                            removeViewBox: false,
-                            addAttributesToSVGElement: {
-                              params: {
-                                attributes: [{ xmlns: 'http://www.w3.org/2000/svg' }],
-                              },
-                            },
-                          },
-                        },
-                      },
-                    ],
-                  },
-                ],
-              ],
-            },
-          },
         }),
       ] : []),
       ...(isAnalyze ? [new BundleAnalyzerPlugin()] : []),

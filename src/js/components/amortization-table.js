@@ -161,11 +161,53 @@ class AmortizationTable {
   }
 
   /**
+   * Show loading skeleton while data is being processed
+   */
+  showLoadingSkeleton() {
+    if (!this.container) return;
+
+    this.container.innerHTML = `
+      <div class="table-container">
+        <table class="skeleton-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Payment</th>
+              <th>Principal</th>
+              <th>Interest</th>
+              <th>Remaining Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${Array.from({ length: 8 }, (_, i) => `
+              <tr class="skeleton-row">
+                <td><div class="skeleton-cell short"></div></td>
+                <td><div class="skeleton-cell medium"></div></td>
+                <td><div class="skeleton-cell long"></div></td>
+                <td><div class="skeleton-cell long"></div></td>
+                <td><div class="skeleton-cell long"></div></td>
+                <td><div class="skeleton-cell long"></div></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  /**
    * Render the amortization schedule
    * @param {Object} amortizationSchedule - Amortization schedule object
    */
   render(amortizationSchedule) {
-    if (!this.container || !amortizationSchedule) {
+    if (!this.container) {
+      return;
+    }
+
+    // Show loading skeleton if no data yet
+    if (!amortizationSchedule || !amortizationSchedule.payments || amortizationSchedule.payments.length === 0) {
+      this.showLoadingSkeleton();
       return;
     }
 
@@ -581,6 +623,22 @@ class AmortizationTable {
 
     // Render with new data
     this.render(amortizationSchedule);
+  }
+
+  /**
+   * Show error state
+   * @param {string} message - Error message to display
+   */
+  showError(message = 'Failed to load amortization data') {
+    if (!this.container) return;
+
+    this.container.innerHTML = `
+      <div class="component-error">
+        <div class="error-icon">⚠️</div>
+        <div class="error-text">${message}</div>
+        <button class="retry-button" onclick="location.reload()">Retry</button>
+      </div>
+    `;
   }
 
   /**

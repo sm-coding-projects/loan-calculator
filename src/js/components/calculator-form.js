@@ -520,7 +520,20 @@ class CalculatorForm {
     const validator = this.validators[field];
     if (!validator) return true;
 
-    const isValid = validator(value);
+    let isValid = true;
+    let errorMessage = '';
+
+    try {
+      isValid = validator(value);
+      
+      if (!isValid) {
+        // Get appropriate error message based on field and value
+        errorMessage = this.getFieldErrorMessage(field, value);
+      }
+    } catch (error) {
+      isValid = false;
+      errorMessage = `Validation error: ${error.message}`;
+    }
 
     // Update UI
     const input = this.container.querySelector(`#${field}`);
@@ -532,15 +545,83 @@ class CalculatorForm {
         errorElement.textContent = '';
       } else {
         input.classList.add('is-invalid');
-        errorElement.textContent = validators.getValidationErrorMessage(
-          `is${validator.name.slice(2)}`,
-          value,
-          { min: input.min, max: input.max },
-        );
+        errorElement.textContent = errorMessage;
       }
     }
 
     return isValid;
+  }
+
+  /**
+   * Get appropriate error message for a field
+   * @param {string} field - Field name
+   * @param {any} value - Field value
+   * @returns {string} Error message
+   */
+  getFieldErrorMessage(field, value) {
+    const input = this.container.querySelector(`#${field}`);
+    const min = input ? parseFloat(input.min) : null;
+    const max = input ? parseFloat(input.max) : null;
+    const numValue = parseFloat(value);
+
+    switch (field) {
+      case 'principal':
+        if (isNaN(numValue) || numValue <= 0) {
+          return 'Please enter a valid loan amount greater than $0';
+        }
+        if (min !== null && numValue < min) {
+          return `Loan amount must be at least $${min.toLocaleString()}`;
+        }
+        if (max !== null && numValue > max) {
+          return `Loan amount cannot exceed $${max.toLocaleString()}`;
+        }
+        return 'Please enter a valid loan amount';
+
+      case 'interestRate':
+        if (isNaN(numValue) || numValue < 0) {
+          return 'Interest rate must be 0% or higher';
+        }
+        if (numValue > 50) {
+          return 'Interest rate seems unusually high. Please verify.';
+        }
+        return 'Please enter a valid interest rate';
+
+      case 'term':
+        if (isNaN(numValue) || numValue <= 0) {
+          return 'Loan term must be greater than 0 months';
+        }
+        if (numValue > 600) {
+          return 'Loan term cannot exceed 600 months (50 years)';
+        }
+        return 'Please enter a valid loan term';
+
+      case 'downPayment':
+        if (isNaN(numValue) || numValue < 0) {
+          return 'Down payment cannot be negative';
+        }
+        if (max !== null && numValue > max) {
+          return 'Down payment cannot exceed the loan amount';
+        }
+        return 'Please enter a valid down payment';
+
+      case 'additionalPayment':
+        if (isNaN(numValue) || numValue < 0) {
+          return 'Additional payment cannot be negative';
+        }
+        return 'Please enter a valid additional payment amount';
+
+      case 'inflationRate':
+        if (isNaN(numValue) || numValue < 0) {
+          return 'Inflation rate cannot be negative';
+        }
+        if (numValue > 20) {
+          return 'Inflation rate seems unusually high. Please verify.';
+        }
+        return 'Please enter a valid inflation rate';
+
+      default:
+        return 'Please enter a valid value';
+    }
   }
 
   /**
@@ -571,29 +652,20 @@ class CalculatorForm {
   /**
    * Handle form calculation
    */
-  handleCalculate() {
+  async handleCalculate() {
     const formData = this.getFormData();
 
     // Validate form data before calculation
     if (!this.validate()) {
-      // Show error message to user
-      const errorContainer = document.createElement('div');
-      errorContainer.className = 'error-message';
-      errorContainer.textContent = 'Please correct the errors in the form before calculating.';
-
-      // Insert at the top of the form
-      const form = this.container.querySelector('#loan-calculator-form');
-      if (form) {
-        form.insertBefore(errorContainer, form.firstChild);
-
-        // Remove error message after 5 seconds
-        setTimeout(() => {
-          if (errorContainer.parentNode) {
-            errorContainer.parentNode.removeChild(errorContainer);
-          }
-        }, 5000);
-      }
+      this.showFormError('Please correct the errors in the form before calculating.');
       return;
+    }
+
+    // Disable calculate button during calculation
+    const calculateButton = this.container.querySelector('#calculate-button');
+    if (calculateButton) {
+      calculateButton.disabled = true;
+      calculateButton.textContent = 'Calculating...';
     }
 
     // Create loan object from form data
@@ -607,28 +679,53 @@ class CalculatorForm {
 
       // Call the calculation callback
       if (typeof this.onCalculate === 'function') {
-        this.onCalculate(loan);
+        await this.onCalculate(loan);
       }
     } catch (error) {
       console.error('Error calculating loan:', error);
-
-      // Display error message to user
-      const errorContainer = document.createElement('div');
-      errorContainer.className = 'error-message';
-      errorContainer.textContent = `Calculation error: ${error.message || 'Unknown error occurred'}`;
-
-      // Insert at the top of the form
-      const form = this.container.querySelector('#loan-calculator-form');
-      if (form) {
-        form.insertBefore(errorContainer, form.firstChild);
-
-        // Remove error message after 5 seconds
-        setTimeout(() => {
-          if (errorContainer.parentNode) {
-            errorContainer.parentNode.removeChild(errorContainer);
-          }
-        }, 5000);
+      this.showFormError(`Calculation error: ${error.message || 'Unknown error occurred'}`);
+    } finally {
+      // Re-enable calculate button
+      if (calculateButton) {
+        calculateButton.disabled = false;
+        calculateButton.textContent = 'Calculate';
       }
+    }
+  }
+
+  /**
+   * Show form error message
+   * @param {string} message - Error message to display
+   */
+  showFormError(message) {
+    // Remove any existing error messages
+    const existingError = this.container.querySelector('.form-error-message');
+    if (existingError) {
+      existingError.remove();
+    }
+
+    // Create error message element
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'form-error-message';
+    errorContainer.innerHTML = `
+      <div class="error-content">
+        <span class="error-icon">⚠️</span>
+        <span class="error-text">${message}</span>
+        <button class="error-close" onclick="this.parentElement.parentElement.remove()">×</button>
+      </div>
+    `;
+
+    // Insert at the top of the form
+    const form = this.container.querySelector('#loan-calculator-form');
+    if (form) {
+      form.insertBefore(errorContainer, form.firstChild);
+
+      // Auto-remove error message after 8 seconds
+      setTimeout(() => {
+        if (errorContainer.parentNode) {
+          errorContainer.remove();
+        }
+      }, 8000);
     }
   }
 

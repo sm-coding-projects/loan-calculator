@@ -8,17 +8,165 @@ class AmortizationSchedule {
   /**
    * Create a new amortization schedule for a loan
    * @param {Loan} loan - The loan to create a schedule for
+   * @param {boolean} [autoGenerate=true] - Whether to automatically generate the schedule
    */
-  constructor(loan) {
+  constructor(loan, autoGenerate = true) {
     this.loan = loan;
     this.payments = [];
+    this.isGenerating = false;
+    this.generationProgress = 0;
 
-    // Generate the schedule when the object is created
-    this.generateSchedule();
+    // Generate the schedule when the object is created (unless disabled)
+    if (autoGenerate) {
+      this.generateSchedule();
+    }
   }
 
   /**
-   * Generate the amortization schedule for the loan
+   * Generate the amortization schedule for the loan asynchronously
+   * @param {Object} options - Options for schedule generation
+   * @param {boolean} [options.includeAdditionalPayments=true] - Whether to include additional payments in the calculation
+   * @param {Function} [options.onProgress] - Progress callback function
+   * @param {number} [options.timeout=5000] - Timeout in milliseconds
+   * @returns {Promise<Array>} Promise that resolves to array of Payment objects
+   */
+  async generateScheduleAsync(options = {}) {
+    const includeAdditionalPayments = options.includeAdditionalPayments !== false;
+    const onProgress = options.onProgress || (() => {});
+    const timeout = options.timeout || 5000;
+    const batchSize = options.batchSize || 50; // Process payments in batches
+
+    // Set generation state
+    this.isGenerating = true;
+    this.generationProgress = 0;
+
+    try {
+      // Clear existing payments
+      this.payments = [];
+
+      // Validate loan parameters
+      const loanAmount = this.loan.totalLoanAmount();
+      if (!loanAmount || loanAmount <= 0) {
+        throw new Error('Loan amount must be greater than zero.');
+      }
+
+      if (loanAmount > 100000000) { // 100 million limit
+        throw new Error('Loan amount is too large. Please enter a reasonable loan amount.');
+      }
+
+      const interestRate = this.loan.interestRate;
+      if (interestRate == null || interestRate < 0 || interestRate > 50) {
+        throw new Error('Interest rate must be between 0% and 50%.');
+      }
+
+      const term = this.loan.term;
+      if (!term || term <= 0 || term > 600) { // 50 years max
+        throw new Error('Loan term must be between 1 and 600 months.');
+      }
+
+      // Get loan parameters
+      const principal = this.loan.totalLoanAmount();
+      const periodicRate = this.loan.periodicInterestRate();
+      const regularPayment = this.loan.paymentAmount();
+      const additionalPayment = includeAdditionalPayments ? this.loan.additionalPayment : 0;
+      const maxPayments = this.loan.numberOfPayments() * 2; // Safety limit
+
+      // Validate calculated values
+      if (isNaN(periodicRate) || periodicRate < 0) {
+        throw new Error('Invalid interest rate calculation. Please check your interest rate.');
+      }
+
+      if (isNaN(regularPayment) || regularPayment <= 0) {
+        throw new Error('Invalid payment calculation. Please check your loan parameters.');
+      }
+
+      if (regularPayment <= principal * periodicRate) {
+        throw new Error('Monthly payment is too low to cover interest. Please increase the payment amount or reduce the loan amount.');
+      }
+
+      // Initialize variables for the schedule calculation
+      let balance = principal;
+      let paymentNumber = 1;
+      const currentDate = new Date(this.loan.startDate);
+      const paymentInterval = this.getPaymentInterval();
+
+      // Set up timeout
+      const startTime = Date.now();
+
+      // Generate payments until the balance is paid off
+      while (balance > 0 && paymentNumber <= maxPayments) {
+        // Check for timeout
+        if (Date.now() - startTime > timeout) {
+          throw new Error(`Calculation timeout after ${timeout}ms. The loan parameters may be invalid.`);
+        }
+
+        // Calculate interest for this period
+        const interestPayment = balance * periodicRate;
+
+        // Calculate principal for this period (ensure we don't overpay)
+        const totalPayment = Math.min(regularPayment + additionalPayment, balance + interestPayment);
+        const principalPayment = totalPayment - interestPayment;
+
+        // Update balance
+        balance = Math.max(0, balance - principalPayment);
+
+        // Create payment object
+        const payment = new Payment(
+          paymentNumber,
+          new Date(currentDate),
+          totalPayment,
+          principalPayment,
+          interestPayment,
+          balance,
+        );
+
+        // Add to payments array
+        this.payments.push(payment);
+
+        // Update progress
+        const estimatedTotalPayments = Math.min(this.loan.numberOfPayments(), maxPayments);
+        this.generationProgress = Math.min(95, (paymentNumber / estimatedTotalPayments) * 100);
+        
+        // Process in batches to avoid blocking the UI
+        if (paymentNumber % batchSize === 0) {
+          onProgress(this.generationProgress, `Processing payment ${paymentNumber}...`);
+          // Yield control back to the event loop
+          await new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        // Increment payment number
+        paymentNumber++;
+
+        // Advance date to next payment
+        this.advanceDate(currentDate, paymentInterval);
+
+        // If we're down to a very small balance, just pay it off
+        if (balance > 0 && balance < 0.01) {
+          balance = 0;
+        }
+      }
+
+      // Check if we hit the safety limit
+      if (paymentNumber > maxPayments && balance > 0) {
+        throw new Error('Maximum payment limit reached. Please check your loan parameters.');
+      }
+
+      // Complete
+      this.isGenerating = false;
+      this.generationProgress = 100;
+      onProgress(100, 'Complete');
+
+      return this.payments;
+
+    } catch (error) {
+      this.isGenerating = false;
+      this.generationProgress = 0;
+      throw error;
+    }
+  }
+
+  /**
+   * Generate the amortization schedule for the loan (synchronous version)
    * @param {Object} options - Options for schedule generation
    * @param {boolean} [options.includeAdditionalPayments=true] - Whether to include additional payments in the calculation
    * @returns {Array} Array of Payment objects
