@@ -9,12 +9,12 @@ describe('AmortizationSchedule Model', () => {
       term: 360,
       downPayment: 40000,
     });
-    
+
     const schedule = new AmortizationSchedule(loan);
     expect(schedule).toBeDefined();
     expect(schedule.payments.length).toBeGreaterThan(0);
   });
-  
+
   it('should calculate total interest correctly', () => {
     const loan = new Loan({
       principal: 200000,
@@ -22,12 +22,12 @@ describe('AmortizationSchedule Model', () => {
       term: 360,
       downPayment: 40000,
     });
-    
+
     const schedule = new AmortizationSchedule(loan);
     const totalInterest = schedule.totalInterest();
     expect(totalInterest).toBeGreaterThan(0);
   });
-  
+
   it('should calculate payoff date correctly', () => {
     const startDate = new Date(2023, 0, 1); // January 1, 2023
     const loan = new Loan({
@@ -37,10 +37,10 @@ describe('AmortizationSchedule Model', () => {
       downPayment: 40000,
       startDate,
     });
-    
+
     const schedule = new AmortizationSchedule(loan);
     const payoffDate = schedule.payoffDate();
-    
+
     // Should be approximately 1 year later
     const expectedDate = new Date(2023, 11, 1); // December 1, 2023
     expect(payoffDate.getFullYear()).toBe(expectedDate.getFullYear());
@@ -52,7 +52,7 @@ describe('Payment Model', () => {
   it('should create a payment with correct properties', () => {
     const date = new Date(2023, 0, 15);
     const payment = new Payment(1, date, 1000, 800, 200, 199200);
-    
+
     expect(payment.number).toBe(1);
     expect(payment.date).toEqual(date);
     expect(payment.amount).toBe(1000);
@@ -60,14 +60,14 @@ describe('Payment Model', () => {
     expect(payment.interest).toBe(200);
     expect(payment.balance).toBe(199200);
   });
-  
+
   it('should convert payment to JSON and back', () => {
     const date = new Date(2023, 0, 15);
     const payment = new Payment(1, date, 1000, 800, 200, 199200);
-    
+
     const json = payment.toJSON();
     const restoredPayment = Payment.fromJSON(json);
-    
+
     expect(restoredPayment.number).toBe(payment.number);
     expect(restoredPayment.amount).toBe(payment.amount);
     expect(restoredPayment.principal).toBe(payment.principal);

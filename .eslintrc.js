@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     'airbnb-base',
     'plugin:jest/recommended',
-    'plugin:prettier/recommended',
   ],
   parserOptions: {
     ecmaVersion: 2021,
@@ -16,7 +15,6 @@ module.exports = {
   },
   plugins: [
     'jest',
-    'prettier',
   ],
   settings: {
     'import/resolver': {

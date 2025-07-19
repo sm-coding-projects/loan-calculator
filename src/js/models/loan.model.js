@@ -96,8 +96,8 @@ class Loan {
     this.updatedAt = options.updatedAt instanceof Date ? options.updatedAt : new Date();
 
     // Validate the entire loan object
-    const validationResult = this.validate();
-    // Validation warnings are stored in validationResult.warnings if needed
+    // Validation warnings are stored in this.validate().warnings if needed
+    this.validate();
   }
 
   /**
