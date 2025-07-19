@@ -1,25 +1,4 @@
-/* Main CSS file that imports all other CSS files */
-
-/* Import themes */
-@import './themes/light.css';
-@import './themes/dark.css';
-
-/* Import component styles */
-@import './components/forms.css';
-@import './components/tables.css';
-@import './components/charts.css';
-@import './components/results.css';
-@import './components/saved-calculations.css';
-@import './components/settings.css';
-@import './components/theme-transitions.css';
-@import './components/accessibility.css';
-@import './components/glossary.css';
-@import './components/market-rates.css';
-@import './components/tooltips.css';
-@import './components/inflation.css';
-
-/* Import responsive styles */
-@import './responsive.css';
+/* Main CSS file with base styles */
 
 /* Base styles */
 * {

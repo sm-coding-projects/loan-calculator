@@ -1,5 +1,20 @@
 // Import styles
 import '../css/main.css';
+import '../css/themes/light.css';
+import '../css/themes/dark.css';
+import '../css/components/forms.css';
+import '../css/components/tables.css';
+import '../css/components/charts.css';
+import '../css/components/results.css';
+import '../css/components/saved-calculations.css';
+import '../css/components/settings.css';
+import '../css/components/theme-transitions.css';
+import '../css/components/accessibility.css';
+import '../css/components/glossary.css';
+import '../css/components/market-rates.css';
+import '../css/components/tooltips.css';
+import '../css/components/inflation.css';
+import '../css/responsive.css';
 
 // Import core components
 import CalculatorForm from './components/calculator-form';
