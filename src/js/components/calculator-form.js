@@ -10,6 +10,8 @@ import * as formatters from '../utils/formatters.js';
 import { getTranslation } from '../utils/translations.js';
 import { initTooltips } from '../utils/tooltips.js';
 import MarketRates from './market-rates.js';
+import loadingManager from '../utils/loading-manager.js';
+import animationManager from '../utils/animation-manager.js';
 
 class CalculatorForm {
   constructor(options = {}) {
@@ -367,6 +369,14 @@ class CalculatorForm {
       this.handleCalculate();
     });
 
+    // Add ripple effect to calculate button
+    const calculateButton = this.container.querySelector('#calculate-button');
+    if (calculateButton) {
+      calculateButton.addEventListener('click', (e) => {
+        animationManager.createRippleEffect(calculateButton, e);
+      });
+    }
+
     // Reset button
     const resetButton = this.container.querySelector('#reset-button');
     if (resetButton) {
@@ -555,7 +565,7 @@ class CalculatorForm {
 
     try {
       isValid = validator(value);
-      
+
       if (!isValid) {
         // Get appropriate error message based on field and value
         errorMessage = this.getFieldErrorMessage(field, value);
@@ -691,17 +701,41 @@ class CalculatorForm {
       return;
     }
 
-    // Add loading state to calculate button
+    // Show enhanced loading with progress steps
+    const calculationSteps = [
+      { id: 'validate', label: 'Validating Input', status: 'completed' },
+      { id: 'calculate', label: 'Calculating Loan', status: 'active' },
+      { id: 'amortization', label: 'Building Schedule', status: 'pending' },
+      { id: 'render', label: 'Rendering Results', status: 'pending' },
+    ];
+
+    loadingManager.showProgressOverlay(calculationSteps, {
+      title: 'Calculating Your Loan',
+      message: 'Please wait while we process your loan calculation...',
+      cancellable: false,
+    });
+
+    // Add enhanced loading state to calculate button
     const calculateButton = this.container.querySelector('#calculate-button');
     if (calculateButton) {
       calculateButton.disabled = true;
       calculateButton.classList.add('loading');
       calculateButton.setAttribute('data-original-text', calculateButton.textContent);
-      calculateButton.textContent = 'Calculating...';
+      calculateButton.innerHTML = `
+        <div class="loading-spinner-dots" style="display: inline-flex; margin-right: 0.5rem;">
+          <div class="loading-dot" style="width: 6px; height: 6px; margin: 0 2px;"></div>
+          <div class="loading-dot" style="width: 6px; height: 6px; margin: 0 2px;"></div>
+          <div class="loading-dot" style="width: 6px; height: 6px; margin: 0 2px;"></div>
+        </div>
+        Calculating...
+      `;
     }
 
     // Create loan object from form data
     try {
+      // Update progress
+      loadingManager.updateProgress(25, 'Creating loan object...', 'calculate');
+
       const loan = Loan.fromJSON(formData);
 
       // Update market rates component with current interest rate
@@ -709,12 +743,42 @@ class CalculatorForm {
         this.marketRatesComponent.updateCurrentRate(formData.interestRate);
       }
 
+      // Update progress
+      loadingManager.updateProgress(50, 'Processing calculation...', 'calculate');
+      loadingManager.updateStepStatus('calculate', 'completed');
+      loadingManager.updateStepStatus('amortization', 'active');
+
+      // Add small delay to show progress animation
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Update progress
+      loadingManager.updateProgress(75, 'Building amortization schedule...', 'amortization');
+
       // Call the calculation callback
       if (typeof this.onCalculate === 'function') {
         await this.onCalculate(loan);
       }
+
+      // Complete the process
+      loadingManager.updateProgress(100, 'Finalizing results...', 'render');
+      loadingManager.updateStepStatus('amortization', 'completed');
+      loadingManager.updateStepStatus('render', 'active');
+
+      // Small delay before hiding
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      loadingManager.updateStepStatus('render', 'completed');
     } catch (error) {
       console.error('Error calculating loan:', error);
+
+      // Update progress to show error
+      loadingManager.updateStepStatus('calculate', 'error');
+      loadingManager.updateProgress(0, 'Calculation failed', 'calculate');
+
+      // Hide loading after a moment
+      setTimeout(() => {
+        loadingManager.hideProgressOverlay();
+      }, 1500);
+
       this.showFormError(`Calculation error: ${error.message || 'Unknown error occurred'}`);
     } finally {
       // Remove loading state from calculate button
@@ -724,6 +788,11 @@ class CalculatorForm {
         const originalText = calculateButton.getAttribute('data-original-text') || 'Calculate';
         calculateButton.textContent = originalText;
       }
+
+      // Hide progress overlay after a short delay
+      setTimeout(() => {
+        loadingManager.hideProgressOverlay();
+      }, 800);
     }
   }
 
@@ -893,7 +962,7 @@ class CalculatorForm {
     if (!this.container) return;
 
     const inputs = this.container.querySelectorAll('.form-input, .form-select');
-    
+
     inputs.forEach((input) => {
       const label = input.nextElementSibling;
       if (!label || !label.classList.contains('form-label')) return;
@@ -927,7 +996,7 @@ class CalculatorForm {
     const hasValue = input.value && input.value.trim() !== '';
     const isSelect = input.tagName.toLowerCase() === 'select';
     const isDate = input.type === 'date';
-    
+
     if (hasValue || isSelect || isDate) {
       label.classList.add('floating');
     } else {

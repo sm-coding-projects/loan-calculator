@@ -54,12 +54,12 @@ class AmortizationSchedule {
         throw new Error('Loan amount is too large. Please enter a reasonable loan amount.');
       }
 
-      const interestRate = this.loan.interestRate;
+      const { interestRate } = this.loan;
       if (interestRate == null || interestRate < 0 || interestRate > 50) {
         throw new Error('Interest rate must be between 0% and 50%.');
       }
 
-      const term = this.loan.term;
+      const { term } = this.loan;
       if (!term || term <= 0 || term > 600) { // 50 years max
         throw new Error('Loan term must be between 1 and 600 months.');
       }
@@ -126,12 +126,12 @@ class AmortizationSchedule {
         // Update progress
         const estimatedTotalPayments = Math.min(this.loan.numberOfPayments(), maxPayments);
         this.generationProgress = Math.min(95, (paymentNumber / estimatedTotalPayments) * 100);
-        
+
         // Process in batches to avoid blocking the UI
         if (paymentNumber % batchSize === 0) {
           onProgress(this.generationProgress, `Processing payment ${paymentNumber}...`);
           // Yield control back to the event loop
-          await new Promise(resolve => setTimeout(resolve, 0));
+          await new Promise((resolve) => setTimeout(resolve, 0));
         }
 
         // Increment payment number
@@ -157,7 +157,6 @@ class AmortizationSchedule {
       onProgress(100, 'Complete');
 
       return this.payments;
-
     } catch (error) {
       this.isGenerating = false;
       this.generationProgress = 0;

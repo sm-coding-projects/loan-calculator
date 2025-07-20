@@ -18,18 +18,18 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 60000
+      downPayment: 60000,
     });
   });
 
   test('should generate amortization schedule asynchronously', async () => {
     const schedule = new AmortizationSchedule(testLoan, false); // Don't auto-generate
-    
+
     const progressUpdates = [];
     const payments = await schedule.generateScheduleAsync({
       onProgress: (progress, message) => {
         progressUpdates.push({ progress, message });
-      }
+      },
     });
 
     // Should have payments
@@ -39,10 +39,10 @@ describe('Async Calculation Functionality', () => {
 
     // Should have received progress updates
     expect(progressUpdates.length).toBeGreaterThan(0);
-    
+
     // First update should be reasonable progress (since we process in batches)
     expect(progressUpdates[0].progress).toBeLessThan(50);
-    
+
     // Last update should be 100%
     const lastUpdate = progressUpdates[progressUpdates.length - 1];
     expect(lastUpdate.progress).toBe(100);
@@ -71,15 +71,15 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 0
+      downPayment: 0,
     });
 
     const schedule = new AmortizationSchedule(largeLoan, false);
-    
+
     // Use a very short timeout and small batch size to force timeout
     await expect(schedule.generateScheduleAsync({
       timeout: 50, // Very short timeout
-      batchSize: 1 // Process one payment at a time
+      batchSize: 1, // Process one payment at a time
     })).rejects.toThrow(/timeout/i);
   });
 
@@ -92,14 +92,14 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 0
+      downPayment: 0,
     });
 
     // Manually set principal to 0 to bypass Loan validation
     invalidLoan.principal = 0;
 
     const schedule = new AmortizationSchedule(invalidLoan, false);
-    
+
     await expect(schedule.generateScheduleAsync()).rejects.toThrow(/Loan amount must be greater than zero/);
   });
 
@@ -111,14 +111,14 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 0
+      downPayment: 0,
     });
 
     // Manually set an invalid rate to bypass Loan validation
     invalidLoan.interestRate = 60;
 
     const schedule = new AmortizationSchedule(invalidLoan, false);
-    
+
     await expect(schedule.generateScheduleAsync()).rejects.toThrow(/Interest rate must be between/);
   });
 
@@ -130,14 +130,14 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 0
+      downPayment: 0,
     });
 
     // Manually set an invalid term to bypass Loan validation
     invalidLoan.term = 0;
 
     const schedule = new AmortizationSchedule(invalidLoan, false);
-    
+
     await expect(schedule.generateScheduleAsync()).rejects.toThrow(/Loan term must be between/);
   });
 
@@ -149,7 +149,7 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 200, // Extra $200 per month
-      downPayment: 60000
+      downPayment: 60000,
     });
 
     const schedule = new AmortizationSchedule(loanWithExtra, false);
@@ -157,7 +157,7 @@ describe('Async Calculation Functionality', () => {
 
     // Should have fewer payments due to additional payment
     expect(payments.length).toBeLessThan(360);
-    
+
     // Each payment should include the additional amount
     const regularPayment = loanWithExtra.paymentAmount();
     expect(payments[0].amount).toBeCloseTo(regularPayment + 200, 2);
@@ -165,13 +165,13 @@ describe('Async Calculation Functionality', () => {
 
   test('should process payments in batches', async () => {
     const schedule = new AmortizationSchedule(testLoan, false);
-    
+
     const progressUpdates = [];
     await schedule.generateScheduleAsync({
       batchSize: 10, // Small batch size
       onProgress: (progress, message) => {
         progressUpdates.push({ progress, message });
-      }
+      },
     });
 
     // Should have multiple progress updates due to small batch size
@@ -180,17 +180,17 @@ describe('Async Calculation Functionality', () => {
 
   test('should maintain generation state during calculation', async () => {
     const schedule = new AmortizationSchedule(testLoan, false);
-    
+
     // Start calculation
     const calculationPromise = schedule.generateScheduleAsync();
-    
+
     // Check state during calculation
     expect(schedule.isGenerating).toBe(true);
     expect(schedule.generationProgress).toBeGreaterThanOrEqual(0);
-    
+
     // Wait for completion
     await calculationPromise;
-    
+
     // Check final state
     expect(schedule.isGenerating).toBe(false);
     expect(schedule.generationProgress).toBe(100);
@@ -204,11 +204,11 @@ describe('Async Calculation Functionality', () => {
       paymentFrequency: 'monthly',
       startDate: new Date('2024-01-01'),
       additionalPayment: 0,
-      downPayment: 0
+      downPayment: 0,
     });
 
     const schedule = new AmortizationSchedule(invalidLoan, false);
-    
+
     try {
       await schedule.generateScheduleAsync();
     } catch (error) {

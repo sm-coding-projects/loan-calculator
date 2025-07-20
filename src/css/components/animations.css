@@ -1,0 +1,616 @@
+/**
+ * Animations and Transitions
+ * Smooth animations for UI interactions and result reveals
+ * Implements requirements 3.1, 3.4
+ */
+
+/* Base Animation Settings */
+:root {
+  --animation-duration-fast: 0.15s;
+  --animation-duration-normal: 0.3s;
+  --animation-duration-slow: 0.5s;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Result Reveal Animations */
+.results-enter {
+  animation: slideInUp var(--animation-duration-slow) var(--animation-easing) forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.results-enter-stagger {
+  animation: slideInUp var(--animation-duration-slow) var(--animation-easing) forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.results-enter-stagger:nth-child(1) { animation-delay: 0.1s; }
+.results-enter-stagger:nth-child(2) { animation-delay: 0.2s; }
+.results-enter-stagger:nth-child(3) { animation-delay: 0.3s; }
+.results-enter-stagger:nth-child(4) { animation-delay: 0.4s; }
+.results-enter-stagger:nth-child(5) { animation-delay: 0.5s; }
+.results-enter-stagger:nth-child(6) { animation-delay: 0.6s; }
+.results-enter-stagger:nth-child(7) { animation-delay: 0.7s; }
+.results-enter-stagger:nth-child(8) { animation-delay: 0.8s; }
+
+/* Enhanced Results Header Animation */
+.results-header {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s var(--animation-easing);
+}
+
+.results-header.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced Breakdown Chart Animations */
+.breakdown-chart {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.6s var(--animation-easing-bounce);
+}
+
+.breakdown-chart.animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Legend Item Animations */
+.legend-item {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.4s var(--animation-easing);
+}
+
+.legend-item.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Summary Item Animations */
+.summary-item {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.summary-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.summary-item.highlight {
+  animation: highlightPulse 2s var(--animation-easing) infinite;
+}
+
+/* Chart Reveal Animations */
+.chart-reveal {
+  animation: scaleIn var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.chart-reveal-delayed {
+  animation: scaleIn var(--animation-duration-slow) var(--animation-easing-bounce) forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Table Row Animations */
+.table-row-enter {
+  animation: slideInRight var(--animation-duration-normal) var(--animation-easing) forwards;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.table-row-enter:nth-child(odd) {
+  animation-delay: 0.05s;
+}
+
+.table-row-enter:nth-child(even) {
+  animation-delay: 0.1s;
+}
+
+/* Form Element Animations */
+.form-input,
+.form-select {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.form-input:focus,
+.form-select:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.form-button {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+.form-button:active {
+  transform: translateY(0);
+  transition-duration: var(--animation-duration-fast);
+}
+
+/* Button Ripple Effect */
+.form-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.form-button:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Slider Animations */
+.form-slider {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.form-slider:hover {
+  transform: scaleY(1.2);
+}
+
+/* Card Hover Animations */
+.calculator-form-section,
+.results-section,
+.table-section,
+.charts-section {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.calculator-form-section:hover,
+.results-section:hover,
+.table-section:hover,
+.charts-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Number Counter Animation */
+.number-counter {
+  display: inline-block;
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.number-counter.updating {
+  animation: numberPulse var(--animation-duration-normal) var(--animation-easing);
+}
+
+/* Progress Bar Animations */
+.breakdown-bar {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.breakdown-principal,
+.breakdown-interest {
+  transition: width 1s var(--animation-easing-smooth);
+  position: relative;
+}
+
+.breakdown-principal::after,
+.breakdown-interest::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmerSlow 2s infinite;
+}
+
+/* Micro-interactions */
+.info-icon {
+  transition: all var(--animation-duration-fast) var(--animation-easing);
+  cursor: pointer;
+}
+
+.info-icon:hover {
+  transform: scale(1.2);
+  color: var(--primary-600);
+}
+
+.term-preset {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.term-preset:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.term-preset:active {
+  transform: scale(0.98);
+}
+
+/* Error Message Animations */
+.form-error-message {
+  animation: slideInDown var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.form-error-message.removing {
+  animation: slideOutUp var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+/* Loading State Transitions */
+.loading-overlay-enter {
+  animation: fadeIn var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.loading-overlay-exit {
+  animation: fadeOut var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+/* Tooltip Animations */
+.tooltip {
+  transition: all var(--animation-duration-fast) var(--animation-easing);
+  animation: tooltipIn var(--animation-duration-normal) var(--animation-easing) forwards;
+}
+
+.tooltip.hiding {
+  animation: tooltipOut var(--animation-duration-fast) var(--animation-easing) forwards;
+}
+
+/* Keyframe Definitions */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes highlightPulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  }
+}
+
+@keyframes numberPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    color: var(--primary-600);
+  }
+}
+
+@keyframes shimmerSlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tooltipOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes highlightSweep {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes pulseIndicator {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+/* Staggered Animation Utilities */
+.stagger-children > * {
+  animation-fill-mode: both;
+}
+
+.stagger-children.animate-in > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children.animate-in > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children.animate-in > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children.animate-in > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children.animate-in > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-children.animate-in > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-children.animate-in > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-children.animate-in > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* Enhanced Result Reveal Animations */
+.results-display {
+  opacity: 0;
+  animation: fadeInUp 0.8s var(--animation-easing) forwards;
+}
+
+.results-display.animate-in {
+  opacity: 1;
+}
+
+/* Smooth State Transitions */
+.results-content {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.results-content.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Enhanced Summary Item Animations */
+.summary-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.summary-item.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Value Highlight Animations */
+.summary-value.highlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-value.highlight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+  animation: highlightSweep 2s ease-in-out;
+}
+
+/* Interest Rate Indicator Animations */
+.rate-low {
+  color: var(--success-500);
+  position: relative;
+}
+
+.rate-medium {
+  color: var(--warning-500);
+  position: relative;
+}
+
+.rate-high {
+  color: var(--error-500);
+  position: relative;
+}
+
+.rate-low::before,
+.rate-medium::before,
+.rate-high::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateY(-50%);
+  opacity: 0;
+  animation: pulseIndicator 2s ease-in-out infinite;
+}
+
+/* Action Button Animations */
+.results-actions {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.results-actions.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .results-enter,
+  .results-enter-stagger,
+  .chart-reveal,
+  .chart-reveal-delayed,
+  .table-row-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Dark Theme Animations */
+.dark-theme .summary-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .form-button:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.dark-theme .calculator-form-section:hover,
+.dark-theme .results-section:hover,
+.dark-theme .table-section:hover,
+.dark-theme .charts-section:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  :root {
+    --animation-duration-fast: 0.1s;
+    --animation-duration-normal: 0.2s;
+    --animation-duration-slow: 0.3s;
+  }
+  
+  .calculator-form-section:hover,
+  .results-section:hover,
+  .table-section:hover,
+  .charts-section:hover {
+    transform: none;
+  }
+  
+  .summary-item:hover {
+    transform: none;
+  }
+  
+  .form-button:hover {
+    transform: none;
+  }
+}
+
+/* High Performance Mode */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  .results-section {
+    will-change: transform, box-shadow;
+  }
+  
+  .summary-item {
+    will-change: transform, box-shadow;
+  }
+  
+  .form-button {
+    will-change: transform, box-shadow;
+  }
+}

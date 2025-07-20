@@ -14,6 +14,8 @@ import '../css/components/glossary.css';
 import '../css/components/market-rates.css';
 import '../css/components/tooltips.css';
 import '../css/components/inflation.css';
+import '../css/components/loading-states.css';
+import '../css/components/animations.css';
 import '../css/responsive.css';
 
 // Import core components
@@ -83,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           // Import the amortization model dynamically
           const { AmortizationSchedule } = await import(/* webpackChunkName: "amortization-model" */ './models/amortization.model');
-          
+
           // Create amortization schedule without auto-generation
           const amortizationSchedule = new AmortizationSchedule(loan, false);
 
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timeout: 10000, // 10 second timeout
             onProgress: (progress, message) => {
               updateCalculationProgress(progress, message);
-            }
+            },
           });
 
           // Update progress for inflation calculation
@@ -163,13 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
           // Complete calculation
           hideCalculationLoading();
-
         } catch (error) {
           console.error('Error calculating loan:', error);
-          
+
           // Categorize error types for better user experience
           let errorCategory = 'general';
-          let userMessage = error.message;
+          const userMessage = error.message;
           let suggestions = [];
 
           if (error.message.includes('timeout')) {
@@ -177,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestions = [
               'Try reducing the loan amount',
               'Check if your interest rate is reasonable',
-              'Reduce the loan term if it\'s very long'
+              'Reduce the loan term if it\'s very long',
             ];
           } else if (error.message.includes('Loan amount')) {
             errorCategory = 'validation';
@@ -190,21 +191,21 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestions = [
               'Increase the loan term to reduce monthly payments',
               'Reduce the loan amount',
-              'Lower the interest rate if possible'
+              'Lower the interest rate if possible',
             ];
           } else if (error.message.includes('Maximum payment limit')) {
             errorCategory = 'calculation';
             suggestions = [
               'Check your loan parameters for reasonableness',
               'Ensure interest rate is not too low',
-              'Verify loan term is appropriate'
+              'Verify loan term is appropriate',
             ];
           }
 
           showCalculationError({
             ...error,
             category: errorCategory,
-            suggestions
+            suggestions,
           });
         }
       },
@@ -462,14 +463,14 @@ function showCalculationLoading(message = 'Calculating...') {
     `;
     document.body.appendChild(loadingOverlay);
   }
-  
+
   loadingOverlay.style.display = 'flex';
-  
+
   // Reset progress
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   const loadingMessage = document.getElementById('loading-message');
-  
+
   if (progressFill) progressFill.style.width = '0%';
   if (progressText) progressText.textContent = '0%';
   if (loadingMessage) loadingMessage.textContent = message;
@@ -479,7 +480,7 @@ function updateCalculationProgress(progress, message) {
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
   const loadingMessage = document.getElementById('loading-message');
-  
+
   if (progressFill) {
     progressFill.style.width = `${Math.round(progress)}%`;
   }
@@ -500,7 +501,7 @@ function hideCalculationLoading() {
 
 function showCalculationError(error) {
   hideCalculationLoading();
-  
+
   // Show error overlay
   let errorOverlay = document.getElementById('calculation-error-overlay');
   if (!errorOverlay) {
@@ -509,32 +510,32 @@ function showCalculationError(error) {
     errorOverlay.className = 'calculation-error-overlay';
     document.body.appendChild(errorOverlay);
   }
-  
+
   const errorMessage = error.message || 'An unknown error occurred during calculation.';
   const category = error.category || 'general';
   const suggestions = error.suggestions || [];
-  
+
   // Choose appropriate icon based on error category
   const icons = {
     timeout: '⏱️',
     validation: '📝',
     payment: '💰',
     calculation: '🔢',
-    general: '⚠️'
+    general: '⚠️',
   };
-  
+
   const icon = icons[category] || icons.general;
-  
+
   // Build suggestions HTML
   const suggestionsHtml = suggestions.length > 0 ? `
     <div class="error-suggestions">
       <h4>Suggestions:</h4>
       <ul>
-        ${suggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
+        ${suggestions.map((suggestion) => `<li>${suggestion}</li>`).join('')}
       </ul>
     </div>
   ` : '';
-  
+
   errorOverlay.innerHTML = `
     <div class="error-content">
       <div class="error-icon">${icon}</div>
@@ -547,7 +548,7 @@ function showCalculationError(error) {
       </div>
     </div>
   `;
-  
+
   errorOverlay.style.display = 'flex';
 }
 

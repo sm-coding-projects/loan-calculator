@@ -5,6 +5,7 @@
  */
 
 import { Chart } from 'chart.js/auto';
+import animationManager from '../utils/animation-manager.js';
 
 class Charts {
   /**
@@ -271,6 +272,9 @@ class Charts {
 
     // Apply theme
     this._applyChartTheme(this.chartInstances.principalVsInterest);
+
+    // Animate chart reveal
+    this._animateChartReveal(chartContainer, 'principal-interest');
   }
 
   /**
@@ -354,6 +358,9 @@ class Charts {
 
     // Apply theme
     this._applyChartTheme(this.chartInstances.paymentBreakdown);
+
+    // Animate chart reveal
+    this._animateChartReveal(chartContainer, 'payment-breakdown');
   }
 
   /**
@@ -722,6 +729,120 @@ class Charts {
         container.style.display = 'none';
       }
     });
+  }
+
+  /**
+   * Animate chart reveal with scale and fade effect
+   * @param {HTMLElement} chartContainer - Chart container element
+   * @param {string} chartType - Type of chart for specific animations
+   * @private
+   */
+  _animateChartReveal(chartContainer, chartType) {
+    if (!chartContainer) return;
+
+    animationManager.respectfulAnimate(() => {
+      // Set initial state
+      chartContainer.style.opacity = '0';
+      chartContainer.style.transform = 'scale(0.9) translateY(20px)';
+      chartContainer.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+
+      // Animate reveal
+      setTimeout(() => {
+        chartContainer.style.opacity = '1';
+        chartContainer.style.transform = 'scale(1) translateY(0)';
+      }, 100);
+
+      // Add chart-specific animations
+      setTimeout(() => {
+        this._addChartSpecificAnimations(chartContainer, chartType);
+      }, 700);
+
+    }, () => {
+      // Fallback for reduced motion
+      chartContainer.style.opacity = '1';
+      chartContainer.style.transform = 'none';
+    });
+  }
+
+  /**
+   * Add chart-specific animations and interactions
+   * @param {HTMLElement} chartContainer - Chart container element
+   * @param {string} chartType - Type of chart
+   * @private
+   */
+  _addChartSpecificAnimations(chartContainer, chartType) {
+    // Add hover effects to chart container
+    chartContainer.addEventListener('mouseenter', () => {
+      if (!animationManager.prefersReducedMotion()) {
+        chartContainer.style.transform = 'scale(1.02)';
+        chartContainer.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+        chartContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+    });
+
+    chartContainer.addEventListener('mouseleave', () => {
+      if (!animationManager.prefersReducedMotion()) {
+        chartContainer.style.transform = 'scale(1)';
+        chartContainer.style.boxShadow = '';
+      }
+    });
+
+    // Add specific animations based on chart type
+    switch (chartType) {
+      case 'principal-interest':
+        this._animatePrincipalInterestChart(chartContainer);
+        break;
+      case 'payment-breakdown':
+        this._animatePaymentBreakdownChart(chartContainer);
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Add specific animations for principal vs interest chart
+   * @param {HTMLElement} chartContainer - Chart container element
+   * @private
+   */
+  _animatePrincipalInterestChart(chartContainer) {
+    // Add subtle pulse animation to highlight the crossover point
+    const canvas = chartContainer.querySelector('canvas');
+    if (canvas && this.chartInstances.principalVsInterest) {
+      // Add a subtle glow effect that pulses occasionally
+      setInterval(() => {
+        if (!animationManager.prefersReducedMotion() && Math.random() < 0.1) {
+          canvas.style.filter = 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.3))';
+          setTimeout(() => {
+            canvas.style.filter = '';
+          }, 1000);
+        }
+      }, 5000);
+    }
+  }
+
+  /**
+   * Add specific animations for payment breakdown chart
+   * @param {HTMLElement} chartContainer - Chart container element
+   * @private
+   */
+  _animatePaymentBreakdownChart(chartContainer) {
+    // Add rotation animation on hover for pie chart
+    const canvas = chartContainer.querySelector('canvas');
+    if (canvas) {
+      chartContainer.addEventListener('mouseenter', () => {
+        if (!animationManager.prefersReducedMotion()) {
+          canvas.style.transform = 'rotate(2deg)';
+          canvas.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+      });
+
+      chartContainer.addEventListener('mouseleave', () => {
+        if (!animationManager.prefersReducedMotion()) {
+          canvas.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
   }
 }
 

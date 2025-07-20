@@ -5,6 +5,7 @@
  */
 
 import * as formatters from '../utils/formatters.js';
+import animationManager from '../utils/animation-manager.js';
 
 class AmortizationTable {
   /**
@@ -257,6 +258,9 @@ class AmortizationTable {
 
     // Add highlighting for key information
     this.highlightKeyInformation();
+
+    // Animate table reveal
+    this._animateTableReveal(table, paginatedData.length);
   }
 
   /**
@@ -654,6 +658,102 @@ class AmortizationTable {
 
     // Clear current data
     this.currentData = [];
+  }
+
+  /**
+   * Animate table reveal with staggered row animations
+   * @param {HTMLTableElement} table - Table element
+   * @param {number} rowCount - Number of rows to animate
+   * @private
+   */
+  _animateTableReveal(table, rowCount) {
+    animationManager.respectfulAnimate(() => {
+      // First animate the table container
+      const tableContainer = table.closest('.table-container');
+      if (tableContainer) {
+        tableContainer.style.opacity = '0';
+        tableContainer.style.transform = 'translateY(20px)';
+        tableContainer.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        setTimeout(() => {
+          tableContainer.style.opacity = '1';
+          tableContainer.style.transform = 'translateY(0)';
+        }, 100);
+      }
+
+      // Then animate table rows with stagger
+      setTimeout(() => {
+        animationManager.animateTableRows(table, {
+          delay: 200,
+          staggerDelay: 50,
+        });
+      }, 300);
+
+      // Add subtle hover animations after initial reveal
+      setTimeout(() => {
+        this._addTableInteractions(table);
+      }, 300 + (rowCount * 50));
+
+    }, () => {
+      // Fallback for reduced motion
+      const tableContainer = table.closest('.table-container');
+      if (tableContainer) {
+        tableContainer.style.opacity = '1';
+        tableContainer.style.transform = 'none';
+      }
+      
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach((row) => {
+        row.style.opacity = '1';
+        row.style.transform = 'none';
+      });
+    });
+  }
+
+  /**
+   * Add interactive animations to table elements
+   * @param {HTMLTableElement} table - Table element
+   * @private
+   */
+  _addTableInteractions(table) {
+    // Add hover effects to table rows
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        if (!animationManager.prefersReducedMotion()) {
+          row.style.transform = 'translateX(4px)';
+          row.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+          row.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+      });
+
+      row.addEventListener('mouseleave', () => {
+        if (!animationManager.prefersReducedMotion()) {
+          row.style.transform = '';
+          row.style.boxShadow = '';
+        }
+      });
+    });
+
+    // Add click animations to sortable headers
+    const sortableHeaders = table.querySelectorAll('th[data-sort]');
+    sortableHeaders.forEach((header) => {
+      header.addEventListener('click', (event) => {
+        if (!animationManager.prefersReducedMotion()) {
+          animationManager.createRippleEffect(header, event);
+        }
+      });
+    });
+
+    // Add smooth transitions to pagination buttons
+    const paginationButtons = this.container.querySelectorAll('.pagination button');
+    paginationButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        if (!animationManager.prefersReducedMotion()) {
+          animationManager.createRippleEffect(button, event);
+        }
+      });
+    });
   }
 }
 

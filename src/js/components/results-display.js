@@ -6,6 +6,8 @@
 
 import * as formatters from '../utils/formatters.js';
 import Charts from './charts.js';
+import loadingManager from '../utils/loading-manager.js';
+import animationManager from '../utils/animation-manager.js';
 
 class ResultsDisplay {
   /**
@@ -111,6 +113,9 @@ class ResultsDisplay {
       return;
     }
 
+    // Hide any skeleton loading
+    this.hideLoading();
+
     const {
       loan, amortizationSchedule, inflationAdjusted, comparisonScenarios,
     } = calculationResults;
@@ -188,6 +193,9 @@ class ResultsDisplay {
 
     // Show the results container
     this.container.style.display = 'block';
+
+    // Animate results reveal with enhanced staggered effect
+    this._animateResultsReveal(summary, breakdown, amortizationSchedule);
   }
 
   /**
@@ -369,10 +377,61 @@ class ResultsDisplay {
   }
 
   /**
+   * Show skeleton loading for results
+   */
+  showLoading() {
+    if (!this.container) return;
+
+    // Show skeleton for summary
+    const summaryContainer = this.container.querySelector('#results-summary');
+    if (summaryContainer) {
+      this.summarySkeleton = loadingManager.showSkeleton(summaryContainer, 'results', { items: 8 });
+    }
+
+    // Show skeleton for breakdown
+    const breakdownContainer = this.container.querySelector('#results-breakdown');
+    if (breakdownContainer) {
+      this.breakdownSkeleton = loadingManager.showSkeleton(breakdownContainer, 'results', { items: 3 });
+    }
+
+    // Show skeleton for charts
+    const chartsContainer = this.container.querySelector('#charts-container');
+    if (chartsContainer) {
+      this.chartsSkeleton = loadingManager.showSkeleton(chartsContainer, 'chart', { title: true, legend: true });
+    }
+
+    // Show the results container
+    this.container.style.display = 'block';
+  }
+
+  /**
+   * Hide skeleton loading
+   */
+  hideLoading() {
+    if (this.summarySkeleton) {
+      loadingManager.hideSkeleton(this.summarySkeleton);
+      this.summarySkeleton = null;
+    }
+
+    if (this.breakdownSkeleton) {
+      loadingManager.hideSkeleton(this.breakdownSkeleton);
+      this.breakdownSkeleton = null;
+    }
+
+    if (this.chartsSkeleton) {
+      loadingManager.hideSkeleton(this.chartsSkeleton);
+      this.chartsSkeleton = null;
+    }
+  }
+
+  /**
    * Clear all results
    */
   clear() {
     if (!this.container) return;
+
+    // Hide any active skeleton loading
+    this.hideLoading();
 
     const summaryContainer = this.container.querySelector('#results-summary');
     const breakdownContainer = this.container.querySelector('#results-breakdown');
@@ -413,6 +472,183 @@ class ResultsDisplay {
       loan,
       amortizationSchedule,
       inflationAdjusted,
+    });
+  }
+
+  /**
+   * Animate results reveal with enhanced effects
+   * @param {Object} summary - Summary data
+   * @param {Object} breakdown - Breakdown data
+   * @param {Object} amortizationSchedule - Amortization schedule
+   * @private
+   */
+  _animateResultsReveal(summary, breakdown, amortizationSchedule) {
+    animationManager.respectfulAnimate(() => {
+      // First, ensure all elements start in hidden state
+      const allElements = this.container.querySelectorAll('.summary-item, .breakdown-chart, .chart-item, .results-header');
+      allElements.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+      });
+
+      // Animate header first
+      animationManager.queueAnimation(() => {
+        const header = this.container.querySelector('.results-header');
+        if (header) {
+          header.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+          header.style.opacity = '1';
+          header.style.transform = 'translateY(0)';
+        }
+      }, 100);
+
+      // Animate summary items with stagger
+      animationManager.queueAnimation(() => {
+        animationManager.animateResultsReveal(this.container.querySelector('#results-summary'), {
+          stagger: true,
+          delay: 0,
+        });
+      }, 300);
+
+      // Animate breakdown with scale effect
+      animationManager.queueAnimation(() => {
+        const breakdownContainer = this.container.querySelector('#results-breakdown');
+        if (breakdownContainer) {
+          // Animate the breakdown title first
+          const title = breakdownContainer.querySelector('h3');
+          if (title) {
+            title.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            title.style.opacity = '1';
+            title.style.transform = 'translateY(0)';
+          }
+
+          // Then animate the breakdown chart with scale
+          setTimeout(() => {
+            const chart = breakdownContainer.querySelector('.breakdown-chart');
+            if (chart) {
+              chart.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+              chart.style.opacity = '1';
+              chart.style.transform = 'translateY(0) scale(1)';
+              chart.style.transformOrigin = 'center';
+              
+              // Animate progress bars
+              this._animateProgressBars(chart);
+            }
+          }, 200);
+
+          // Animate legend items
+          setTimeout(() => {
+            const legendItems = breakdownContainer.querySelectorAll('.legend-item');
+            legendItems.forEach((item, index) => {
+              setTimeout(() => {
+                item.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                item.style.opacity = '1';
+                item.style.transform = 'translateX(0)';
+              }, index * 100);
+            });
+          }, 400);
+        }
+      }, 800);
+
+      // Animate charts with delay
+      if (this.charts && amortizationSchedule) {
+        animationManager.queueAnimation(() => {
+          animationManager.animateChartReveal(this.container.querySelector('#charts-container'), {
+            delay: 0,
+          });
+        }, 1400);
+      }
+
+      // Add subtle micro-interactions after main animation
+      animationManager.queueAnimation(() => {
+        this._addMicroInteractions();
+      }, 2000);
+
+    }, () => {
+      // Fallback for reduced motion - just show everything immediately
+      const elements = this.container.querySelectorAll('.summary-item, .breakdown-chart, .chart-item, .results-header');
+      elements.forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    });
+  }
+
+  /**
+   * Animate progress bars with smooth fill effect
+   * @param {HTMLElement} container - Container element
+   * @private
+   */
+  _animateProgressBars(container) {
+    const principalBar = container.querySelector('.breakdown-principal');
+    const interestBar = container.querySelector('.breakdown-interest');
+
+    if (principalBar) {
+      const targetWidth = principalBar.style.width;
+      principalBar.style.width = '0%';
+      setTimeout(() => {
+        principalBar.style.transition = 'width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        principalBar.style.width = targetWidth;
+      }, 100);
+    }
+
+    if (interestBar) {
+      const targetWidth = interestBar.style.width;
+      interestBar.style.width = '0%';
+      setTimeout(() => {
+        interestBar.style.transition = 'width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        interestBar.style.width = targetWidth;
+      }, 300);
+    }
+  }
+
+  /**
+   * Add subtle micro-interactions to result elements
+   * @private
+   */
+  _addMicroInteractions() {
+    // Add hover animations to summary items
+    animationManager.addHoverAnimations(this.container, '.summary-item');
+
+    // Add number counter animations for highlighted values
+    const highlightedValues = this.container.querySelectorAll('.summary-item.highlight .summary-value');
+    highlightedValues.forEach((element) => {
+      // Extract numeric value for animation
+      const text = element.textContent;
+      const numericMatch = text.match(/[\d,]+\.?\d*/);
+      if (numericMatch) {
+        const numericValue = parseFloat(numericMatch[0].replace(/,/g, ''));
+        if (!isNaN(numericValue)) {
+          // Animate from 0 to the actual value
+          animationManager.animateNumber(element, 0, numericValue, {
+            duration: 1500,
+            formatter: (num) => {
+              // Preserve the original formatting
+              const formatted = num.toLocaleString();
+              return text.replace(/[\d,]+\.?\d*/, formatted);
+            },
+          });
+        }
+      }
+    });
+
+    // Add ripple effects to action buttons
+    const actionButtons = this.container.querySelectorAll('.btn-save, .btn-export');
+    actionButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        animationManager.createRippleEffect(button, event);
+      });
+    });
+
+    // Add subtle pulse animation to interest rate indicators
+    const rateIndicators = this.container.querySelectorAll('.rate-low, .rate-medium, .rate-high');
+    rateIndicators.forEach((indicator) => {
+      indicator.addEventListener('mouseenter', () => {
+        indicator.style.animation = 'numberPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+      });
+      
+      indicator.addEventListener('animationend', () => {
+        indicator.style.animation = '';
+      });
     });
   }
 }
