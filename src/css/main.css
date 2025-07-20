@@ -1,5 +1,8 @@
 /* Main CSS file with base styles */
 
+/* Import component styles */
+@import url('components/virtual-scrolling.css');
+
 /* Base styles */
 * {
   box-sizing: border-box;

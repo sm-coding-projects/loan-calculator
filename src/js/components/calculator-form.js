@@ -12,6 +12,7 @@ import { initTooltips } from '../utils/tooltips.js';
 import MarketRates from './market-rates.js';
 import loadingManager from '../utils/loading-manager.js';
 import animationManager from '../utils/animation-manager.js';
+import AsyncCalculatorService from '../services/async-calculator.service.js';
 
 class CalculatorForm {
   constructor(options = {}) {
@@ -41,6 +42,9 @@ class CalculatorForm {
 
     // Market rates component
     this.marketRatesComponent = null;
+
+    // Initialize async calculator service
+    this.asyncCalculator = new AsyncCalculatorService();
 
     this.init();
   }
@@ -462,6 +466,27 @@ class CalculatorForm {
   }
 
   /**
+   * Cleanup resources when component is destroyed
+   */
+  destroy() {
+    // Cancel any pending calculations
+    if (this.asyncCalculator) {
+      this.asyncCalculator.destroy();
+    }
+
+    // Clear any active loading states
+    loadingManager.clearAll();
+
+    // Remove event listeners
+    if (this.container) {
+      const form = this.container.querySelector('#loan-calculator-form');
+      if (form) {
+        form.removeEventListener('submit', this.handleCalculate);
+      }
+    }
+  }
+
+  /**
    * Bind slider and input field to sync with each other
    * @param {string} fieldName - Name of the field
    */
@@ -690,7 +715,7 @@ class CalculatorForm {
   }
 
   /**
-   * Handle form calculation
+   * Handle form calculation with async processing
    */
   async handleCalculate() {
     const formData = this.getFormData();
@@ -704,15 +729,18 @@ class CalculatorForm {
     // Show enhanced loading with progress steps
     const calculationSteps = [
       { id: 'validate', label: 'Validating Input', status: 'completed' },
-      { id: 'calculate', label: 'Calculating Loan', status: 'active' },
+      { id: 'calculate', label: 'Calculating Payment', status: 'active' },
       { id: 'amortization', label: 'Building Schedule', status: 'pending' },
       { id: 'render', label: 'Rendering Results', status: 'pending' },
     ];
 
     loadingManager.showProgressOverlay(calculationSteps, {
       title: 'Calculating Your Loan',
-      message: 'Please wait while we process your loan calculation...',
-      cancellable: false,
+      message: 'Using advanced async processing for optimal performance...',
+      cancellable: true,
+      onCancel: () => {
+        this.asyncCalculator.cancelAllCalculations();
+      }
     });
 
     // Add enhanced loading state to calculate button
@@ -731,11 +759,8 @@ class CalculatorForm {
       `;
     }
 
-    // Create loan object from form data
     try {
-      // Update progress
-      loadingManager.updateProgress(25, 'Creating loan object...', 'calculate');
-
+      // Create loan object from form data
       const loan = Loan.fromJSON(formData);
 
       // Update market rates component with current interest rate
@@ -743,41 +768,71 @@ class CalculatorForm {
         this.marketRatesComponent.updateCurrentRate(formData.interestRate);
       }
 
-      // Update progress
-      loadingManager.updateProgress(50, 'Processing calculation...', 'calculate');
-      loadingManager.updateStepStatus('calculate', 'completed');
-      loadingManager.updateStepStatus('amortization', 'active');
+      // Progress callback for async calculations
+      const onProgress = (progress, message, currentStep) => {
+        loadingManager.updateProgress(progress, message, currentStep);
+        
+        // Update step status based on progress
+        if (progress >= 95 && currentStep === 'calculate') {
+          loadingManager.updateStepStatus('calculate', 'completed');
+          loadingManager.updateStepStatus('amortization', 'active');
+        }
+      };
 
-      // Add small delay to show progress animation
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Perform async calculation
+      loadingManager.updateProgress(10, 'Starting async calculation...', 'calculate');
+      
+      const calculationResult = await this.asyncCalculator.calculateAmortizationAsync(
+        formData,
+        {
+          includeAdditionalPayments: true,
+          batchSize: 100, // Larger batch size for better performance
+          timeout: 30000
+        },
+        onProgress
+      );
 
-      // Update progress
-      loadingManager.updateProgress(75, 'Building amortization schedule...', 'amortization');
-
-      // Call the calculation callback
-      if (typeof this.onCalculate === 'function') {
-        await this.onCalculate(loan);
-      }
-
-      // Complete the process
-      loadingManager.updateProgress(100, 'Finalizing results...', 'render');
+      // Update progress for rendering
+      loadingManager.updateProgress(95, 'Preparing results...', 'render');
       loadingManager.updateStepStatus('amortization', 'completed');
       loadingManager.updateStepStatus('render', 'active');
 
+      // Prepare results for callback
+      const results = {
+        loan,
+        amortizationSchedule: {
+          payments: calculationResult.schedule.payments,
+          totalInterest: () => calculationResult.schedule.totalInterest,
+          totalPayment: () => calculationResult.schedule.totalPayment,
+          payoffDate: () => new Date(calculationResult.schedule.payoffDate)
+        },
+        inflationAdjusted: calculationResult.inflationAdjusted
+      };
+
+      // Call the calculation callback
+      if (typeof this.onCalculate === 'function') {
+        await this.onCalculate(results.loan, results.amortizationSchedule, results.inflationAdjusted);
+      }
+
+      // Complete the process
+      loadingManager.updateProgress(100, 'Complete!', 'render');
+      loadingManager.updateStepStatus('render', 'completed');
+
       // Small delay before hiding
       await new Promise((resolve) => setTimeout(resolve, 500));
-      loadingManager.updateStepStatus('render', 'completed');
+
     } catch (error) {
       console.error('Error calculating loan:', error);
 
       // Update progress to show error
-      loadingManager.updateStepStatus('calculate', 'error');
-      loadingManager.updateProgress(0, 'Calculation failed', 'calculate');
+      const currentStep = error.message.includes('timeout') ? 'amortization' : 'calculate';
+      loadingManager.updateStepStatus(currentStep, 'error');
+      loadingManager.updateProgress(0, `Error: ${error.message}`, currentStep);
 
       // Hide loading after a moment
       setTimeout(() => {
         loadingManager.hideProgressOverlay();
-      }, 1500);
+      }, 2000);
 
       this.showFormError(`Calculation error: ${error.message || 'Unknown error occurred'}`);
     } finally {
