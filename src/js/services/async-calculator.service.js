@@ -10,7 +10,7 @@ class AsyncCalculatorService {
     this.pendingCalculations = new Map();
     this.calculationId = 0;
     this.workerPath = '/src/js/workers/calculation-worker.js';
-    
+
     // Initialize worker
     this.initWorker();
   }
@@ -27,7 +27,7 @@ class AsyncCalculatorService {
       }
 
       this.worker = new Worker(this.workerPath);
-      
+
       this.worker.onmessage = (e) => {
         this.handleWorkerMessage(e.data);
       };
@@ -36,7 +36,6 @@ class AsyncCalculatorService {
         console.error('Worker error:', error);
         this.handleWorkerError(error);
       };
-
     } catch (error) {
       console.warn('Failed to initialize Web Worker:', error);
       this.worker = null;
@@ -47,7 +46,9 @@ class AsyncCalculatorService {
    * Handle messages from the Web Worker
    */
   handleWorkerMessage(data) {
-    const { type, id, progress, message, currentStep, result, error } = data;
+    const {
+      type, id, progress, message, currentStep, result, error,
+    } = data;
     const calculation = this.pendingCalculations.get(id);
 
     if (!calculation) {
@@ -67,12 +68,13 @@ class AsyncCalculatorService {
         this.pendingCalculations.delete(id);
         break;
 
-      case 'error':
+      case 'error': {
         const err = new Error(error.message);
         if (error.stack) err.stack = error.stack;
         calculation.reject(err);
         this.pendingCalculations.delete(id);
         break;
+      }
     }
   }
 
@@ -106,14 +108,14 @@ class AsyncCalculatorService {
     }
 
     const id = ++this.calculationId;
-    
+
     return new Promise((resolve, reject) => {
       // Store calculation promise handlers
       this.pendingCalculations.set(id, {
         resolve,
         reject,
         onProgress,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 
       // Send calculation request to worker
@@ -127,9 +129,9 @@ class AsyncCalculatorService {
             batchSize: 50,
             maxPayments: 10000,
             timeout: 30000,
-            ...options
-          }
-        }
+            ...options,
+          },
+        },
       });
 
       // Set up timeout for the calculation
@@ -156,12 +158,12 @@ class AsyncCalculatorService {
     }
 
     const id = ++this.calculationId;
-    
+
     return new Promise((resolve, reject) => {
       this.pendingCalculations.set(id, {
         resolve: (result) => resolve(result.payment),
         reject,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 
       this.worker.postMessage({
@@ -171,8 +173,8 @@ class AsyncCalculatorService {
           principal,
           interestRate,
           term,
-          paymentFrequency
-        }
+          paymentFrequency,
+        },
       });
 
       // Timeout for simple calculations
@@ -197,12 +199,12 @@ class AsyncCalculatorService {
     }
 
     const id = ++this.calculationId;
-    
+
     return new Promise((resolve, reject) => {
       this.pendingCalculations.set(id, {
         resolve,
         reject,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 
       this.worker.postMessage({
@@ -210,8 +212,8 @@ class AsyncCalculatorService {
         id,
         data: {
           payments,
-          inflationRate
-        }
+          inflationRate,
+        },
       });
 
       setTimeout(() => {
@@ -234,22 +236,26 @@ class AsyncCalculatorService {
   async processInChunks(items, processor, chunkSize = 100, onProgress = null) {
     const results = [];
     const totalItems = items.length;
-    
+
     for (let i = 0; i < totalItems; i += chunkSize) {
       const chunk = items.slice(i, i + chunkSize);
+      // eslint-disable-next-line no-await-in-loop
       const chunkResults = await Promise.all(chunk.map(processor));
       results.push(...chunkResults);
-      
+
       // Report progress
       if (onProgress) {
         const progress = Math.min(100, ((i + chunkSize) / totalItems) * 100);
         onProgress(progress, `Processed ${Math.min(i + chunkSize, totalItems)} of ${totalItems} items`);
       }
-      
+
       // Yield control to prevent blocking
-      await new Promise(resolve => setTimeout(resolve, 0));
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((resolve) => {
+        setTimeout(resolve, 0);
+      });
     }
-    
+
     return results;
   }
 
@@ -267,7 +273,7 @@ class AsyncCalculatorService {
       paymentFrequency: loanData.paymentFrequency || 'monthly',
       additionalPayment: loanData.additionalPayment || 0,
       inflationRate: loanData.inflationRate || 0,
-      startDate: loanData.startDate ? loanData.startDate.toISOString() : new Date().toISOString()
+      startDate: loanData.startDate ? loanData.startDate.toISOString() : new Date().toISOString(),
     };
   }
 
@@ -278,14 +284,14 @@ class AsyncCalculatorService {
     // Import the synchronous calculator
     const { AmortizationSchedule } = await import('../models/amortization.model.js');
     const Loan = (await import('../models/loan.model.js')).default;
-    
+
     if (onProgress) onProgress(10, 'Creating loan object...');
-    
+
     // Create loan object
     const loan = new Loan(loanData);
-    
+
     if (onProgress) onProgress(30, 'Generating amortization schedule...');
-    
+
     // Generate schedule with progress tracking
     const schedule = new AmortizationSchedule(loan, false);
     const payments = await schedule.generateScheduleAsync({
@@ -294,34 +300,34 @@ class AsyncCalculatorService {
         if (onProgress) onProgress(30 + (progress * 0.6), message);
       },
       timeout: options.timeout || 30000,
-      batchSize: options.batchSize || 50
+      batchSize: options.batchSize || 50,
     });
-    
+
     if (onProgress) onProgress(95, 'Calculating totals...');
-    
+
     // Calculate totals
     const totalInterest = payments.reduce((sum, payment) => sum + payment.interest, 0);
     const totalPayment = payments.reduce((sum, payment) => sum + payment.amount, 0);
     const payoffDate = payments.length > 0 ? payments[payments.length - 1].date : loan.startDate;
-    
+
     const result = {
       schedule: {
         payments,
         totalInterest,
         totalPayment,
         payoffDate,
-        numberOfPayments: payments.length
-      }
+        numberOfPayments: payments.length,
+      },
     };
-    
+
     // Calculate inflation adjustment if needed
     if (loanData.inflationRate && loanData.inflationRate > 0) {
       if (onProgress) onProgress(98, 'Calculating inflation adjustments...');
       result.inflationAdjusted = this.calculateInflationSync(payments, loanData.inflationRate);
     }
-    
+
     if (onProgress) onProgress(100, 'Complete');
-    
+
     return result;
   }
 
@@ -412,7 +418,7 @@ class AsyncCalculatorService {
     return {
       pendingCalculations: this.pendingCalculations.size,
       workerAvailable: !!this.worker,
-      totalCalculations: this.calculationId
+      totalCalculations: this.calculationId,
     };
   }
 
@@ -421,7 +427,7 @@ class AsyncCalculatorService {
    */
   destroy() {
     this.cancelAllCalculations();
-    
+
     if (this.worker) {
       this.worker.terminate();
       this.worker = null;

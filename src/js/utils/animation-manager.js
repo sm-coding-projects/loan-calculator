@@ -306,7 +306,9 @@ class AnimationManager {
     const { fn, delay } = this.animationQueue.shift();
 
     if (delay > 0) {
-      await new Promise((resolve) => setTimeout(resolve, delay));
+      await new Promise((resolve) => {
+        setTimeout(resolve, delay);
+      });
     }
 
     try {

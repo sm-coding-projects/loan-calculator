@@ -20,7 +20,7 @@ class LoadingManager {
    */
   showSkeleton(container, type = 'results', options = {}) {
     const element = typeof container === 'string' ? document.querySelector(container) : container;
-    if (!element) return;
+    if (!element) return null;
 
     const skeletonId = `skeleton-${Date.now()}`;
     const skeletonHtml = this.generateSkeletonHtml(type, options);
@@ -82,7 +82,7 @@ class LoadingManager {
     this.loadingOverlay.setAttribute('aria-modal', 'true');
     this.loadingOverlay.setAttribute('aria-labelledby', 'loading-title');
     this.loadingOverlay.setAttribute('aria-describedby', 'loading-message');
-    
+
     this.loadingOverlay.innerHTML = `
       <div class="loading-content">
         <div class="loading-header">
@@ -166,7 +166,7 @@ class LoadingManager {
 
     if (progressText && message) {
       progressText.textContent = message;
-      
+
       // Announce significant progress milestones
       if (progress === 100) {
         announceLoadingState('completed', message);
@@ -245,7 +245,7 @@ class LoadingManager {
    */
   showInlineLoader(container, type = 'default', message = 'Loading...') {
     const element = typeof container === 'string' ? document.querySelector(container) : container;
-    if (!element) return;
+    if (!element) return null;
 
     const loaderId = `loader-${Date.now()}`;
     const spinnerHtml = this.generateSpinnerHtml(type, message);
@@ -345,7 +345,7 @@ class LoadingManager {
           ${Array(rows).fill(0).map(() => `
             <tr class="skeleton-row">
               ${Array(columns).fill(0).map((_, i) => `
-                <td><div class="skeleton-cell ${i === columns - 1 ? 'number' : i % 3 === 0 ? 'short' : 'medium'} skeleton"></div></td>
+                <td><div class="skeleton-cell ${this.getSkeletonCellClass(i, columns)} skeleton"></div></td>
               `).join('')}
             </tr>
           `).join('')}
@@ -403,6 +403,19 @@ class LoadingManager {
   }
 
   /**
+   * Get skeleton cell class based on column index
+   * @param {number} columnIndex - Column index
+   * @param {number} totalColumns - Total number of columns
+   * @returns {string} CSS class name
+   */
+  getSkeletonCellClass(columnIndex, totalColumns) {
+    if (columnIndex === totalColumns - 1) {
+      return 'number';
+    }
+    return columnIndex % 3 === 0 ? 'short' : 'medium';
+  }
+
+  /**
    * Generate spinner HTML
    * @param {string} type - Spinner type
    * @param {string} message - Loading message
@@ -448,6 +461,18 @@ class LoadingManager {
   }
 
   /**
+   * Get step icon based on status
+   * @param {string} status - Step status
+   * @param {number} stepNumber - Step number
+   * @returns {string} Icon or number
+   */
+  getStepIcon(status, stepNumber) {
+    if (status === 'completed') return '✓';
+    if (status === 'error') return '✗';
+    return stepNumber;
+  }
+
+  /**
    * Generate progress steps HTML
    * @param {Array} steps - Array of step objects
    * @returns {string} HTML
@@ -457,7 +482,7 @@ class LoadingManager {
       <div class="progress-steps">
         ${steps.map((step, index) => `
           <div class="progress-step ${step.status || 'pending'}" data-step-id="${step.id}" data-step-number="${index + 1}">
-            <div class="progress-step-circle">${step.status === 'completed' ? '✓' : step.status === 'error' ? '✗' : index + 1}</div>
+            <div class="progress-step-circle">${this.getStepIcon(step.status, index + 1)}</div>
             <div class="progress-step-line"></div>
             <div class="progress-step-label">${step.label}</div>
           </div>

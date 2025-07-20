@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/447</span>
+                <span class='fraction'>0/450</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/435</span>
+                <span class='fraction'>0/438</span>
             </div>
         
             
@@ -1193,9 +1193,7 @@
 <a name='L1128'></a><a href='#L1128'>1128</a>
 <a name='L1129'></a><a href='#L1129'>1129</a>
 <a name='L1130'></a><a href='#L1130'>1130</a>
-<a name='L1131'></a><a href='#L1131'>1131</a>
-<a name='L1132'></a><a href='#L1132'>1132</a>
-<a name='L1133'></a><a href='#L1133'>1133</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1131'></a><a href='#L1131'>1131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1656,10 +1654,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2190,7 +2188,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2261,7 +2258,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2363,7 +2359,7 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >    this.sortDirection = 'asc';</span>
 <span class="cstat-no" title="statement not covered" >    this.filters = {};</span>
 <span class="cstat-no" title="statement not covered" >    this.currentData = [];</span>
-    
+&nbsp;
     // Virtual scrolling options
 <span class="cstat-no" title="statement not covered" >    this.useVirtualScrolling = options.useVirtualScrolling !== false; </span>// Default to true
 <span class="cstat-no" title="statement not covered" >    this.virtualScrollThreshold = options.virtualScrollThreshold || 100;</span>
@@ -2578,7 +2574,7 @@ class AmortizationTable {
    */
 <span class="fstat-no" title="function not covered" >  sw</span>itchToVirtualMode(data) {
 <span class="cstat-no" title="statement not covered" >    this.isVirtualMode = true;</span>
-    
+&nbsp;
     // Clear container
 <span class="cstat-no" title="statement not covered" >    this.container.innerHTML = '';</span>
 &nbsp;
@@ -2607,56 +2603,56 @@ class AmortizationTable {
         title: '#',
         flex: 0.5,
         minWidth: 60,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.toString()</span>
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.toString(),</span>
       },
       {
         key: 'date',
         title: 'Date',
         flex: 1,
         minWidth: 120,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.date(value)</span>
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.date(value),</span>
       },
       {
         key: 'amount',
         title: 'Payment',
         flex: 1,
         minWidth: 120,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value)</span>
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value),</span>
       },
       {
         key: 'principal',
         title: 'Principal',
         flex: 1,
         minWidth: 120,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value)</span>
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value),</span>
       },
       {
         key: 'interest',
         title: 'Interest',
         flex: 1,
         minWidth: 120,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value)</span>
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value),</span>
       },
       {
         key: 'balance',
         title: 'Remaining Balance',
         flex: 1.2,
         minWidth: 140,
-        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value)</span>
-      }
+        formatter: <span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >this.formatters.currency(value),</span>
+      },
     ];
 &nbsp;
     // Create virtual table
 <span class="cstat-no" title="statement not covered" >    this.virtualTable = new VirtualTable({</span>
       container: virtualContainer,
-      columns: columns,
+      columns,
       itemHeight: 45,
       bufferSize: 20,
       headerHeight: 50,
       onScroll: <span class="fstat-no" title="function not covered" >(i</span>nfo) =&gt; {
         // Update scroll position indicator
 <span class="cstat-no" title="statement not covered" >        this.updateScrollIndicator(info);</span>
-      }
+      },
     });
 &nbsp;
     // Set data
@@ -2678,7 +2674,7 @@ class AmortizationTable {
    */
 <span class="fstat-no" title="function not covered" >  sw</span>itchToPaginatedMode(data) {
 <span class="cstat-no" title="statement not covered" >    this.isVirtualMode = false;</span>
-    
+&nbsp;
     // Destroy virtual table
 <span class="cstat-no" title="statement not covered" >    if (this.virtualTable) {</span>
 <span class="cstat-no" title="statement not covered" >      this.virtualTable.destroy();</span>
@@ -2721,7 +2717,7 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >    table.className = 'table table-responsive';</span>
 <span class="cstat-no" title="statement not covered" >    table.setAttribute('role', 'table');</span>
 <span class="cstat-no" title="statement not covered" >    table.setAttribute('aria-label', 'Loan amortization schedule');</span>
-    
+&nbsp;
     // Add caption for screen readers
     const caption = <span class="cstat-no" title="statement not covered" >document.createElement('caption');</span>
 <span class="cstat-no" title="statement not covered" >    caption.textContent = `Amortization schedule showing ${sortedData.length} payments`;</span>
@@ -2787,11 +2783,11 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >        th.className = 'sortable';</span>
 <span class="cstat-no" title="statement not covered" >        th.setAttribute('role', 'columnheader');</span>
 <span class="cstat-no" title="statement not covered" >        th.setAttribute('tabindex', '0');</span>
-<span class="cstat-no" title="statement not covered" >        th.setAttribute('aria-sort', </span>
-          column.id === this.sortColumn 
-            ? (this.sortDirection === 'asc' ? 'ascending' : 'descending')
-            : 'none'
-        );
+        let ariaSortValue = <span class="cstat-no" title="statement not covered" >'none';</span>
+<span class="cstat-no" title="statement not covered" >        if (column.id === this.sortColumn) {</span>
+<span class="cstat-no" title="statement not covered" >          ariaSortValue = this.sortDirection === 'asc' ? 'ascending' : 'descending';</span>
+        }
+<span class="cstat-no" title="statement not covered" >        th.setAttribute('aria-sort', ariaSortValue);</span>
 &nbsp;
         // Add sort indicator if this is the current sort column
 <span class="cstat-no" title="statement not covered" >        if (column.id === this.sortColumn) {</span>
@@ -2805,7 +2801,7 @@ class AmortizationTable {
         const handleSort = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
           // Announce sorting action to screen readers
 <span class="cstat-no" title="statement not covered" >          announceToScreenReader(`Sorting by ${column.label} ${this.sortColumn === column.id &amp;&amp; this.sortDirection === 'asc' ? 'descending' : 'ascending'}`);</span>
-          
+&nbsp;
           // Toggle direction if already sorting by this column
 <span class="cstat-no" title="statement not covered" >          if (this.sortColumn === column.id) {</span>
 <span class="cstat-no" title="statement not covered" >            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';</span>
@@ -2819,7 +2815,7 @@ class AmortizationTable {
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        th.addEventListener('click', handleSort);</span>
-        
+&nbsp;
         // Add keyboard support for sorting
 <span class="cstat-no" title="statement not covered" >        th.addEventListener('keydown', <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          if (e.key === 'Enter' || e.key === ' ') {</span>
@@ -3298,7 +3294,7 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >          perfBadge.style.opacity = '0';</span>
 <span class="cstat-no" title="statement not covered" >          perfBadge.style.transform = 'translateX(-20px)';</span>
 <span class="cstat-no" title="statement not covered" >          perfBadge.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';</span>
-          
+&nbsp;
 <span class="cstat-no" title="statement not covered" >          setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            perfBadge.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >            perfBadge.style.transform = 'translateX(0)';</span>
@@ -3313,27 +3309,26 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >          controls.style.opacity = '0';</span>
 <span class="cstat-no" title="statement not covered" >          controls.style.transform = 'translateY(10px)';</span>
 <span class="cstat-no" title="statement not covered" >          controls.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';</span>
-          
+&nbsp;
 <span class="cstat-no" title="statement not covered" >          setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            controls.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >            controls.style.transform = 'translateY(0)';</span>
           }, 50);
         }
       }, 500);
-&nbsp;
     }, <span class="fstat-no" title="function not covered" >()</span> =&gt; {
       // Fallback for reduced motion
 <span class="cstat-no" title="statement not covered" >      container.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >      container.style.transform = 'none';</span>
-      
+&nbsp;
       const perfBadge = <span class="cstat-no" title="statement not covered" >this.container.querySelector('.perf-badge');</span>
       const controls = <span class="cstat-no" title="statement not covered" >this.container.querySelector('.virtual-table-controls');</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (perfBadge) {</span>
 <span class="cstat-no" title="statement not covered" >        perfBadge.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >        perfBadge.style.transform = 'none';</span>
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      if (controls) {</span>
 <span class="cstat-no" title="statement not covered" >        controls.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >        controls.style.transform = 'none';</span>
@@ -3375,7 +3370,7 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >        tableContainer.style.opacity = '0';</span>
 <span class="cstat-no" title="statement not covered" >        tableContainer.style.transform = 'translateY(20px)';</span>
 <span class="cstat-no" title="statement not covered" >        tableContainer.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';</span>
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          tableContainer.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >          tableContainer.style.transform = 'translateY(0)';</span>
@@ -3394,7 +3389,6 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >      setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this._addTableInteractions(table);</span>
       }, 300 + (rowCount * 50));
-&nbsp;
     }, <span class="fstat-no" title="function not covered" >()</span> =&gt; {
       // Fallback for reduced motion
       const tableContainer = <span class="cstat-no" title="statement not covered" >table.closest('.table-container');</span>
@@ -3402,7 +3396,7 @@ class AmortizationTable {
 <span class="cstat-no" title="statement not covered" >        tableContainer.style.opacity = '1';</span>
 <span class="cstat-no" title="statement not covered" >        tableContainer.style.transform = 'none';</span>
       }
-      
+&nbsp;
       const rows = <span class="cstat-no" title="statement not covered" >table.querySelectorAll('tbody tr');</span>
 <span class="cstat-no" title="statement not covered" >      rows.forEach(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        row.style.opacity = '1';</span>
@@ -3466,7 +3460,7 @@ export default AmortizationTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T04:02:32.395Z
+                at 2025-07-20T05:41:28.439Z
             </div>
         <script src="../prettify.js"></script>
         <script>

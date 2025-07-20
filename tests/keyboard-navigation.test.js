@@ -8,7 +8,7 @@ import keyboardNavigationManager from '../src/js/utils/keyboard-navigation.js';
 
 describe('Keyboard Navigation', () => {
   let container;
-  
+
   beforeEach(() => {
     // Create test container
     container = document.createElement('div');
@@ -53,7 +53,7 @@ describe('Keyboard Navigation', () => {
     `;
     document.body.appendChild(container);
   });
-  
+
   afterEach(() => {
     document.body.removeChild(container);
   });
@@ -61,14 +61,14 @@ describe('Keyboard Navigation', () => {
   describe('Focus Management', () => {
     test('should identify all focusable elements', () => {
       const focusableElements = keyboardNavigationManager.getFocusableElements();
-      
+
       expect(focusableElements.length).toBeGreaterThan(0);
-      
+
       // Check that all expected elements are found
       const expectedIds = ['button1', 'input1', 'select1', 'link1', 'div1', 'amount', 'amount-slider', 'submit-btn'];
-      const foundIds = focusableElements.map(el => el.id).filter(id => expectedIds.includes(id));
-      
-      expect(foundIds.length).toBe(expectedIds.length);
+      const foundIds = focusableElements.map((el) => el.id).filter((id) => expectedIds.includes(id));
+
+      expect(foundIds).toHaveLength(expectedIds.length);
     });
 
     test('should correctly identify focusable elements', () => {
@@ -77,7 +77,7 @@ describe('Keyboard Navigation', () => {
       const hiddenDiv = document.createElement('div');
       hiddenDiv.style.display = 'none';
       hiddenDiv.tabIndex = 0;
-      
+
       expect(keyboardNavigationManager.isElementFocusable(button)).toBe(true);
       expect(keyboardNavigationManager.isElementFocusable(input)).toBe(true);
       expect(keyboardNavigationManager.isElementFocusable(hiddenDiv)).toBe(false);
@@ -86,9 +86,9 @@ describe('Keyboard Navigation', () => {
     test('should handle disabled elements correctly', () => {
       const button = document.getElementById('button1');
       button.disabled = true;
-      
+
       expect(keyboardNavigationManager.isElementFocusable(button)).toBe(false);
-      
+
       button.disabled = false;
       expect(keyboardNavigationManager.isElementFocusable(button)).toBe(true);
     });
@@ -97,28 +97,32 @@ describe('Keyboard Navigation', () => {
   describe('Keyboard Shortcuts', () => {
     test('should register keyboard shortcuts', () => {
       const handler = jest.fn();
-      
+
       keyboardNavigationManager.registerShortcut('ctrl+t', {
         description: 'Test shortcut',
-        handler: handler
+        handler,
       });
-      
+
       // Simulate keyboard event
       const event = new KeyboardEvent('keydown', {
         key: 't',
         ctrlKey: true,
-        bubbles: true
+        bubbles: true,
       });
-      
+
       document.dispatchEvent(event);
-      
+
       expect(handler).toHaveBeenCalled();
     });
 
     test('should generate correct shortcut keys', () => {
-      const event1 = { key: 'enter', ctrlKey: true, altKey: false, shiftKey: false, metaKey: false };
-      const event2 = { key: 'f1', ctrlKey: false, altKey: true, shiftKey: true, metaKey: false };
-      
+      const event1 = {
+        key: 'enter', ctrlKey: true, altKey: false, shiftKey: false, metaKey: false,
+      };
+      const event2 = {
+        key: 'f1', ctrlKey: false, altKey: true, shiftKey: true, metaKey: false,
+      };
+
       expect(keyboardNavigationManager.getShortcutKey(event1)).toBe('ctrl+enter');
       expect(keyboardNavigationManager.getShortcutKey(event2)).toBe('alt+shift+f1');
     });
@@ -129,15 +133,15 @@ describe('Keyboard Navigation', () => {
       const table = document.getElementById('test-table');
       const firstCell = table.querySelector('td');
       firstCell.focus();
-      
+
       // Test right arrow
       const rightArrowEvent = new KeyboardEvent('keydown', {
         key: 'ArrowRight',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       firstCell.dispatchEvent(rightArrowEvent);
-      
+
       // Should move focus to next cell
       expect(document.activeElement).toBe(table.querySelectorAll('td')[1]);
     });
@@ -147,17 +151,17 @@ describe('Keyboard Navigation', () => {
       const cells = table.querySelectorAll('td');
       const firstRowFirstCell = cells[0];
       const secondRowFirstCell = cells[2];
-      
+
       firstRowFirstCell.focus();
-      
+
       // Test down arrow
       const downArrowEvent = new KeyboardEvent('keydown', {
         key: 'ArrowDown',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       firstRowFirstCell.dispatchEvent(downArrowEvent);
-      
+
       // Should move focus to cell below
       expect(document.activeElement).toBe(secondRowFirstCell);
     });
@@ -167,21 +171,23 @@ describe('Keyboard Navigation', () => {
     test('should sync slider and input values', async () => {
       const input = document.getElementById('amount');
       const slider = document.getElementById('amount-slider');
-      
+
       slider.focus();
       slider.value = '500';
-      
+
       // Simulate arrow key on slider
       const arrowEvent = new KeyboardEvent('keydown', {
         key: 'ArrowUp',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       slider.dispatchEvent(arrowEvent);
-      
+
       // Wait for sync
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      await new Promise((resolve) => {
+        setTimeout(resolve, 10);
+      });
+
       expect(input.value).toBe('500');
     });
   });
@@ -194,25 +200,25 @@ describe('Keyboard Navigation', () => {
         <button id="last-btn">Last</button>
       `;
       document.body.appendChild(modal);
-      
+
       keyboardNavigationManager.trapFocus(modal);
-      
+
       const firstBtn = modal.querySelector('#first-btn');
       const lastBtn = modal.querySelector('#last-btn');
-      
+
       lastBtn.focus();
-      
+
       // Simulate tab key
       const tabEvent = new KeyboardEvent('keydown', {
         key: 'Tab',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       lastBtn.dispatchEvent(tabEvent);
-      
+
       // Should wrap to first button
       expect(document.activeElement).toBe(firstBtn);
-      
+
       keyboardNavigationManager.removeFocusTrap(modal);
       document.body.removeChild(modal);
     });
@@ -225,21 +231,21 @@ describe('Keyboard Navigation', () => {
       modal.setAttribute('aria-hidden', 'false');
       modal.innerHTML = '<button class="modal-close">Close</button>';
       document.body.appendChild(modal);
-      
+
       const closeBtn = modal.querySelector('.modal-close');
       const closeSpy = jest.fn();
       closeBtn.addEventListener('click', closeSpy);
-      
+
       // Simulate escape key
       const escapeEvent = new KeyboardEvent('keydown', {
         key: 'Escape',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       document.dispatchEvent(escapeEvent);
-      
+
       expect(closeSpy).toHaveBeenCalled();
-      
+
       document.body.removeChild(modal);
     });
   });
@@ -248,13 +254,13 @@ describe('Keyboard Navigation', () => {
     test('should start and stop testing mode', () => {
       keyboardNavigationManager.startTesting();
       expect(keyboardNavigationManager.isTestMode).toBe(true);
-      
+
       // Simulate some focus events
       const button = document.getElementById('button1');
       button.focus();
-      
+
       const results = keyboardNavigationManager.stopTesting();
-      
+
       expect(keyboardNavigationManager.isTestMode).toBe(false);
       expect(results.tabOrder.length).toBeGreaterThan(0);
       expect(results.totalElements).toBeGreaterThan(0);
@@ -266,32 +272,32 @@ describe('Keyboard Navigation', () => {
           tagName: 'BUTTON',
           id: 'btn1',
           textContent: 'Button 1',
-          ariaLabel: null
+          ariaLabel: null,
         },
         {
           tagName: 'INPUT',
           id: '',
           textContent: '',
-          ariaLabel: null
-        }
+          ariaLabel: null,
+        },
       ];
-      
+
       const issues = keyboardNavigationManager.analyzeTabOrder(testResults);
-      
+
       expect(issues.length).toBeGreaterThan(0);
-      expect(issues.some(issue => issue.includes('lacks proper labeling'))).toBe(true);
+      expect(issues.some((issue) => issue.includes('lacks proper labeling'))).toBe(true);
     });
   });
 
   describe('Comprehensive Testing', () => {
     test('should test all keyboard functionality', async () => {
       const results = await keyboardNavigationManager.testAllKeyboardFunctionality();
-      
+
       expect(results).toHaveProperty('focusableElements');
       expect(results).toHaveProperty('shortcuts');
       expect(results).toHaveProperty('navigation');
       expect(results).toHaveProperty('issues');
-      
+
       expect(Array.isArray(results.focusableElements)).toBe(true);
       expect(Array.isArray(results.shortcuts)).toBe(true);
       expect(Array.isArray(results.navigation)).toBe(true);
@@ -304,23 +310,23 @@ describe('Keyboard Navigation', () => {
       // Check if keyboard navigation class is added on keydown
       const keydownEvent = new KeyboardEvent('keydown', {
         key: 'Tab',
-        bubbles: true
+        bubbles: true,
       });
-      
+
       document.dispatchEvent(keydownEvent);
-      
+
       expect(document.body.classList.contains('keyboard-navigation')).toBe(true);
     });
 
     test('should remove keyboard navigation class on mousedown', () => {
       document.body.classList.add('keyboard-navigation');
-      
+
       const mousedownEvent = new MouseEvent('mousedown', {
-        bubbles: true
+        bubbles: true,
       });
-      
+
       document.dispatchEvent(mousedownEvent);
-      
+
       expect(document.body.classList.contains('keyboard-navigation')).toBe(false);
     });
   });
@@ -329,11 +335,11 @@ describe('Keyboard Navigation', () => {
     test('should add skip to content link', () => {
       // Remove any existing skip links
       const existingSkipLinks = document.querySelectorAll('.skip-to-content');
-      existingSkipLinks.forEach(link => link.remove());
-      
+      existingSkipLinks.forEach((link) => link.remove());
+
       // Re-initialize to add skip link
       keyboardNavigationManager.addSkipToContentLink();
-      
+
       const skipLink = document.querySelector('.skip-to-content');
       expect(skipLink).toBeTruthy();
       expect(skipLink.textContent).toBe('Skip to main content');
@@ -370,12 +376,12 @@ describe('Keyboard Navigation Integration', () => {
       </tbody>
     `;
     document.body.appendChild(table);
-    
+
     const focusableElements = keyboardNavigationManager.getFocusableElements();
-    const tableElements = focusableElements.filter(el => el.closest('table'));
-    
+    const tableElements = focusableElements.filter((el) => el.closest('table'));
+
     expect(tableElements.length).toBeGreaterThan(0);
-    
+
     document.body.removeChild(table);
   });
 });

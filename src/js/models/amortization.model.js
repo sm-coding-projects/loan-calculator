@@ -131,7 +131,10 @@ class AmortizationSchedule {
         if (paymentNumber % batchSize === 0) {
           onProgress(this.generationProgress, `Processing payment ${paymentNumber}...`);
           // Yield control back to the event loop
-          await new Promise((resolve) => setTimeout(resolve, 0));
+          // eslint-disable-next-line no-await-in-loop
+          await new Promise((resolve) => {
+            setTimeout(resolve, 0);
+          });
         }
 
         // Increment payment number

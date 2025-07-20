@@ -56,7 +56,7 @@ class WorkerLoanCalculator {
       includeAdditionalPayments = true,
       batchSize = 50,
       maxPayments = 10000,
-      timeout = 30000
+      timeout = 30000,
     } = options;
 
     // Validate input
@@ -108,7 +108,7 @@ class WorkerLoanCalculator {
       type: 'progress',
       progress: 0,
       message: 'Starting calculation...',
-      currentStep: 'calculate'
+      currentStep: 'calculate',
     });
 
     // Generate payments
@@ -133,7 +133,7 @@ class WorkerLoanCalculator {
         amount: totalPayment,
         principal: principalPayment,
         interest: interestPayment,
-        balance: balance
+        balance,
       };
 
       payments.push(payment);
@@ -143,14 +143,17 @@ class WorkerLoanCalculator {
         const progress = Math.min(95, (paymentNumber / estimatedTotalPayments) * 100);
         self.postMessage({
           type: 'progress',
-          progress: progress,
+          progress,
           message: `Processing payment ${paymentNumber}...`,
           currentStep: 'calculate',
-          paymentsProcessed: paymentNumber
+          paymentsProcessed: paymentNumber,
         });
 
         // Yield control to prevent blocking
-        await new Promise(resolve => setTimeout(resolve, 0));
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((resolve) => {
+          setTimeout(resolve, 0);
+        });
       }
 
       paymentNumber++;
@@ -176,7 +179,7 @@ class WorkerLoanCalculator {
       totalInterest,
       totalPayment,
       payoffDate,
-      numberOfPayments: payments.length
+      numberOfPayments: payments.length,
     };
   }
 
@@ -185,7 +188,7 @@ class WorkerLoanCalculator {
    */
   static calculatePaymentDate(startDate, paymentNumber, frequency) {
     const date = new Date(startDate);
-    
+
     switch (frequency) {
       case 'weekly':
         date.setDate(date.getDate() + (paymentNumber - 1) * 7);
@@ -198,7 +201,7 @@ class WorkerLoanCalculator {
         date.setMonth(date.getMonth() + (paymentNumber - 1));
         break;
     }
-    
+
     return date.toISOString();
   }
 
@@ -247,18 +250,18 @@ class WorkerLoanCalculator {
 }
 
 // Worker message handler
-self.onmessage = async function(e) {
+self.onmessage = async function (e) {
   const { type, data, id } = e.data;
 
   try {
     switch (type) {
-      case 'calculateAmortization':
+      case 'calculateAmortization': {
         self.postMessage({
           type: 'progress',
           progress: 5,
           message: 'Initializing calculation...',
           currentStep: 'validate',
-          id
+          id,
         });
 
         const schedule = await WorkerLoanCalculator.generateAmortizationSchedule(data.loanData, data.options);
@@ -268,15 +271,15 @@ self.onmessage = async function(e) {
           progress: 98,
           message: 'Finalizing results...',
           currentStep: 'finalize',
-          id
+          id,
         });
 
         // Calculate inflation adjustment if needed
         let inflationAdjusted = null;
         if (data.loanData.inflationRate && data.loanData.inflationRate > 0) {
           inflationAdjusted = WorkerLoanCalculator.calculateInflationAdjusted(
-            schedule.payments, 
-            data.loanData.inflationRate
+            schedule.payments,
+            data.loanData.inflationRate,
           );
         }
 
@@ -284,39 +287,42 @@ self.onmessage = async function(e) {
           type: 'complete',
           result: {
             schedule,
-            inflationAdjusted
+            inflationAdjusted,
           },
-          id
+          id,
         });
         break;
+      }
 
-      case 'calculatePayment':
+      case 'calculatePayment': {
         const payment = WorkerLoanCalculator.calculatePayment(
           data.principal,
           data.interestRate,
           data.term,
-          data.paymentFrequency
+          data.paymentFrequency,
         );
 
         self.postMessage({
           type: 'complete',
           result: { payment },
-          id
+          id,
         });
         break;
+      }
 
-      case 'calculateInflation':
+      case 'calculateInflation': {
         const inflationResult = WorkerLoanCalculator.calculateInflationAdjusted(
           data.payments,
-          data.inflationRate
+          data.inflationRate,
         );
 
         self.postMessage({
           type: 'complete',
           result: inflationResult,
-          id
+          id,
         });
         break;
+      }
 
       default:
         throw new Error(`Unknown calculation type: ${type}`);
@@ -326,21 +332,21 @@ self.onmessage = async function(e) {
       type: 'error',
       error: {
         message: error.message,
-        stack: error.stack
+        stack: error.stack,
       },
-      id
+      id,
     });
   }
 };
 
 // Handle worker errors
-self.onerror = function(error) {
+self.onerror = function (error) {
   self.postMessage({
     type: 'error',
     error: {
       message: error.message,
       filename: error.filename,
-      lineno: error.lineno
-    }
+      lineno: error.lineno,
+    },
   });
 };

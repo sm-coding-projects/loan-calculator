@@ -34,7 +34,7 @@ class AmortizationTable {
     this.sortDirection = 'asc';
     this.filters = {};
     this.currentData = [];
-    
+
     // Virtual scrolling options
     this.useVirtualScrolling = options.useVirtualScrolling !== false; // Default to true
     this.virtualScrollThreshold = options.virtualScrollThreshold || 100;
@@ -249,7 +249,7 @@ class AmortizationTable {
    */
   switchToVirtualMode(data) {
     this.isVirtualMode = true;
-    
+
     // Clear container
     this.container.innerHTML = '';
 
@@ -278,56 +278,56 @@ class AmortizationTable {
         title: '#',
         flex: 0.5,
         minWidth: 60,
-        formatter: (value) => value.toString()
+        formatter: (value) => value.toString(),
       },
       {
         key: 'date',
         title: 'Date',
         flex: 1,
         minWidth: 120,
-        formatter: (value) => this.formatters.date(value)
+        formatter: (value) => this.formatters.date(value),
       },
       {
         key: 'amount',
         title: 'Payment',
         flex: 1,
         minWidth: 120,
-        formatter: (value) => this.formatters.currency(value)
+        formatter: (value) => this.formatters.currency(value),
       },
       {
         key: 'principal',
         title: 'Principal',
         flex: 1,
         minWidth: 120,
-        formatter: (value) => this.formatters.currency(value)
+        formatter: (value) => this.formatters.currency(value),
       },
       {
         key: 'interest',
         title: 'Interest',
         flex: 1,
         minWidth: 120,
-        formatter: (value) => this.formatters.currency(value)
+        formatter: (value) => this.formatters.currency(value),
       },
       {
         key: 'balance',
         title: 'Remaining Balance',
         flex: 1.2,
         minWidth: 140,
-        formatter: (value) => this.formatters.currency(value)
-      }
+        formatter: (value) => this.formatters.currency(value),
+      },
     ];
 
     // Create virtual table
     this.virtualTable = new VirtualTable({
       container: virtualContainer,
-      columns: columns,
+      columns,
       itemHeight: 45,
       bufferSize: 20,
       headerHeight: 50,
       onScroll: (info) => {
         // Update scroll position indicator
         this.updateScrollIndicator(info);
-      }
+      },
     });
 
     // Set data
@@ -349,7 +349,7 @@ class AmortizationTable {
    */
   switchToPaginatedMode(data) {
     this.isVirtualMode = false;
-    
+
     // Destroy virtual table
     if (this.virtualTable) {
       this.virtualTable.destroy();
@@ -392,7 +392,7 @@ class AmortizationTable {
     table.className = 'table table-responsive';
     table.setAttribute('role', 'table');
     table.setAttribute('aria-label', 'Loan amortization schedule');
-    
+
     // Add caption for screen readers
     const caption = document.createElement('caption');
     caption.textContent = `Amortization schedule showing ${sortedData.length} payments`;
@@ -458,11 +458,11 @@ class AmortizationTable {
         th.className = 'sortable';
         th.setAttribute('role', 'columnheader');
         th.setAttribute('tabindex', '0');
-        th.setAttribute('aria-sort', 
-          column.id === this.sortColumn 
-            ? (this.sortDirection === 'asc' ? 'ascending' : 'descending')
-            : 'none'
-        );
+        let ariaSortValue = 'none';
+        if (column.id === this.sortColumn) {
+          ariaSortValue = this.sortDirection === 'asc' ? 'ascending' : 'descending';
+        }
+        th.setAttribute('aria-sort', ariaSortValue);
 
         // Add sort indicator if this is the current sort column
         if (column.id === this.sortColumn) {
@@ -476,7 +476,7 @@ class AmortizationTable {
         const handleSort = () => {
           // Announce sorting action to screen readers
           announceToScreenReader(`Sorting by ${column.label} ${this.sortColumn === column.id && this.sortDirection === 'asc' ? 'descending' : 'ascending'}`);
-          
+
           // Toggle direction if already sorting by this column
           if (this.sortColumn === column.id) {
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -490,7 +490,7 @@ class AmortizationTable {
         };
 
         th.addEventListener('click', handleSort);
-        
+
         // Add keyboard support for sorting
         th.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -969,7 +969,7 @@ class AmortizationTable {
           perfBadge.style.opacity = '0';
           perfBadge.style.transform = 'translateX(-20px)';
           perfBadge.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          
+
           setTimeout(() => {
             perfBadge.style.opacity = '1';
             perfBadge.style.transform = 'translateX(0)';
@@ -984,27 +984,26 @@ class AmortizationTable {
           controls.style.opacity = '0';
           controls.style.transform = 'translateY(10px)';
           controls.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          
+
           setTimeout(() => {
             controls.style.opacity = '1';
             controls.style.transform = 'translateY(0)';
           }, 50);
         }
       }, 500);
-
     }, () => {
       // Fallback for reduced motion
       container.style.opacity = '1';
       container.style.transform = 'none';
-      
+
       const perfBadge = this.container.querySelector('.perf-badge');
       const controls = this.container.querySelector('.virtual-table-controls');
-      
+
       if (perfBadge) {
         perfBadge.style.opacity = '1';
         perfBadge.style.transform = 'none';
       }
-      
+
       if (controls) {
         controls.style.opacity = '1';
         controls.style.transform = 'none';
@@ -1046,7 +1045,7 @@ class AmortizationTable {
         tableContainer.style.opacity = '0';
         tableContainer.style.transform = 'translateY(20px)';
         tableContainer.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        
+
         setTimeout(() => {
           tableContainer.style.opacity = '1';
           tableContainer.style.transform = 'translateY(0)';
@@ -1065,7 +1064,6 @@ class AmortizationTable {
       setTimeout(() => {
         this._addTableInteractions(table);
       }, 300 + (rowCount * 50));
-
     }, () => {
       // Fallback for reduced motion
       const tableContainer = table.closest('.table-container');
@@ -1073,7 +1071,7 @@ class AmortizationTable {
         tableContainer.style.opacity = '1';
         tableContainer.style.transform = 'none';
       }
-      
+
       const rows = table.querySelectorAll('tbody tr');
       rows.forEach((row) => {
         row.style.opacity = '1';

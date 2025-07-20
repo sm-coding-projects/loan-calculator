@@ -11,7 +11,7 @@ class VirtualScroller {
     this.bufferSize = options.bufferSize || 10;
     this.renderItem = options.renderItem || (() => document.createElement('div'));
     this.onScroll = options.onScroll || (() => {});
-    
+
     // Data and state
     this.data = [];
     this.visibleItems = [];
@@ -19,18 +19,18 @@ class VirtualScroller {
     this.endIndex = 0;
     this.containerHeight = 0;
     this.visibleCount = 0;
-    
+
     // DOM elements
     this.viewport = null;
     this.content = null;
     this.spacerTop = null;
     this.spacerBottom = null;
-    
+
     // Performance tracking
     this.lastScrollTime = 0;
     this.scrollTimeout = null;
     this.isScrolling = false;
-    
+
     this.init();
   }
 
@@ -53,7 +53,7 @@ class VirtualScroller {
   createViewport() {
     // Clear container
     this.container.innerHTML = '';
-    
+
     // Create viewport
     this.viewport = document.createElement('div');
     this.viewport.className = 'virtual-scroller-viewport';
@@ -63,7 +63,7 @@ class VirtualScroller {
       overflow-x: hidden;
       position: relative;
     `;
-    
+
     // Create content container
     this.content = document.createElement('div');
     this.content.className = 'virtual-scroller-content';
@@ -71,7 +71,7 @@ class VirtualScroller {
       position: relative;
       min-height: 100%;
     `;
-    
+
     // Create spacers for maintaining scroll position
     this.spacerTop = document.createElement('div');
     this.spacerTop.className = 'virtual-scroller-spacer-top';
@@ -79,14 +79,14 @@ class VirtualScroller {
       height: 0px;
       flex-shrink: 0;
     `;
-    
+
     this.spacerBottom = document.createElement('div');
     this.spacerBottom.className = 'virtual-scroller-spacer-bottom';
     this.spacerBottom.style.cssText = `
       height: 0px;
       flex-shrink: 0;
     `;
-    
+
     // Assemble structure
     this.content.appendChild(this.spacerTop);
     this.content.appendChild(this.spacerBottom);
@@ -100,7 +100,7 @@ class VirtualScroller {
   bindEvents() {
     // Throttled scroll handler for performance
     this.viewport.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
-    
+
     // Resize observer for responsive updates
     if (window.ResizeObserver) {
       this.resizeObserver = new ResizeObserver(() => {
@@ -109,7 +109,7 @@ class VirtualScroller {
       });
       this.resizeObserver.observe(this.container);
     }
-    
+
     // Window resize fallback
     window.addEventListener('resize', () => {
       this.updateDimensions();
@@ -122,35 +122,35 @@ class VirtualScroller {
    */
   handleScroll() {
     const now = Date.now();
-    
+
     // Mark as scrolling
     this.isScrolling = true;
-    
+
     // Clear existing timeout
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
     }
-    
+
     // Throttle scroll updates for performance
     if (now - this.lastScrollTime > 16) { // ~60fps
       this.updateVisibleRange();
       this.render();
       this.lastScrollTime = now;
     }
-    
+
     // Set timeout to mark scrolling as finished
     this.scrollTimeout = setTimeout(() => {
       this.isScrolling = false;
       this.onScroll({
         scrollTop: this.viewport.scrollTop,
-        isScrolling: false
+        isScrolling: false,
       });
     }, 150);
-    
+
     // Call scroll callback
     this.onScroll({
       scrollTop: this.viewport.scrollTop,
-      isScrolling: true
+      isScrolling: true,
     });
   }
 
@@ -159,7 +159,7 @@ class VirtualScroller {
    */
   updateDimensions() {
     if (!this.viewport) return;
-    
+
     const rect = this.viewport.getBoundingClientRect();
     this.containerHeight = rect.height;
     this.visibleCount = Math.ceil(this.containerHeight / this.itemHeight) + this.bufferSize * 2;
@@ -170,10 +170,10 @@ class VirtualScroller {
    */
   updateVisibleRange() {
     if (!this.viewport || this.data.length === 0) return;
-    
-    const scrollTop = this.viewport.scrollTop;
+
+    const { scrollTop } = this.viewport;
     const startIndex = Math.floor(scrollTop / this.itemHeight);
-    
+
     // Apply buffer
     this.startIndex = Math.max(0, startIndex - this.bufferSize);
     this.endIndex = Math.min(this.data.length, startIndex + this.visibleCount + this.bufferSize);
@@ -194,42 +194,42 @@ class VirtualScroller {
    */
   render() {
     if (!this.content || this.data.length === 0) return;
-    
+
     // Calculate spacer heights
     const topSpacerHeight = this.startIndex * this.itemHeight;
     const bottomSpacerHeight = (this.data.length - this.endIndex) * this.itemHeight;
-    
+
     // Update spacers
     this.spacerTop.style.height = `${topSpacerHeight}px`;
     this.spacerBottom.style.height = `${bottomSpacerHeight}px`;
-    
+
     // Clear existing visible items
     this.clearVisibleItems();
-    
+
     // Render visible items
     const fragment = document.createDocumentFragment();
-    
+
     for (let i = this.startIndex; i < this.endIndex; i++) {
       const item = this.data[i];
       const element = this.renderItem(item, i);
-      
+
       // Ensure proper styling for virtual scrolling
       element.style.cssText = `
         height: ${this.itemHeight}px;
         box-sizing: border-box;
         flex-shrink: 0;
       `;
-      
+
       // Add data attributes for debugging
       element.setAttribute('data-virtual-index', i);
       element.className = `${element.className} virtual-item`.trim();
-      
+
       fragment.appendChild(element);
     }
-    
+
     // Insert rendered items between spacers
     this.content.insertBefore(fragment, this.spacerBottom);
-    
+
     // Store reference to visible items
     this.visibleItems = Array.from(this.content.querySelectorAll('.virtual-item'));
   }
@@ -239,7 +239,7 @@ class VirtualScroller {
    */
   clearVisibleItems() {
     const items = this.content.querySelectorAll('.virtual-item');
-    items.forEach(item => item.remove());
+    items.forEach((item) => item.remove());
     this.visibleItems = [];
   }
 
@@ -250,11 +250,11 @@ class VirtualScroller {
    */
   scrollToIndex(index, behavior = 'auto') {
     if (index < 0 || index >= this.data.length) return;
-    
+
     const scrollTop = index * this.itemHeight;
     this.viewport.scrollTo({
       top: scrollTop,
-      behavior
+      behavior,
     });
   }
 
@@ -265,7 +265,7 @@ class VirtualScroller {
   scrollToTop(behavior = 'smooth') {
     this.viewport.scrollTo({
       top: 0,
-      behavior
+      behavior,
     });
   }
 
@@ -276,7 +276,7 @@ class VirtualScroller {
   scrollToBottom(behavior = 'smooth') {
     this.viewport.scrollTo({
       top: this.data.length * this.itemHeight,
-      behavior
+      behavior,
     });
   }
 
@@ -293,7 +293,7 @@ class VirtualScroller {
       endIndex: this.endIndex,
       visibleCount: this.endIndex - this.startIndex,
       totalCount: this.data.length,
-      isScrolling: this.isScrolling
+      isScrolling: this.isScrolling,
     };
   }
 
@@ -329,7 +329,7 @@ class VirtualScroller {
       itemHeight: this.itemHeight,
       containerHeight: this.containerHeight,
       bufferSize: this.bufferSize,
-      isScrolling: this.isScrolling
+      isScrolling: this.isScrolling,
     };
   }
 
@@ -341,22 +341,22 @@ class VirtualScroller {
     if (this.scrollTimeout) {
       clearTimeout(this.scrollTimeout);
     }
-    
+
     // Disconnect resize observer
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    
+
     // Remove event listeners
     if (this.viewport) {
       this.viewport.removeEventListener('scroll', this.handleScroll);
     }
-    
+
     // Clear container
     if (this.container) {
       this.container.innerHTML = '';
     }
-    
+
     // Reset state
     this.data = [];
     this.visibleItems = [];
@@ -374,13 +374,13 @@ class VirtualTable extends VirtualScroller {
   constructor(options = {}) {
     // Set default item height for table rows
     options.itemHeight = options.itemHeight || 45;
-    
+
     super(options);
-    
+
     this.columns = options.columns || [];
     this.headerHeight = options.headerHeight || 50;
     this.showHeader = options.showHeader !== false;
-    
+
     this.createTableStructure();
   }
 
@@ -391,12 +391,12 @@ class VirtualTable extends VirtualScroller {
     // Add table classes
     this.container.classList.add('virtual-table-container');
     this.viewport.classList.add('virtual-table-viewport');
-    
+
     // Create header if needed
     if (this.showHeader && this.columns.length > 0) {
       this.createHeader();
     }
-    
+
     // Update content styling for table
     this.content.style.cssText += `
       display: flex;
@@ -420,7 +420,7 @@ class VirtualTable extends VirtualScroller {
       z-index: 10;
       flex-shrink: 0;
     `;
-    
+
     // Create header cells
     this.columns.forEach((column, index) => {
       const cell = document.createElement('div');
@@ -435,9 +435,9 @@ class VirtualTable extends VirtualScroller {
         min-width: ${column.minWidth || 100}px;
         max-width: ${column.maxWidth || 'none'};
       `;
-      
+
       cell.textContent = column.title || column.key;
-      
+
       // Add sort functionality if enabled
       if (column.sortable) {
         cell.style.cursor = 'pointer';
@@ -445,13 +445,13 @@ class VirtualTable extends VirtualScroller {
           this.handleSort(column.key);
         });
       }
-      
+
       header.appendChild(cell);
     });
-    
+
     // Insert header before viewport
     this.container.insertBefore(header, this.viewport);
-    
+
     // Adjust viewport height to account for header
     this.viewport.style.height = `calc(100% - ${this.headerHeight}px)`;
   }
@@ -480,16 +480,16 @@ class VirtualTable extends VirtualScroller {
       background: ${index % 2 === 0 ? 'var(--table-row-even-bg, #fff)' : 'var(--table-row-odd-bg, #f8f9fa)'};
       transition: background-color 0.2s ease;
     `;
-    
+
     // Add hover effect
     row.addEventListener('mouseenter', () => {
       row.style.backgroundColor = 'var(--table-row-hover-bg, #e9ecef)';
     });
-    
+
     row.addEventListener('mouseleave', () => {
       row.style.backgroundColor = index % 2 === 0 ? 'var(--table-row-even-bg, #fff)' : 'var(--table-row-odd-bg, #f8f9fa)';
     });
-    
+
     // Create cells
     this.columns.forEach((column) => {
       const cell = document.createElement('div');
@@ -506,15 +506,15 @@ class VirtualTable extends VirtualScroller {
         text-overflow: ellipsis;
         white-space: nowrap;
       `;
-      
+
       // Get cell value
       let value = item[column.key];
-      
+
       // Apply formatter if provided
       if (column.formatter && typeof column.formatter === 'function') {
         value = column.formatter(value, item, index);
       }
-      
+
       // Set cell content
       if (typeof value === 'string' || typeof value === 'number') {
         cell.textContent = value;
@@ -523,13 +523,13 @@ class VirtualTable extends VirtualScroller {
       } else {
         cell.textContent = String(value || '');
       }
-      
+
       // Add column-specific classes
       cell.classList.add(`col-${column.key}`);
-      
+
       row.appendChild(cell);
     });
-    
+
     return row;
   }
 }

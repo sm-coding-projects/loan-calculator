@@ -599,7 +599,8 @@
 <a name='L534'></a><a href='#L534'>534</a>
 <a name='L535'></a><a href='#L535'>535</a>
 <a name='L536'></a><a href='#L536'>536</a>
-<a name='L537'></a><a href='#L537'>537</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1132,6 +1133,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1148,7 +1150,7 @@ class VirtualScroller {
 <span class="cstat-no" title="statement not covered" >    this.bufferSize = options.bufferSize || 10;</span>
 <span class="cstat-no" title="statement not covered" >    this.renderItem = options.renderItem || (<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >document.createElement('div'))</span>;</span>
 <span class="cstat-no" title="statement not covered" >    this.onScroll = options.onScroll || (<span class="fstat-no" title="function not covered" >()</span> =&gt; {});</span>
-    
+&nbsp;
     // Data and state
 <span class="cstat-no" title="statement not covered" >    this.data = [];</span>
 <span class="cstat-no" title="statement not covered" >    this.visibleItems = [];</span>
@@ -1156,18 +1158,18 @@ class VirtualScroller {
 <span class="cstat-no" title="statement not covered" >    this.endIndex = 0;</span>
 <span class="cstat-no" title="statement not covered" >    this.containerHeight = 0;</span>
 <span class="cstat-no" title="statement not covered" >    this.visibleCount = 0;</span>
-    
+&nbsp;
     // DOM elements
 <span class="cstat-no" title="statement not covered" >    this.viewport = null;</span>
 <span class="cstat-no" title="statement not covered" >    this.content = null;</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerTop = null;</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerBottom = null;</span>
-    
+&nbsp;
     // Performance tracking
 <span class="cstat-no" title="statement not covered" >    this.lastScrollTime = 0;</span>
 <span class="cstat-no" title="statement not covered" >    this.scrollTimeout = null;</span>
 <span class="cstat-no" title="statement not covered" >    this.isScrolling = false;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    this.init();</span>
   }
 &nbsp;
@@ -1190,7 +1192,7 @@ class VirtualScroller {
 <span class="fstat-no" title="function not covered" >  cr</span>eateViewport() {
     // Clear container
 <span class="cstat-no" title="statement not covered" >    this.container.innerHTML = '';</span>
-    
+&nbsp;
     // Create viewport
 <span class="cstat-no" title="statement not covered" >    this.viewport = document.createElement('div');</span>
 <span class="cstat-no" title="statement not covered" >    this.viewport.className = 'virtual-scroller-viewport';</span>
@@ -1200,7 +1202,7 @@ class VirtualScroller {
       overflow-x: hidden;
       position: relative;
     `;
-    
+&nbsp;
     // Create content container
 <span class="cstat-no" title="statement not covered" >    this.content = document.createElement('div');</span>
 <span class="cstat-no" title="statement not covered" >    this.content.className = 'virtual-scroller-content';</span>
@@ -1208,7 +1210,7 @@ class VirtualScroller {
       position: relative;
       min-height: 100%;
     `;
-    
+&nbsp;
     // Create spacers for maintaining scroll position
 <span class="cstat-no" title="statement not covered" >    this.spacerTop = document.createElement('div');</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerTop.className = 'virtual-scroller-spacer-top';</span>
@@ -1216,14 +1218,14 @@ class VirtualScroller {
       height: 0px;
       flex-shrink: 0;
     `;
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    this.spacerBottom = document.createElement('div');</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerBottom.className = 'virtual-scroller-spacer-bottom';</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerBottom.style.cssText = `</span>
       height: 0px;
       flex-shrink: 0;
     `;
-    
+&nbsp;
     // Assemble structure
 <span class="cstat-no" title="statement not covered" >    this.content.appendChild(this.spacerTop);</span>
 <span class="cstat-no" title="statement not covered" >    this.content.appendChild(this.spacerBottom);</span>
@@ -1237,7 +1239,7 @@ class VirtualScroller {
 <span class="fstat-no" title="function not covered" >  bi</span>ndEvents() {
     // Throttled scroll handler for performance
 <span class="cstat-no" title="statement not covered" >    this.viewport.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });</span>
-    
+&nbsp;
     // Resize observer for responsive updates
 <span class="cstat-no" title="statement not covered" >    if (window.ResizeObserver) {</span>
 <span class="cstat-no" title="statement not covered" >      this.resizeObserver = new ResizeObserver(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1246,7 +1248,7 @@ class VirtualScroller {
       });
 <span class="cstat-no" title="statement not covered" >      this.resizeObserver.observe(this.container);</span>
     }
-    
+&nbsp;
     // Window resize fallback
 <span class="cstat-no" title="statement not covered" >    window.addEventListener('resize', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.updateDimensions();</span>
@@ -1259,35 +1261,35 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  ha</span>ndleScroll() {
     const now = <span class="cstat-no" title="statement not covered" >Date.now();</span>
-    
+&nbsp;
     // Mark as scrolling
 <span class="cstat-no" title="statement not covered" >    this.isScrolling = true;</span>
-    
+&nbsp;
     // Clear existing timeout
 <span class="cstat-no" title="statement not covered" >    if (this.scrollTimeout) {</span>
 <span class="cstat-no" title="statement not covered" >      clearTimeout(this.scrollTimeout);</span>
     }
-    
+&nbsp;
     // Throttle scroll updates for performance
 <span class="cstat-no" title="statement not covered" >    if (now - this.lastScrollTime &gt; 16) { // ~60fps</span>
 <span class="cstat-no" title="statement not covered" >      this.updateVisibleRange();</span>
 <span class="cstat-no" title="statement not covered" >      this.render();</span>
 <span class="cstat-no" title="statement not covered" >      this.lastScrollTime = now;</span>
     }
-    
+&nbsp;
     // Set timeout to mark scrolling as finished
 <span class="cstat-no" title="statement not covered" >    this.scrollTimeout = setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.isScrolling = false;</span>
 <span class="cstat-no" title="statement not covered" >      this.onScroll({</span>
         scrollTop: this.viewport.scrollTop,
-        isScrolling: false
+        isScrolling: false,
       });
     }, 150);
-    
+&nbsp;
     // Call scroll callback
 <span class="cstat-no" title="statement not covered" >    this.onScroll({</span>
       scrollTop: this.viewport.scrollTop,
-      isScrolling: true
+      isScrolling: true,
     });
   }
 &nbsp;
@@ -1296,7 +1298,7 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  up</span>dateDimensions() {
 <span class="cstat-no" title="statement not covered" >    if (!this.viewport) <span class="cstat-no" title="statement not covered" >return;</span></span>
-    
+&nbsp;
     const rect = <span class="cstat-no" title="statement not covered" >this.viewport.getBoundingClientRect();</span>
 <span class="cstat-no" title="statement not covered" >    this.containerHeight = rect.height;</span>
 <span class="cstat-no" title="statement not covered" >    this.visibleCount = Math.ceil(this.containerHeight / this.itemHeight) + this.bufferSize * 2;</span>
@@ -1307,10 +1309,10 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  up</span>dateVisibleRange() {
 <span class="cstat-no" title="statement not covered" >    if (!this.viewport || this.data.length === 0) <span class="cstat-no" title="statement not covered" >return;</span></span>
-    
-    const scrollTop = <span class="cstat-no" title="statement not covered" >this.viewport.scrollTop;</span>
+&nbsp;
+    const { scrollTop } = <span class="cstat-no" title="statement not covered" >this.viewport;</span>
     const startIndex = <span class="cstat-no" title="statement not covered" >Math.floor(scrollTop / this.itemHeight);</span>
-    
+&nbsp;
     // Apply buffer
 <span class="cstat-no" title="statement not covered" >    this.startIndex = Math.max(0, startIndex - this.bufferSize);</span>
 <span class="cstat-no" title="statement not covered" >    this.endIndex = Math.min(this.data.length, startIndex + this.visibleCount + this.bufferSize);</span>
@@ -1331,42 +1333,42 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  re</span>nder() {
 <span class="cstat-no" title="statement not covered" >    if (!this.content || this.data.length === 0) <span class="cstat-no" title="statement not covered" >return;</span></span>
-    
+&nbsp;
     // Calculate spacer heights
     const topSpacerHeight = <span class="cstat-no" title="statement not covered" >this.startIndex * this.itemHeight;</span>
     const bottomSpacerHeight = <span class="cstat-no" title="statement not covered" >(this.data.length - this.endIndex) * this.itemHeight;</span>
-    
+&nbsp;
     // Update spacers
 <span class="cstat-no" title="statement not covered" >    this.spacerTop.style.height = `${topSpacerHeight}px`;</span>
 <span class="cstat-no" title="statement not covered" >    this.spacerBottom.style.height = `${bottomSpacerHeight}px`;</span>
-    
+&nbsp;
     // Clear existing visible items
 <span class="cstat-no" title="statement not covered" >    this.clearVisibleItems();</span>
-    
+&nbsp;
     // Render visible items
     const fragment = <span class="cstat-no" title="statement not covered" >document.createDocumentFragment();</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >this.startIndex;</span> i &lt; this.endIndex; i++) {</span>
       const item = <span class="cstat-no" title="statement not covered" >this.data[i];</span>
       const element = <span class="cstat-no" title="statement not covered" >this.renderItem(item, i);</span>
-      
+&nbsp;
       // Ensure proper styling for virtual scrolling
 <span class="cstat-no" title="statement not covered" >      element.style.cssText = `</span>
         height: ${this.itemHeight}px;
         box-sizing: border-box;
         flex-shrink: 0;
       `;
-      
+&nbsp;
       // Add data attributes for debugging
 <span class="cstat-no" title="statement not covered" >      element.setAttribute('data-virtual-index', i);</span>
 <span class="cstat-no" title="statement not covered" >      element.className = `${element.className} virtual-item`.trim();</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      fragment.appendChild(element);</span>
     }
-    
+&nbsp;
     // Insert rendered items between spacers
 <span class="cstat-no" title="statement not covered" >    this.content.insertBefore(fragment, this.spacerBottom);</span>
-    
+&nbsp;
     // Store reference to visible items
 <span class="cstat-no" title="statement not covered" >    this.visibleItems = Array.from(this.content.querySelectorAll('.virtual-item'));</span>
   }
@@ -1376,7 +1378,7 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  cl</span>earVisibleItems() {
     const items = <span class="cstat-no" title="statement not covered" >this.content.querySelectorAll('.virtual-item');</span>
-<span class="cstat-no" title="statement not covered" >    items.forEach(<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.remove())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    items.forEach(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.remove())</span>;</span>
 <span class="cstat-no" title="statement not covered" >    this.visibleItems = [];</span>
   }
 &nbsp;
@@ -1387,11 +1389,11 @@ class VirtualScroller {
    */
 <span class="fstat-no" title="function not covered" >  sc</span>rollToIndex(index, behavior = <span class="branch-0 cbranch-no" title="branch not covered" >'auto')</span> {
 <span class="cstat-no" title="statement not covered" >    if (index &lt; 0 || index &gt;= this.data.length) <span class="cstat-no" title="statement not covered" >return;</span></span>
-    
+&nbsp;
     const scrollTop = <span class="cstat-no" title="statement not covered" >index * this.itemHeight;</span>
 <span class="cstat-no" title="statement not covered" >    this.viewport.scrollTo({</span>
       top: scrollTop,
-      behavior
+      behavior,
     });
   }
 &nbsp;
@@ -1402,7 +1404,7 @@ class VirtualScroller {
 <span class="fstat-no" title="function not covered" >  sc</span>rollToTop(behavior = <span class="branch-0 cbranch-no" title="branch not covered" >'smooth')</span> {
 <span class="cstat-no" title="statement not covered" >    this.viewport.scrollTo({</span>
       top: 0,
-      behavior
+      behavior,
     });
   }
 &nbsp;
@@ -1413,7 +1415,7 @@ class VirtualScroller {
 <span class="fstat-no" title="function not covered" >  sc</span>rollToBottom(behavior = <span class="branch-0 cbranch-no" title="branch not covered" >'smooth')</span> {
 <span class="cstat-no" title="statement not covered" >    this.viewport.scrollTo({</span>
       top: this.data.length * this.itemHeight,
-      behavior
+      behavior,
     });
   }
 &nbsp;
@@ -1430,7 +1432,7 @@ class VirtualScroller {
       endIndex: this.endIndex,
       visibleCount: this.endIndex - this.startIndex,
       totalCount: this.data.length,
-      isScrolling: this.isScrolling
+      isScrolling: this.isScrolling,
     };
   }
 &nbsp;
@@ -1466,7 +1468,7 @@ class VirtualScroller {
       itemHeight: this.itemHeight,
       containerHeight: this.containerHeight,
       bufferSize: this.bufferSize,
-      isScrolling: this.isScrolling
+      isScrolling: this.isScrolling,
     };
   }
 &nbsp;
@@ -1478,22 +1480,22 @@ class VirtualScroller {
 <span class="cstat-no" title="statement not covered" >    if (this.scrollTimeout) {</span>
 <span class="cstat-no" title="statement not covered" >      clearTimeout(this.scrollTimeout);</span>
     }
-    
+&nbsp;
     // Disconnect resize observer
 <span class="cstat-no" title="statement not covered" >    if (this.resizeObserver) {</span>
 <span class="cstat-no" title="statement not covered" >      this.resizeObserver.disconnect();</span>
     }
-    
+&nbsp;
     // Remove event listeners
 <span class="cstat-no" title="statement not covered" >    if (this.viewport) {</span>
 <span class="cstat-no" title="statement not covered" >      this.viewport.removeEventListener('scroll', this.handleScroll);</span>
     }
-    
+&nbsp;
     // Clear container
 <span class="cstat-no" title="statement not covered" >    if (this.container) {</span>
 <span class="cstat-no" title="statement not covered" >      this.container.innerHTML = '';</span>
     }
-    
+&nbsp;
     // Reset state
 <span class="cstat-no" title="statement not covered" >    this.data = [];</span>
 <span class="cstat-no" title="statement not covered" >    this.visibleItems = [];</span>
@@ -1511,13 +1513,13 @@ class VirtualTable extends VirtualScroller {
 <span class="fstat-no" title="function not covered" >  co</span>nstructor(options = <span class="branch-0 cbranch-no" title="branch not covered" >{})</span> {
     // Set default item height for table rows
 <span class="cstat-no" title="statement not covered" >    options.itemHeight = options.itemHeight || 45;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    super(options);</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    this.columns = options.columns || [];</span>
 <span class="cstat-no" title="statement not covered" >    this.headerHeight = options.headerHeight || 50;</span>
 <span class="cstat-no" title="statement not covered" >    this.showHeader = options.showHeader !== false;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    this.createTableStructure();</span>
   }
 &nbsp;
@@ -1528,12 +1530,12 @@ class VirtualTable extends VirtualScroller {
     // Add table classes
 <span class="cstat-no" title="statement not covered" >    this.container.classList.add('virtual-table-container');</span>
 <span class="cstat-no" title="statement not covered" >    this.viewport.classList.add('virtual-table-viewport');</span>
-    
+&nbsp;
     // Create header if needed
 <span class="cstat-no" title="statement not covered" >    if (this.showHeader &amp;&amp; this.columns.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      this.createHeader();</span>
     }
-    
+&nbsp;
     // Update content styling for table
 <span class="cstat-no" title="statement not covered" >    this.content.style.cssText += `</span>
       display: flex;
@@ -1557,7 +1559,7 @@ class VirtualTable extends VirtualScroller {
       z-index: 10;
       flex-shrink: 0;
     `;
-    
+&nbsp;
     // Create header cells
 <span class="cstat-no" title="statement not covered" >    this.columns.forEach(<span class="fstat-no" title="function not covered" >(c</span>olumn, index) =&gt; {</span>
       const cell = <span class="cstat-no" title="statement not covered" >document.createElement('div');</span>
@@ -1572,9 +1574,9 @@ class VirtualTable extends VirtualScroller {
         min-width: ${column.minWidth || 100}px;
         max-width: ${column.maxWidth || 'none'};
       `;
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      cell.textContent = column.title || column.key;</span>
-      
+&nbsp;
       // Add sort functionality if enabled
 <span class="cstat-no" title="statement not covered" >      if (column.sortable) {</span>
 <span class="cstat-no" title="statement not covered" >        cell.style.cursor = 'pointer';</span>
@@ -1582,13 +1584,13 @@ class VirtualTable extends VirtualScroller {
 <span class="cstat-no" title="statement not covered" >          this.handleSort(column.key);</span>
         });
       }
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      header.appendChild(cell);</span>
     });
-    
+&nbsp;
     // Insert header before viewport
 <span class="cstat-no" title="statement not covered" >    this.container.insertBefore(header, this.viewport);</span>
-    
+&nbsp;
     // Adjust viewport height to account for header
 <span class="cstat-no" title="statement not covered" >    this.viewport.style.height = `calc(100% - ${this.headerHeight}px)`;</span>
   }
@@ -1617,16 +1619,16 @@ class VirtualTable extends VirtualScroller {
       background: ${index % 2 === 0 ? 'var(--table-row-even-bg, #fff)' : 'var(--table-row-odd-bg, #f8f9fa)'};
       transition: background-color 0.2s ease;
     `;
-    
+&nbsp;
     // Add hover effect
 <span class="cstat-no" title="statement not covered" >    row.addEventListener('mouseenter', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      row.style.backgroundColor = 'var(--table-row-hover-bg, #e9ecef)';</span>
     });
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    row.addEventListener('mouseleave', <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      row.style.backgroundColor = index % 2 === 0 ? 'var(--table-row-even-bg, #fff)' : 'var(--table-row-odd-bg, #f8f9fa)';</span>
     });
-    
+&nbsp;
     // Create cells
 <span class="cstat-no" title="statement not covered" >    this.columns.forEach(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; {</span>
       const cell = <span class="cstat-no" title="statement not covered" >document.createElement('div');</span>
@@ -1643,15 +1645,15 @@ class VirtualTable extends VirtualScroller {
         text-overflow: ellipsis;
         white-space: nowrap;
       `;
-      
+&nbsp;
       // Get cell value
       let value = <span class="cstat-no" title="statement not covered" >item[column.key];</span>
-      
+&nbsp;
       // Apply formatter if provided
 <span class="cstat-no" title="statement not covered" >      if (column.formatter &amp;&amp; typeof column.formatter === 'function') {</span>
 <span class="cstat-no" title="statement not covered" >        value = column.formatter(value, item, index);</span>
       }
-      
+&nbsp;
       // Set cell content
 <span class="cstat-no" title="statement not covered" >      if (typeof value === 'string' || typeof value === 'number') {</span>
 <span class="cstat-no" title="statement not covered" >        cell.textContent = value;</span>
@@ -1660,25 +1662,26 @@ class VirtualTable extends VirtualScroller {
       } else {
 <span class="cstat-no" title="statement not covered" >        cell.textContent = String(value || '');</span>
       }
-      
+&nbsp;
       // Add column-specific classes
 <span class="cstat-no" title="statement not covered" >      cell.classList.add(`col-${column.key}`);</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      row.appendChild(cell);</span>
     });
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return row;</span>
   }
 }
 &nbsp;
-export { VirtualScroller, VirtualTable };</pre></td></tr></table></pre>
+export { VirtualScroller, VirtualTable };
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T04:02:32.395Z
+                at 2025-07-20T05:41:28.439Z
             </div>
         <script src="../prettify.js"></script>
         <script>

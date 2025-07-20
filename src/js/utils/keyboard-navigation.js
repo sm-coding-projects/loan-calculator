@@ -14,7 +14,7 @@ class KeyboardNavigationManager {
     this.focusTraps = new Map();
     this.isTestMode = false;
     this.testResults = [];
-    
+
     this.init();
   }
 
@@ -81,8 +81,8 @@ class KeyboardNavigationManager {
    * @param {KeyboardEvent} e - Keyboard event
    */
   handleTabNavigation(e) {
-    const activeElement = document.activeElement;
-    
+    const { activeElement } = document;
+
     // Check if we're in a focus trap
     for (const [container, trap] of this.focusTraps) {
       if (container.contains(activeElement)) {
@@ -94,10 +94,10 @@ class KeyboardNavigationManager {
     // Skip hidden or disabled elements
     const focusableElements = this.getFocusableElements();
     const currentIndex = focusableElements.indexOf(activeElement);
-    
+
     if (currentIndex !== -1) {
       let nextIndex = e.shiftKey ? currentIndex - 1 : currentIndex + 1;
-      
+
       // Find next valid focusable element
       while (nextIndex >= 0 && nextIndex < focusableElements.length) {
         const nextElement = focusableElements[nextIndex];
@@ -114,22 +114,22 @@ class KeyboardNavigationManager {
    * @param {KeyboardEvent} e - Keyboard event
    */
   handleArrowNavigation(e) {
-    const activeElement = document.activeElement;
-    
+    const { activeElement } = document;
+
     // Handle table navigation
     if (activeElement.closest('table')) {
       this.handleTableArrowNavigation(e, activeElement);
     }
-    
+
     // Handle form group navigation
     if (activeElement.closest('.form-group')) {
       this.handleFormGroupArrowNavigation(e, activeElement);
     }
-    
+
     // Handle slider navigation
     if (activeElement.type === 'range') {
       // Let default behavior handle slider navigation
-      return;
+
     }
   }
 
@@ -162,7 +162,7 @@ class KeyboardNavigationManager {
           targetElement = targetCells[Math.min(cellIndexInRow, targetCells.length - 1)];
         }
         break;
-      
+
       case 'ArrowDown':
         if (currentRowIndex < rows.length - 1) {
           const targetRow = rows[currentRowIndex + 1];
@@ -170,13 +170,13 @@ class KeyboardNavigationManager {
           targetElement = targetCells[Math.min(cellIndexInRow, targetCells.length - 1)];
         }
         break;
-      
+
       case 'ArrowLeft':
         if (cellIndexInRow > 0) {
           targetElement = cellsInRow[cellIndexInRow - 1];
         }
         break;
-      
+
       case 'ArrowRight':
         if (cellIndexInRow < cellsInRow.length - 1) {
           targetElement = cellsInRow[cellIndexInRow + 1];
@@ -221,7 +221,7 @@ class KeyboardNavigationManager {
     // Close any open modals or dropdowns
     const openModals = document.querySelectorAll('[role="dialog"][aria-hidden="false"]');
     const openDropdowns = document.querySelectorAll('[aria-expanded="true"]');
-    
+
     if (openModals.length > 0) {
       const modal = openModals[openModals.length - 1]; // Close topmost modal
       const closeButton = modal.querySelector('[data-dismiss="modal"], .modal-close');
@@ -231,19 +231,19 @@ class KeyboardNavigationManager {
       e.preventDefault();
       return;
     }
-    
+
     if (openDropdowns.length > 0) {
-      openDropdowns.forEach(dropdown => {
+      openDropdowns.forEach((dropdown) => {
         dropdown.setAttribute('aria-expanded', 'false');
       });
       e.preventDefault();
       return;
     }
-    
+
     // Clear any active states
     const activeElements = document.querySelectorAll('.active, .selected');
     if (activeElements.length > 0) {
-      activeElements.forEach(el => {
+      activeElements.forEach((el) => {
         el.classList.remove('active', 'selected');
       });
       e.preventDefault();
@@ -256,10 +256,10 @@ class KeyboardNavigationManager {
   setupFocusManagement() {
     // Add skip to content link
     this.addSkipToContentLink();
-    
+
     // Enhance focus indicators
     this.enhanceFocusIndicators();
-    
+
     // Setup focus restoration
     this.setupFocusRestoration();
   }
@@ -276,7 +276,7 @@ class KeyboardNavigationManager {
     skipLink.className = 'skip-to-content';
     skipLink.textContent = 'Skip to main content';
     skipLink.setAttribute('aria-label', 'Skip to main content');
-    
+
     skipLink.addEventListener('click', (e) => {
       e.preventDefault();
       const mainContent = document.querySelector('#main-content, main, [role="main"]');
@@ -364,7 +364,7 @@ class KeyboardNavigationManager {
   setupFocusRestoration() {
     // Store focus before page changes
     window.addEventListener('beforeunload', () => {
-      const activeElement = document.activeElement;
+      const { activeElement } = document;
       if (activeElement && activeElement.id) {
         sessionStorage.setItem('lastFocusedElement', activeElement.id);
       }
@@ -397,7 +397,7 @@ class KeyboardNavigationManager {
         if (calculateButton && !calculateButton.disabled) {
           calculateButton.click();
         }
-      }
+      },
     });
 
     this.registerShortcut('ctrl+r', {
@@ -408,7 +408,7 @@ class KeyboardNavigationManager {
         if (resetButton) {
           resetButton.click();
         }
-      }
+      },
     });
 
     // Navigation shortcuts
@@ -422,7 +422,7 @@ class KeyboardNavigationManager {
             firstInput.focus();
           }
         }
-      }
+      },
     });
 
     this.registerShortcut('alt+2', {
@@ -432,7 +432,7 @@ class KeyboardNavigationManager {
         if (results) {
           results.focus();
         }
-      }
+      },
     });
 
     this.registerShortcut('alt+3', {
@@ -445,7 +445,7 @@ class KeyboardNavigationManager {
             firstCell.focus();
           }
         }
-      }
+      },
     });
 
     // Help shortcut
@@ -454,7 +454,7 @@ class KeyboardNavigationManager {
       handler: (e) => {
         e.preventDefault();
         this.showKeyboardShortcutsHelp();
-      }
+      },
     });
   }
 
@@ -474,14 +474,14 @@ class KeyboardNavigationManager {
    */
   getShortcutKey(e) {
     const parts = [];
-    
+
     if (e.ctrlKey) parts.push('ctrl');
     if (e.altKey) parts.push('alt');
     if (e.shiftKey) parts.push('shift');
     if (e.metaKey) parts.push('meta');
-    
+
     parts.push(e.key.toLowerCase());
-    
+
     return parts.join('+');
   }
 
@@ -492,9 +492,9 @@ class KeyboardNavigationManager {
     const helpContent = Array.from(this.keyboardShortcuts.entries())
       .map(([keys, shortcut]) => `${keys.toUpperCase()}: ${shortcut.description}`)
       .join('\n');
-    
+
     const helpText = `Keyboard Shortcuts:\n\n${helpContent}\n\nPress Escape to close this help.`;
-    
+
     // Create help modal
     const modal = document.createElement('div');
     modal.className = 'keyboard-help-modal';
@@ -554,7 +554,7 @@ class KeyboardNavigationManager {
 
     // Trap focus in modal
     this.trapFocus(modal);
-    
+
     announceToScreenReader('Keyboard shortcuts help opened');
   }
 
@@ -568,9 +568,9 @@ class KeyboardNavigationManager {
     if (e.key !== 'Tab') return;
 
     const focusableElements = container.querySelectorAll(
-      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])',
     );
-    
+
     if (focusableElements.length === 0) return;
 
     const firstElement = focusableElements[0];
@@ -581,11 +581,9 @@ class KeyboardNavigationManager {
         e.preventDefault();
         lastElement.focus();
       }
-    } else {
-      if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
+    } else if (document.activeElement === lastElement) {
+      e.preventDefault();
+      firstElement.focus();
     }
   }
 
@@ -595,9 +593,9 @@ class KeyboardNavigationManager {
    */
   trapFocus(container) {
     const focusableElements = container.querySelectorAll(
-      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])',
     );
-    
+
     if (focusableElements.length === 0) return;
 
     const firstElement = focusableElements[0];
@@ -610,11 +608,9 @@ class KeyboardNavigationManager {
             e.preventDefault();
             lastElement.focus();
           }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus();
-          }
+        } else if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
         }
       }
     };
@@ -650,11 +646,11 @@ class KeyboardNavigationManager {
       '[role="button"]:not([disabled])',
       '[role="link"]:not([disabled])',
       '[role="menuitem"]:not([disabled])',
-      '[role="tab"]:not([disabled])'
+      '[role="tab"]:not([disabled])',
     ].join(', ');
 
     return Array.from(document.querySelectorAll(selector))
-      .filter(el => this.isElementFocusable(el));
+      .filter((el) => this.isElementFocusable(el));
   }
 
   /**
@@ -664,18 +660,18 @@ class KeyboardNavigationManager {
    */
   isElementFocusable(element) {
     if (!element || element.disabled) return false;
-    
+
     // Check if element is in the document
     if (!document.contains(element)) return false;
-    
+
     // Check if element is visible
     const style = window.getComputedStyle(element);
     if (style.display === 'none' || style.visibility === 'hidden') return false;
-    
+
     // Check if element has zero dimensions (but allow elements with overflow hidden)
     const rect = element.getBoundingClientRect();
     if (rect.width === 0 && rect.height === 0 && style.overflow !== 'hidden') return false;
-    
+
     // Check if element is hidden by parent
     let parent = element.parentElement;
     while (parent && parent !== document.body) {
@@ -683,7 +679,7 @@ class KeyboardNavigationManager {
       if (parentStyle.display === 'none' || parentStyle.visibility === 'hidden') return false;
       parent = parent.parentElement;
     }
-    
+
     return true;
   }
 
@@ -695,14 +691,14 @@ class KeyboardNavigationManager {
     if (this.isTestMode) {
       this.testResults.push({
         timestamp: Date.now(),
-        element: element,
+        element,
         tagName: element.tagName,
         id: element.id,
         className: element.className,
         textContent: element.textContent?.substring(0, 50),
         tabIndex: element.tabIndex,
         role: element.getAttribute('role'),
-        ariaLabel: element.getAttribute('aria-label')
+        ariaLabel: element.getAttribute('aria-label'),
       });
     }
   }
@@ -714,15 +710,15 @@ class KeyboardNavigationManager {
     this.isTestMode = true;
     this.testResults = [];
     announceToScreenReader('Keyboard navigation testing started. Use Tab to navigate through all elements.');
-    
+
     console.log('🎯 Keyboard Navigation Testing Started');
     console.log('Use Tab/Shift+Tab to navigate through all focusable elements');
     console.log('Press Ctrl+Shift+T to stop testing and view results');
-    
+
     // Add test stop shortcut
     this.registerShortcut('ctrl+shift+t', {
       description: 'Stop keyboard navigation testing',
-      handler: () => this.stopTesting()
+      handler: () => this.stopTesting(),
     });
   }
 
@@ -731,40 +727,40 @@ class KeyboardNavigationManager {
    */
   stopTesting() {
     this.isTestMode = false;
-    
+
     console.log('🎯 Keyboard Navigation Test Results:');
     console.log(`Total focus events: ${this.testResults.length}`);
-    
+
     // Analyze tab order
     const tabOrder = this.testResults.map((result, index) => ({
       order: index + 1,
-      element: `${result.tagName}${result.id ? '#' + result.id : ''}${result.className ? '.' + result.className.split(' ')[0] : ''}`,
+      element: `${result.tagName}${result.id ? `#${result.id}` : ''}${result.className ? `.${result.className.split(' ')[0]}` : ''}`,
       text: result.textContent,
       tabIndex: result.tabIndex,
       role: result.role,
-      ariaLabel: result.ariaLabel
+      ariaLabel: result.ariaLabel,
     }));
-    
+
     console.table(tabOrder);
-    
+
     // Check for issues
     const issues = this.analyzeTabOrder(this.testResults);
     if (issues.length > 0) {
       console.warn('🚨 Keyboard Navigation Issues Found:');
-      issues.forEach(issue => console.warn(`- ${issue}`));
+      issues.forEach((issue) => console.warn(`- ${issue}`));
     } else {
       console.log('✅ No keyboard navigation issues detected');
     }
-    
+
     announceToScreenReader(`Keyboard navigation testing completed. ${issues.length} issues found.`);
-    
+
     // Remove test shortcut
     this.keyboardShortcuts.delete('ctrl+shift+t');
-    
+
     return {
       tabOrder,
       issues,
-      totalElements: this.testResults.length
+      totalElements: this.testResults.length,
     };
   }
 
@@ -775,7 +771,7 @@ class KeyboardNavigationManager {
    */
   analyzeTabOrder(testResults) {
     const issues = [];
-    
+
     // Check for elements without proper labels
     testResults.forEach((result, index) => {
       if (['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(result.tagName)) {
@@ -784,27 +780,23 @@ class KeyboardNavigationManager {
         }
       }
     });
-    
+
     // Check for skip links
-    const hasSkipLink = testResults.some(result => 
-      result.className?.includes('skip-to-content') || 
-      result.textContent?.toLowerCase().includes('skip')
-    );
-    
+    const hasSkipLink = testResults.some((result) => result.className?.includes('skip-to-content')
+      || result.textContent?.toLowerCase().includes('skip'));
+
     if (!hasSkipLink) {
       issues.push('No skip to content link found');
     }
-    
+
     // Check for logical tab order
-    const formElements = testResults.filter(result => 
-      ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(result.tagName)
-    );
-    
+    const formElements = testResults.filter((result) => ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(result.tagName));
+
     if (formElements.length > 0) {
       // Check if form elements are grouped logically
       let lastFormIndex = -1;
       let formGroupBreaks = 0;
-      
+
       testResults.forEach((result, index) => {
         if (['INPUT', 'SELECT', 'TEXTAREA'].includes(result.tagName)) {
           if (lastFormIndex !== -1 && index - lastFormIndex > 3) {
@@ -813,12 +805,12 @@ class KeyboardNavigationManager {
           lastFormIndex = index;
         }
       });
-      
+
       if (formGroupBreaks > 2) {
         issues.push('Form elements may not be grouped logically in tab order');
       }
     }
-    
+
     return issues;
   }
 
@@ -828,89 +820,89 @@ class KeyboardNavigationManager {
    */
   async testAllKeyboardFunctionality() {
     console.log('🧪 Starting comprehensive keyboard functionality test...');
-    
+
     const testResults = {
       focusableElements: [],
       shortcuts: [],
       navigation: [],
-      issues: []
+      issues: [],
     };
-    
+
     // Test 1: Find all focusable elements
     const focusableElements = this.getFocusableElements();
-    testResults.focusableElements = focusableElements.map(el => ({
+    testResults.focusableElements = focusableElements.map((el) => ({
       tagName: el.tagName,
       id: el.id,
       className: el.className,
       tabIndex: el.tabIndex,
       role: el.getAttribute('role'),
       ariaLabel: el.getAttribute('aria-label'),
-      isVisible: this.isElementFocusable(el)
+      isVisible: this.isElementFocusable(el),
     }));
-    
+
     console.log(`Found ${focusableElements.length} focusable elements`);
-    
+
     // Test 2: Test keyboard shortcuts
     for (const [keys, shortcut] of this.keyboardShortcuts) {
       testResults.shortcuts.push({
         keys,
         description: shortcut.description,
-        hasHandler: typeof shortcut.handler === 'function'
+        hasHandler: typeof shortcut.handler === 'function',
       });
     }
-    
+
     console.log(`Found ${testResults.shortcuts.length} keyboard shortcuts`);
-    
+
     // Test 3: Test navigation patterns
     const tables = document.querySelectorAll('table');
     const forms = document.querySelectorAll('form');
-    
+
     testResults.navigation.push({
       type: 'tables',
       count: tables.length,
-      hasArrowNavigation: tables.length > 0
+      hasArrowNavigation: tables.length > 0,
     });
-    
+
     testResults.navigation.push({
       type: 'forms',
       count: forms.length,
-      hasTabNavigation: forms.length > 0
+      hasTabNavigation: forms.length > 0,
     });
-    
+
     // Test 4: Check for common issues
-    
+
     // Check focus indicators
-    const elementsWithoutFocusStyles = focusableElements.filter(el => {
+    const elementsWithoutFocusStyles = focusableElements.filter((el) => {
       const styles = window.getComputedStyle(el, ':focus');
       return styles.outline === 'none' && !styles.boxShadow;
     });
-    
+
     if (elementsWithoutFocusStyles.length > 0) {
       testResults.issues.push(`${elementsWithoutFocusStyles.length} elements may lack proper focus indicators`);
     }
-    
+
     // Check for skip links
     const skipLinks = document.querySelectorAll('.skip-to-content, [href="#main-content"]');
     if (skipLinks.length === 0) {
       testResults.issues.push('No skip to content links found');
     }
-    
+
     // Check for proper headings structure
     const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'));
     if (headings.length === 0) {
       testResults.issues.push('No heading structure found');
     }
-    
+
     console.log('🧪 Keyboard functionality test completed');
     console.table(testResults.focusableElements);
-    
+
     if (testResults.issues.length > 0) {
       console.warn('🚨 Issues found:');
-      testResults.issues.forEach(issue => console.warn(`- ${issue}`));
+      testResults.issues.forEach((issue) => console.warn(`- ${issue}`));
     } else {
       console.log('✅ No major keyboard navigation issues detected');
     }
-    
+
     return testResults;
   }
 }
@@ -923,5 +915,5 @@ export default keyboardNavigationManager;
 
 // Export individual functions for direct use
 export {
-  KeyboardNavigationManager
+  KeyboardNavigationManager,
 };

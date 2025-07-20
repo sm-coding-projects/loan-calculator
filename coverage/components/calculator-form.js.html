@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/340</span>
+                <span class='fraction'>0/341</span>
             </div>
         
             
@@ -1167,7 +1167,8 @@
 <a name='L1102'></a><a href='#L1102'>1102</a>
 <a name='L1103'></a><a href='#L1103'>1103</a>
 <a name='L1104'></a><a href='#L1104'>1104</a>
-<a name='L1105'></a><a href='#L1105'>1105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1105'></a><a href='#L1105'>1105</a>
+<a name='L1106'></a><a href='#L1106'>1106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2029,6 +2030,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2653,7 +2655,7 @@ class CalculatorForm {
     `;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    this.container.innerHTML = formHtml;</span>
-    
+&nbsp;
     // Enhance form accessibility
 <span class="cstat-no" title="statement not covered" >    enhanceFormAccessibility(this.container);</span>
   }
@@ -2914,7 +2916,7 @@ class CalculatorForm {
 <span class="cstat-no" title="statement not covered" >        errorElement.textContent = errorMessage;</span>
 <span class="cstat-no" title="statement not covered" >        errorElement.setAttribute('aria-live', 'polite');</span>
 <span class="cstat-no" title="statement not covered" >        errorElement.setAttribute('role', 'alert');</span>
-        
+&nbsp;
         // Announce validation error to screen readers
 <span class="cstat-no" title="statement not covered" >        announceValidationError(field, errorMessage);</span>
       }
@@ -3035,7 +3037,7 @@ class CalculatorForm {
     }
 &nbsp;
     // Store currently focused element for restoration later
-    const activeElement = <span class="cstat-no" title="statement not covered" >document.activeElement;</span>
+    const { activeElement } = <span class="cstat-no" title="statement not covered" >document;</span>
 <span class="cstat-no" title="statement not covered" >    if (activeElement &amp;&amp; activeElement !== document.body) {</span>
 <span class="cstat-no" title="statement not covered" >      activeElement.setAttribute('data-was-focused', 'true');</span>
     }
@@ -3054,7 +3056,7 @@ class CalculatorForm {
       cancellable: true,
       onCancel: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >        this.asyncCalculator.cancelAllCalculations();</span>
-      }
+      },
     });
 &nbsp;
     // Add enhanced loading state to calculate button
@@ -3085,7 +3087,7 @@ class CalculatorForm {
       // Progress callback for async calculations
       const onProgress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rogress, message, currentStep) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        loadingManager.updateProgress(progress, message, currentStep);</span>
-        
+&nbsp;
         // Update step status based on progress
 <span class="cstat-no" title="statement not covered" >        if (progress &gt;= 95 &amp;&amp; currentStep === 'calculate') {</span>
 <span class="cstat-no" title="statement not covered" >          loadingManager.updateStepStatus('calculate', 'completed');</span>
@@ -3095,15 +3097,15 @@ class CalculatorForm {
 &nbsp;
       // Perform async calculation
 <span class="cstat-no" title="statement not covered" >      loadingManager.updateProgress(10, 'Starting async calculation...', 'calculate');</span>
-      
+&nbsp;
       const calculationResult = <span class="cstat-no" title="statement not covered" >await this.asyncCalculator.calculateAmortizationAsync(</span>
         formData,
         {
           includeAdditionalPayments: true,
           batchSize: 100, // Larger batch size for better performance
-          timeout: 30000
+          timeout: 30000,
         },
-        onProgress
+        onProgress,
       );
 &nbsp;
       // Update progress for rendering
@@ -3118,9 +3120,9 @@ class CalculatorForm {
           payments: calculationResult.schedule.payments,
           totalInterest: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >calculationResult.schedule.totalInterest,</span>
           totalPayment: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >calculationResult.schedule.totalPayment,</span>
-          payoffDate: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >new Date(calculationResult.schedule.payoffDate)</span>
+          payoffDate: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >new Date(calculationResult.schedule.payoffDate),</span>
         },
-        inflationAdjusted: calculationResult.inflationAdjusted
+        inflationAdjusted: calculationResult.inflationAdjusted,
       };
 &nbsp;
       // Call the calculation callback
@@ -3133,8 +3135,9 @@ class CalculatorForm {
 <span class="cstat-no" title="statement not covered" >      loadingManager.updateStepStatus('render', 'completed');</span>
 &nbsp;
       // Small delay before hiding
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 500))</span>;</span>
-&nbsp;
+<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        setTimeout(resolve, 500);</span>
+      });
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.error('Error calculating loan:', error);</span>
 &nbsp;
@@ -3382,7 +3385,7 @@ export default CalculatorForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T04:02:32.432Z
+                at 2025-07-20T05:41:28.479Z
             </div>
         <script src="../prettify.js"></script>
         <script>

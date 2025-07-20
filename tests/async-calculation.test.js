@@ -213,7 +213,9 @@ describe('Async Calculation Functionality', () => {
       await schedule.generateScheduleAsync();
     } catch (error) {
       // State should be reset after error
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(schedule.isGenerating).toBe(false);
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(schedule.generationProgress).toBe(0);
     }
   });

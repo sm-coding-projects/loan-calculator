@@ -756,7 +756,6 @@ class Charts {
       setTimeout(() => {
         this._addChartSpecificAnimations(chartContainer, chartType);
       }, 700);
-
     }, () => {
       // Fallback for reduced motion
       chartContainer.style.opacity = '1';

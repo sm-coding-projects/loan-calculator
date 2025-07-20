@@ -529,7 +529,7 @@ class ResultsDisplay {
               chart.style.opacity = '1';
               chart.style.transform = 'translateY(0) scale(1)';
               chart.style.transformOrigin = 'center';
-              
+
               // Animate progress bars
               this._animateProgressBars(chart);
             }
@@ -562,7 +562,6 @@ class ResultsDisplay {
       animationManager.queueAnimation(() => {
         this._addMicroInteractions();
       }, 2000);
-
     }, () => {
       // Fallback for reduced motion - just show everything immediately
       const elements = this.container.querySelectorAll('.summary-item, .breakdown-chart, .chart-item, .results-header');
@@ -645,7 +644,7 @@ class ResultsDisplay {
       indicator.addEventListener('mouseenter', () => {
         indicator.style.animation = 'numberPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
       });
-      
+
       indicator.addEventListener('animationend', () => {
         indicator.style.animation = '';
       });

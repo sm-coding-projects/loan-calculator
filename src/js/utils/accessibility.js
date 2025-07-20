@@ -87,7 +87,7 @@ export function announceToScreenReader(message, ariaLive = 'polite', delay = 100
  */
 export function announceLoadingState(status, message = '', progress = null) {
   let announcement = '';
-  
+
   switch (status) {
     case 'started':
       announcement = message || 'Calculation started. Please wait.';
@@ -108,7 +108,7 @@ export function announceLoadingState(status, message = '', progress = null) {
     default:
       announcement = message;
   }
-  
+
   const ariaLive = status === 'error' ? 'assertive' : 'polite';
   announceToScreenReader(announcement, ariaLive);
 }
@@ -169,10 +169,10 @@ export function enhanceFormAccessibility(container) {
 
   // Add ARIA labels to inputs that don't have proper labels
   const inputs = container.querySelectorAll('input, select, textarea');
-  inputs.forEach(input => {
+  inputs.forEach((input) => {
     const label = container.querySelector(`label[for="${input.id}"]`);
     const ariaLabel = input.getAttribute('aria-label');
-    
+
     if (!label && !ariaLabel) {
       // Try to find a nearby label or use placeholder
       const placeholder = input.getAttribute('placeholder');
@@ -199,7 +199,7 @@ export function enhanceFormAccessibility(container) {
 
   // Enhance sliders with proper ARIA attributes
   const sliders = container.querySelectorAll('input[type="range"]');
-  sliders.forEach(slider => {
+  sliders.forEach((slider) => {
     if (!slider.getAttribute('aria-label') && !slider.getAttribute('aria-labelledby')) {
       const associatedInput = container.querySelector(`#${slider.id.replace('-slider', '')}`);
       if (associatedInput) {
@@ -209,7 +209,7 @@ export function enhanceFormAccessibility(container) {
         }
       }
     }
-    
+
     // Add value text for screen readers
     slider.setAttribute('aria-valuetext', `${slider.value} ${slider.getAttribute('aria-label') || ''}`);
   });
@@ -226,7 +226,7 @@ export function enhanceLoadingAccessibility(element, loadingText = 'Loading') {
   element.setAttribute('aria-busy', 'true');
   element.setAttribute('aria-live', 'polite');
   element.setAttribute('aria-label', loadingText);
-  
+
   // Add role if not present
   if (!element.getAttribute('role')) {
     element.setAttribute('role', 'status');
@@ -243,7 +243,7 @@ export function removeLoadingAccessibility(element) {
   element.removeAttribute('aria-busy');
   element.removeAttribute('aria-live');
   element.removeAttribute('aria-label');
-  
+
   // Only remove role if it was 'status'
   if (element.getAttribute('role') === 'status') {
     element.removeAttribute('role');
@@ -280,7 +280,7 @@ export function enhanceTableAccessibility(table, caption = '') {
       const isFirstRow = row === table.querySelector('tr');
       header.setAttribute('scope', isFirstRow ? 'col' : 'row');
     }
-    
+
     if (!header.id) {
       header.id = `table-header-${index}`;
     }
@@ -288,11 +288,11 @@ export function enhanceTableAccessibility(table, caption = '') {
 
   // Add aria-describedby to data cells
   const cells = table.querySelectorAll('td');
-  cells.forEach(cell => {
+  cells.forEach((cell) => {
     const row = cell.closest('tr');
     const cellIndex = Array.from(row.children).indexOf(cell);
     const header = table.querySelector(`th:nth-child(${cellIndex + 1})`);
-    
+
     if (header && header.id) {
       const existingDescribedBy = cell.getAttribute('aria-describedby');
       const newDescribedBy = existingDescribedBy ? `${existingDescribedBy} ${header.id}` : header.id;
@@ -311,26 +311,26 @@ export function testColorContrast(foreground, background) {
   // Convert colors to RGB
   const fgRgb = hexToRgb(foreground) || parseRgb(foreground);
   const bgRgb = hexToRgb(background) || parseRgb(background);
-  
+
   if (!fgRgb || !bgRgb) {
     return { error: 'Invalid color format' };
   }
-  
+
   // Calculate relative luminance
   const fgLuminance = getRelativeLuminance(fgRgb);
   const bgLuminance = getRelativeLuminance(bgRgb);
-  
+
   // Calculate contrast ratio
   const lighter = Math.max(fgLuminance, bgLuminance);
   const darker = Math.min(fgLuminance, bgLuminance);
   const ratio = (lighter + 0.05) / (darker + 0.05);
-  
+
   return {
     ratio: Math.round(ratio * 100) / 100,
     wcagAA: ratio >= 4.5,
     wcagAAA: ratio >= 7,
     wcagAALarge: ratio >= 3,
-    wcagAAALarge: ratio >= 4.5
+    wcagAAALarge: ratio >= 4.5,
   };
 }
 
@@ -340,7 +340,7 @@ function hexToRgb(hex) {
   return result ? {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
+    b: parseInt(result[3], 16),
   } : null;
 }
 
@@ -349,15 +349,15 @@ function parseRgb(rgb) {
   return match ? {
     r: parseInt(match[1]),
     g: parseInt(match[2]),
-    b: parseInt(match[3])
+    b: parseInt(match[3]),
   } : null;
 }
 
 function getRelativeLuminance(rgb) {
   const { r, g, b } = rgb;
-  const [rs, gs, bs] = [r, g, b].map(c => {
-    c = c / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    c /= 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
 }

@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Test Report</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; }
+        .header h1 { margin: 0; font-size: 2.5em; }
+        .header p { margin: 10px 0 0; opacity: 0.9; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; }
+        .summary-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
+        .summary-card h3 { margin: 0 0 10px; color: #495057; }
+        .summary-card .value { font-size: 2em; font-weight: bold; color: #28a745; }
+        .summary-card .value.failed { color: #dc3545; }
+        .results { padding: 0 30px 30px; }
+        .test-suite { margin-bottom: 30px; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; }
+        .test-suite-header { background: #e9ecef; padding: 15px 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .test-suite-content { padding: 20px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: bold; text-transform: uppercase; }
+        .status-passed { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        .recommendations { padding: 0 30px 30px; }
+        .recommendation { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
+        .recommendation h4 { margin: 0 0 10px; color: #856404; }
+        .recommendation ul { margin: 10px 0 0; padding-left: 20px; }
+        .footer { background: #f8f9fa; padding: 20px 30px; border-radius: 0 0 8px 8px; text-align: center; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Comprehensive Test Report</h1>
+            <p>Generated on 2025-07-20T04:29:30.918Z</p>
+            <p>Total Duration: 6682ms</p>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Total Test Suites</h3>
+                <div class="value">5</div>
+            </div>
+            <div class="summary-card">
+                <h3>Passed Suites</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="summary-card">
+                <h3>Failed Suites</h3>
+                <div class="value failed">4</div>
+            </div>
+            <div class="summary-card">
+                <h3>Success Rate</h3>
+                <div class="value">0%</div>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h2>Test Results</h2>
+            
+                <div class="test-suite">
+                    <div class="test-suite-header">
+                        <span>Cross Browser</span>
+                        <span class="status-badge status-failed">failed</span>
+                    </div>
+                    <div class="test-suite-content">
+                        <p><strong>Timestamp:</strong> 2025-07-20T04:29:25.915Z</p>
+                        <p><strong>Error:</strong> Command failed: npm test -- --testPathPattern=cross-browser.test.js --verbose
+FAIL tests/cross-browser.test.js
+  Cross-browser Compatibility Tests
+    CSS Feature Support
+      ✓ CSS Grid support across browsers (6 ms)
+      ✓ CSS Flexbox support across browsers (2 ms)
+      ✓ CSS Custom Properties support (1 ms)
+      ✓ CSS Transitions support (1 ms)
+    JavaScript API Support
+      ✕ localStorage support across browsers (2 ms)
+      ✓ Promise support across browsers (1 ms)
+      ✕ Fetch API support (2 ms)
+      ✓ Array methods support (1 ms)
+    Form Input Support
+      ✓ Number input type support (1 ms)
+      ✓ Input validation support (1 ms)
+      ✓ Form submission handling (1 ms)
+    Event Handling
+      ✓ Click event handling (10 ms)
+      ✓ Keyboard event handling
+      ✓ Focus and blur events (1 ms)
+    Browser-specific Tests
+      ✓ Chrome compatibility (1 ms)
+      ✓ Firefox compatibility
+      ✓ Safari compatibility (1 ms)
+      ✓ Edge compatibility
+    Responsive Design Tests
+      ✓ Viewport meta tag handling (1 ms)
+      ✓ Media query support (1 ms)
+      ✓ Touch event support
+    Performance Tests
+      ✓ Performance API availability (1 ms)
+      ✓ RequestAnimationFrame support (1 ms)
+      ✕ Intersection Observer support (1 ms)
+    Accessibility Features
+      ✓ ARIA attributes support (1 ms)
+      ✓ Focus management
+      ✓ Screen reader support attributes (1 ms)
+
+  ● Cross-browser Compatibility Tests › JavaScript API Support › localStorage support across browsers
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "value"
+    Received: undefined
+
+      91 |       // Test basic operations
+      92 |       localStorage.setItem('test', 'value');
+    > 93 |       expect(localStorage.getItem('test')).toBe('value');
+         |                                            ^
+      94 |       localStorage.removeItem('test');
+      95 |     });
+      96 |
+
+      at Object.toBe (tests/cross-browser.test.js:93:44)
+
+  ● Cross-browser Compatibility Tests › JavaScript API Support › Fetch API support
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      106 |
+      107 |     test('Fetch API support', () => {
+    > 108 |       expect(typeof fetch).toBe('function');
+          |                            ^
+      109 |     });
+      110 |
+      111 |     test('Array methods support', () => {
+
+      at Object.toBe (tests/cross-browser.test.js:108:28)
+
+  ● Cross-browser Compatibility Tests › Performance Tests › Intersection Observer support
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "function"
+    Received: "undefined"
+
+      277 |
+      278 |     test('Intersection Observer support', () => {
+    > 279 |       expect(typeof IntersectionObserver).toBe('function');
+          |                                           ^
+      280 |     });
+      281 |   });
+      282 |
+
+      at Object.toBe (tests/cross-browser.test.js:279:43)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 24 passed, 27 total
+Snapshots:   0 total
+Time:        1.392 s
+Ran all test suites matching /cross-browser.test.js/i.
+</p>
+                        
+                    </div>
+                </div>
+            
+                <div class="test-suite">
+                    <div class="test-suite-header">
+                        <span>User Experience</span>
+                        <span class="status-badge status-failed">failed</span>
+                    </div>
+                    <div class="test-suite-content">
+                        <p><strong>Timestamp:</strong> 2025-07-20T04:29:27.394Z</p>
+                        <p><strong>Error:</strong> Command failed: npm test -- --testPathPattern=user-experience.test.js --verbose
+FAIL tests/user-experience.test.js
+  User Experience Validation Tests
+    Complete User Flow Tests
+      ✕ successful calculation flow from start to finish (8 ms)
+      ✕ user can modify inputs and recalculate (3 ms)
+      ✕ user can save and load calculations (2 ms)
+    Error Handling Tests
+      ✕ handles invalid input gracefully (2 ms)
+      ✕ displays user-friendly error messages (1 ms)
+      ✕ provides retry mechanism for failed operations (1 ms)
+      ✕ handles storage quota exceeded errors (3 ms)
+    Loading State Tests
+      ✕ shows appropriate loading indicators during calculation (2 ms)
+      ✕ provides progress feedback for long calculations (2 ms)
+      ✕ handles calculation timeout gracefully (1 ms)
+    Accessibility and Usability Tests
+      ✕ provides keyboard navigation support (1 ms)
+      ✕ provides screen reader announcements (1 ms)
+      ✕ maintains focus management during state changes (1 ms)
+    Performance and Responsiveness Tests
+      ✕ calculations complete within acceptable time limits (1 ms)
+      ✕ UI remains responsive during calculations (1 ms)
+
+  ● User Experience Validation Tests › Complete User Flow Tests › successful calculation flow from start to finish
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Complete User Flow Tests › user can modify inputs and recalculate
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Complete User Flow Tests › user can save and load calculations
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Error Handling Tests › handles invalid input gracefully
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Error Handling Tests › displays user-friendly error messages
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Error Handling Tests › provides retry mechanism for failed operations
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Error Handling Tests › handles storage quota exceeded errors
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Loading State Tests › shows appropriate loading indicators during calculation
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Loading State Tests › provides progress feedback for long calculations
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Loading State Tests › handles calculation timeout gracefully
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Accessibility and Usability Tests › provides keyboard navigation support
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Accessibility and Usability Tests › provides screen reader announcements
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Accessibility and Usability Tests › maintains focus management during state changes
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Performance and Responsiveness Tests › calculations complete within acceptable time limits
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+  ● User Experience Validation Tests › Performance and Responsiveness Tests › UI remains responsive during calculations
+
+    TypeError: _calculatorService.CalculatorService is not a constructor
+
+      65 |
+      66 |     // Initialize services
+    > 67 |     calculatorService = new CalculatorService();
+         |                         ^
+      68 |     storageService = new StorageService();
+      69 |     loadingManager = new LoadingManager();
+      70 |
+
+      at Object.<anonymous> (tests/user-experience.test.js:67:25)
+
+Test Suites: 1 failed, 1 total
+Tests:       15 failed, 15 total
+Snapshots:   0 total
+Time:        1.198 s
+Ran all test suites matching /user-experience.test.js/i.
+</p>
+                        
+                    </div>
+                </div>
+            
+                <div class="test-suite">
+                    <div class="test-suite-header">
+                        <span>Performance</span>
+                        <span class="status-badge status-failed">failed</span>
+                    </div>
+                    <div class="test-suite-content">
+                        <p><strong>Timestamp:</strong> 2025-07-20T04:29:29.151Z</p>
+                        <p><strong>Error:</strong> Command failed: npm test -- --testPathPattern="(async-calculation|integration)" --verbose
+FAIL tests/integration.test.js
+  Loan Calculator Integration
+    ✕ should update results when form values change (85 ms)
+    ✕ should update amortization table when form values change (24 ms)
+    ✕ should pass inflation-adjusted data when inflation rate is set (20 ms)
+    ✕ should not pass inflation-adjusted data when inflation rate is zero (19 ms)
+    ✕ should update loan parameters when loan type changes (48 ms)
+    ✕ should save and load calculations (26 ms)
+    ✕ should handle complete user workflow (41 ms)
+    ✕ should handle error conditions gracefully (15 ms)
+
+  ● Loan Calculator Integration › should update results when form values change
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      92 |
+      93 |     // Verify results were updated
+    > 94 |     expect(renderSpy).toHaveBeenCalled();
+         |                       ^
+      95 |
+      96 |     // Verify the loan object passed to render has the updated principal
+      97 |     const renderCall = renderSpy.mock.calls[0][0];
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:94:23)
+
+  ● Loan Calculator Integration › should update amortization table when form values change
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      111 |
+      112 |     // Verify amortization table was updated
+    > 113 |     expect(renderSpy).toHaveBeenCalled();
+          |                       ^
+      114 |
+      115 |     // Verify the loan object passed to render has the updated term
+      116 |     const renderCall = renderSpy.mock.calls[0][0];
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:113:23)
+
+  ● Loan Calculator Integration › should pass inflation-adjusted data when inflation rate is set
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      130 |
+      131 |     // Verify results were updated
+    > 132 |     expect(renderSpy).toHaveBeenCalled();
+          |                       ^
+      133 |
+      134 |     // Verify inflation-adjusted data was passed to render
+      135 |     const renderCall = renderSpy.mock.calls[0][0];
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:132:23)
+
+  ● Loan Calculator Integration › should not pass inflation-adjusted data when inflation rate is zero
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      150 |
+      151 |     // Verify results were updated
+    > 152 |     expect(renderSpy).toHaveBeenCalled();
+          |                       ^
+      153 |
+      154 |     // Verify inflation-adjusted data was not passed to render
+      155 |     const renderCall = renderSpy.mock.calls[0][0];
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:152:23)
+
+  ● Loan Calculator Integration › should update loan parameters when loan type changes
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      169 |
+      170 |     // Verify calculation was performed with updated loan type
+    > 171 |     expect(calculateSpy).toHaveBeenCalled();
+          |                          ^
+      172 |
+      173 |     // Verify the loan passed to calculate has the auto loan type
+      174 |     const loanArg = calculateSpy.mock.calls[0][0];
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:171:26)
+
+  ● Loan Calculator Integration › should save and load calculations
+
+    TypeError: Cannot read properties of null (reading 'loan')
+
+      195 |
+      196 |     // Verify loaded calculation matches saved calculation
+    > 197 |     expect(loadedCalculation.loan.principal).toBe(loan.principal);
+          |                              ^
+      198 |     expect(loadedCalculation.loan.interestRate).toBe(loan.interestRate);
+      199 |     expect(loadedCalculation.loan.term).toBe(loan.term);
+      200 |     expect(loadedCalculation.amortizationSchedule.totalInterest).toBe(amortizationSchedule.totalInterest);
+
+      at Object.loan (tests/integration.test.js:197:30)
+
+  ● Loan Calculator Integration › should handle complete user workflow
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      246 |
+      247 |     // Verify results and amortization table were updated
+    > 248 |     expect(resultsRenderSpy).toHaveBeenCalled();
+          |                              ^
+      249 |     expect(tableRenderSpy).toHaveBeenCalled();
+      250 |
+      251 |     // Verify the final loan object has all the correct values
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:248:30)
+
+  ● Loan Calculator Integration › should handle error conditions gracefully
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      279 |
+      280 |     // Verify error was logged
+    > 281 |     expect(consoleErrorSpy).toHaveBeenCalled();
+          |                             ^
+      282 |
+      283 |     // Verify application didn't crash (DOM still exists)
+      284 |     expect(document.querySelector('#calculator-form-container')).not.toBeNull();
+
+      at Object.toHaveBeenCalled (tests/integration.test.js:281:29)
+
+PASS tests/async-calculation.test.js
+  Async Calculation Functionality
+    ✓ should generate amortization schedule asynchronously (11 ms)
+    ✓ should handle timeout for long calculations (58 ms)
+    ✓ should validate loan parameters before calculation
+    ✓ should validate interest rate (1 ms)
+    ✓ should validate loan term
+    ✓ should handle calculation with additional payments (7 ms)
+    ✓ should process payments in batches (43 ms)
+    ✓ should maintain generation state during calculation (9 ms)
+    ✓ should reset state on error (9 ms)
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       8 failed, 9 passed, 17 total
+Snapshots:   0 total
+Time:        1.488 s
+Ran all test suites matching /(async-calculation|integration)/i.
+</p>
+                        
+                    </div>
+                </div>
+            
+                <div class="test-suite">
+                    <div class="test-suite-header">
+                        <span>Accessibility</span>
+                        <span class="status-badge status-failed">failed</span>
+                    </div>
+                    <div class="test-suite-content">
+                        <p><strong>Timestamp:</strong> 2025-07-20T04:29:30.918Z</p>
+                        <p><strong>Error:</strong> Command failed: npm test -- --testPathPattern=accessibility.test.js --verbose
+FAIL tests/accessibility.test.js
+  Accessibility Compliance
+    ✕ should have no accessibility violations in the main page (94 ms)
+    ✓ should have proper heading structure (8 ms)
+    ✓ should have alt text for all images (5 ms)
+    ✓ should have sufficient color contrast (10 ms)
+    ✓ should have proper form labels (5 ms)
+    ✓ should have proper ARIA attributes (6 ms)
+    ✓ should have keyboard navigable interactive elements (4 ms)
+    ✓ should have proper document language (4 ms)
+    ✓ should have proper page title (8 ms)
+
+  ● Accessibility Compliance › should have no accessibility violations in the main page
+
+    expect(received).toHaveNoViolations(expected)
+
+    Expected the HTML found at $('#calculator-form-container') to have no violations:
+
+    <section class="calculator-form-section" id="calculator-form-container" aria-labelledby="form-title">
+              <!-- Calculator form will be rendered here -->
+            </section>
+
+    Received:
+
+    "Elements must only use allowed ARIA attributes (aria-allowed-attr)"
+
+    Fix all of the following:
+      aria-labelledby attribute cannot be used on a section with no valid role attribute.
+
+    You can find more information on this issue here: 
+    https://dequeuniversity.com/rules/axe/4.7/aria-allowed-attr?application=axeAPI
+
+    Expected the HTML found at $('#results-display-container') to have no violations:
+
+    <section class="results-section" id="results-display-container" aria-labelledby="results-title" aria-live="polite">
+              <!-- Results will be rendered here -->
+            </section>
+
+    Received:
+
+    "Elements must only use allowed ARIA attributes (aria-allowed-attr)"
+
+    Fix all of the following:
+      aria-labelledby attribute cannot be used on a section with no valid role attribute.
+
+    You can find more information on this issue here: 
+    https://dequeuniversity.com/rules/axe/4.7/aria-allowed-attr?application=axeAPI
+
+      41 |
+      42 |     // Check for violations
+    > 43 |     expect(results).toHaveNoViolations();
+         |                     ^
+      44 |   });
+      45 |
+      46 |   test('should have proper heading structure', () => {
+
+      at Object.toHaveNoViolations (tests/accessibility.test.js:43:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 8 passed, 9 total
+Snapshots:   0 total
+Time:        1.489 s
+Ran all test suites matching /accessibility.test.js/i.
+</p>
+                        
+                    </div>
+                </div>
+            
+                <div class="test-suite">
+                    <div class="test-suite-header">
+                        <span>Overall</span>
+                        <span class="status-badge status-undefined">undefined</span>
+                    </div>
+                    <div class="test-suite-content">
+                        <p><strong>Timestamp:</strong> undefined</p>
+                        
+                        
+                    </div>
+                </div>
+            
+        </div>
+        
+        
+        <div class="recommendations">
+            <h2>Recommendations</h2>
+            
+                <div class="recommendation">
+                    <h4>Cross-Browser Compatibility (high priority)</h4>
+                    <p>Fix cross-browser compatibility issues before deployment</p>
+                    <ul>
+                        <li>Test in Chrome, Firefox, Safari, and Edge</li><li>Verify CSS Grid and Flexbox support</li><li>Check JavaScript API compatibility</li>
+                    </ul>
+                </div>
+            
+                <div class="recommendation">
+                    <h4>User Experience (high priority)</h4>
+                    <p>Address user experience issues to improve usability</p>
+                    <ul>
+                        <li>Fix error handling and user feedback</li><li>Improve loading states and progress indicators</li><li>Ensure smooth user flows</li>
+                    </ul>
+                </div>
+            
+                <div class="recommendation">
+                    <h4>Performance (medium priority)</h4>
+                    <p>Optimize performance for better user experience</p>
+                    <ul>
+                        <li>Reduce calculation time to under 3 seconds</li><li>Implement async processing</li><li>Add progress indicators for long operations</li>
+                    </ul>
+                </div>
+            
+                <div class="recommendation">
+                    <h4>Accessibility (high priority)</h4>
+                    <p>Fix accessibility issues to ensure inclusive design</p>
+                    <ul>
+                        <li>Add proper ARIA labels and roles</li><li>Ensure keyboard navigation works</li><li>Test with screen readers</li>
+                    </ul>
+                </div>
+            
+        </div>
+        
+        
+        <div class="footer">
+            <p>Report generated by Comprehensive Test Runner</p>
+        </div>
+    </div>
+</body>
+</html>

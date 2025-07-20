@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/130</span>
             </div>
         
             
@@ -494,7 +494,14 @@
 <a name='L429'></a><a href='#L429'>429</a>
 <a name='L430'></a><a href='#L430'>430</a>
 <a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -533,9 +540,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -543,6 +550,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -569,6 +577,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -733,6 +742,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -740,12 +750,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -921,6 +934,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -937,7 +951,7 @@ class AsyncCalculatorService {
 <span class="cstat-no" title="statement not covered" >    this.pendingCalculations = new Map();</span>
 <span class="cstat-no" title="statement not covered" >    this.calculationId = 0;</span>
 <span class="cstat-no" title="statement not covered" >    this.workerPath = '/src/js/workers/calculation-worker.js';</span>
-    
+&nbsp;
     // Initialize worker
 <span class="cstat-no" title="statement not covered" >    this.initWorker();</span>
   }
@@ -954,7 +968,7 @@ class AsyncCalculatorService {
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      this.worker = new Worker(this.workerPath);</span>
-      
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      this.worker.onmessage = <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this.handleWorkerMessage(e.data);</span>
       };
@@ -963,7 +977,6 @@ class AsyncCalculatorService {
 <span class="cstat-no" title="statement not covered" >        console.error('Worker error:', error);</span>
 <span class="cstat-no" title="statement not covered" >        this.handleWorkerError(error);</span>
       };
-&nbsp;
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      console.warn('Failed to initialize Web Worker:', error);</span>
 <span class="cstat-no" title="statement not covered" >      this.worker = null;</span>
@@ -974,7 +987,9 @@ class AsyncCalculatorService {
    * Handle messages from the Web Worker
    */
 <span class="fstat-no" title="function not covered" >  ha</span>ndleWorkerMessage(data) {
-    const { type, id, progress, message, currentStep, result, error } = <span class="cstat-no" title="statement not covered" >data;</span>
+    const {
+      type, id, progress, message, currentStep, result, error,
+    } = <span class="cstat-no" title="statement not covered" >data;</span>
     const calculation = <span class="cstat-no" title="statement not covered" >this.pendingCalculations.get(id);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!calculation) {</span>
@@ -994,12 +1009,13 @@ class AsyncCalculatorService {
 <span class="cstat-no" title="statement not covered" >        this.pendingCalculations.delete(id);</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
 &nbsp;
-      case 'error':
+      case 'error': {
         const err = <span class="cstat-no" title="statement not covered" >new Error(error.message);</span>
 <span class="cstat-no" title="statement not covered" >        if (error.stack) <span class="cstat-no" title="statement not covered" >err.stack = error.stack;</span></span>
 <span class="cstat-no" title="statement not covered" >        calculation.reject(err);</span>
 <span class="cstat-no" title="statement not covered" >        this.pendingCalculations.delete(id);</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
+      }
     }
   }
 &nbsp;
@@ -1033,14 +1049,14 @@ class AsyncCalculatorService {
     }
 &nbsp;
     const id = <span class="cstat-no" title="statement not covered" >++this.calculationId;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
       // Store calculation promise handlers
 <span class="cstat-no" title="statement not covered" >      this.pendingCalculations.set(id, {</span>
         resolve,
         reject,
         onProgress,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 &nbsp;
       // Send calculation request to worker
@@ -1054,9 +1070,9 @@ class AsyncCalculatorService {
             batchSize: 50,
             maxPayments: 10000,
             timeout: 30000,
-            ...options
-          }
-        }
+            ...options,
+          },
+        },
       });
 &nbsp;
       // Set up timeout for the calculation
@@ -1083,12 +1099,12 @@ class AsyncCalculatorService {
     }
 &nbsp;
     const id = <span class="cstat-no" title="statement not covered" >++this.calculationId;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.pendingCalculations.set(id, {</span>
         resolve: <span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >resolve(result.payment),</span>
         reject,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      this.worker.postMessage({</span>
@@ -1098,8 +1114,8 @@ class AsyncCalculatorService {
           principal,
           interestRate,
           term,
-          paymentFrequency
-        }
+          paymentFrequency,
+        },
       });
 &nbsp;
       // Timeout for simple calculations
@@ -1124,12 +1140,12 @@ class AsyncCalculatorService {
     }
 &nbsp;
     const id = <span class="cstat-no" title="statement not covered" >++this.calculationId;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      this.pendingCalculations.set(id, {</span>
         resolve,
         reject,
-        startTime: Date.now()
+        startTime: Date.now(),
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      this.worker.postMessage({</span>
@@ -1137,8 +1153,8 @@ class AsyncCalculatorService {
         id,
         data: {
           payments,
-          inflationRate
-        }
+          inflationRate,
+        },
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1161,22 +1177,26 @@ class AsyncCalculatorService {
 <span class="fstat-no" title="function not covered" >  as</span>ync processInChunks(items, processor, chunkSize = <span class="branch-0 cbranch-no" title="branch not covered" >100,</span> onProgress = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
     const results = <span class="cstat-no" title="statement not covered" >[];</span>
     const totalItems = <span class="cstat-no" title="statement not covered" >items.length;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; totalItems; i += chunkSize) {</span>
       const chunk = <span class="cstat-no" title="statement not covered" >items.slice(i, i + chunkSize);</span>
+      // eslint-disable-next-line no-await-in-loop
       const chunkResults = <span class="cstat-no" title="statement not covered" >await Promise.all(chunk.map(processor));</span>
 <span class="cstat-no" title="statement not covered" >      results.push(...chunkResults);</span>
-      
+&nbsp;
       // Report progress
 <span class="cstat-no" title="statement not covered" >      if (onProgress) {</span>
         const progress = <span class="cstat-no" title="statement not covered" >Math.min(100, ((i + chunkSize) / totalItems) * 100);</span>
 <span class="cstat-no" title="statement not covered" >        onProgress(progress, `Processed ${Math.min(i + chunkSize, totalItems)} of ${totalItems} items`);</span>
       }
-      
+&nbsp;
       // Yield control to prevent blocking
-<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >re</span>solve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 0))</span>;</span>
+      // eslint-disable-next-line no-await-in-loop
+<span class="cstat-no" title="statement not covered" >      await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        setTimeout(resolve, 0);</span>
+      });
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return results;</span>
   }
 &nbsp;
@@ -1194,7 +1214,7 @@ class AsyncCalculatorService {
       paymentFrequency: loanData.paymentFrequency || 'monthly',
       additionalPayment: loanData.additionalPayment || 0,
       inflationRate: loanData.inflationRate || 0,
-      startDate: loanData.startDate ? loanData.startDate.toISOString() : new Date().toISOString()
+      startDate: loanData.startDate ? loanData.startDate.toISOString() : new Date().toISOString(),
     };
   }
 &nbsp;
@@ -1205,14 +1225,14 @@ class AsyncCalculatorService {
     // Import the synchronous calculator
     const { AmortizationSchedule } = <span class="cstat-no" title="statement not covered" >await import('../models/amortization.model.js');</span>
     const Loan = <span class="cstat-no" title="statement not covered" >(await import('../models/loan.model.js')).default;</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(10, 'Creating loan object...');</span></span>
-    
+&nbsp;
     // Create loan object
     const loan = <span class="cstat-no" title="statement not covered" >new Loan(loanData);</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(30, 'Generating amortization schedule...');</span></span>
-    
+&nbsp;
     // Generate schedule with progress tracking
     const schedule = <span class="cstat-no" title="statement not covered" >new AmortizationSchedule(loan, false);</span>
     const payments = <span class="cstat-no" title="statement not covered" >await schedule.generateScheduleAsync({</span>
@@ -1221,34 +1241,34 @@ class AsyncCalculatorService {
 <span class="cstat-no" title="statement not covered" >        if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(30 + (progress * 0.6), message);</span></span>
       },
       timeout: options.timeout || 30000,
-      batchSize: options.batchSize || 50
+      batchSize: options.batchSize || 50,
     });
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(95, 'Calculating totals...');</span></span>
-    
+&nbsp;
     // Calculate totals
     const totalInterest = <span class="cstat-no" title="statement not covered" >payments.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, payment) =&gt; <span class="cstat-no" title="statement not covered" >sum + payment.interest,</span> 0);</span>
     const totalPayment = <span class="cstat-no" title="statement not covered" >payments.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, payment) =&gt; <span class="cstat-no" title="statement not covered" >sum + payment.amount,</span> 0);</span>
     const payoffDate = <span class="cstat-no" title="statement not covered" >payments.length &gt; 0 ? payments[payments.length - 1].date : loan.startDate;</span>
-    
+&nbsp;
     const result = <span class="cstat-no" title="statement not covered" >{</span>
       schedule: {
         payments,
         totalInterest,
         totalPayment,
         payoffDate,
-        numberOfPayments: payments.length
-      }
+        numberOfPayments: payments.length,
+      },
     };
-    
+&nbsp;
     // Calculate inflation adjustment if needed
 <span class="cstat-no" title="statement not covered" >    if (loanData.inflationRate &amp;&amp; loanData.inflationRate &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >      if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(98, 'Calculating inflation adjustments...');</span></span>
 <span class="cstat-no" title="statement not covered" >      result.inflationAdjusted = this.calculateInflationSync(payments, loanData.inflationRate);</span>
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (onProgress) <span class="cstat-no" title="statement not covered" >onProgress(100, 'Complete');</span></span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return result;</span>
   }
 &nbsp;
@@ -1339,7 +1359,7 @@ class AsyncCalculatorService {
 <span class="cstat-no" title="statement not covered" >    return {</span>
       pendingCalculations: this.pendingCalculations.size,
       workerAvailable: !!this.worker,
-      totalCalculations: this.calculationId
+      totalCalculations: this.calculationId,
     };
   }
 &nbsp;
@@ -1348,7 +1368,7 @@ class AsyncCalculatorService {
    */
 <span class="fstat-no" title="function not covered" >  de</span>stroy() {
 <span class="cstat-no" title="statement not covered" >    this.cancelAllCalculations();</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (this.worker) {</span>
 <span class="cstat-no" title="statement not covered" >      this.worker.terminate();</span>
 <span class="cstat-no" title="statement not covered" >      this.worker = null;</span>
@@ -1356,14 +1376,15 @@ class AsyncCalculatorService {
   }
 }
 &nbsp;
-export default AsyncCalculatorService;</pre></td></tr></table></pre>
+export default AsyncCalculatorService;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T04:02:32.432Z
+                at 2025-07-20T05:41:28.479Z
             </div>
         <script src="../prettify.js"></script>
         <script>

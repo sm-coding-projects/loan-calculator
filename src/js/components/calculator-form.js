@@ -380,7 +380,7 @@ class CalculatorForm {
     `;
 
     this.container.innerHTML = formHtml;
-    
+
     // Enhance form accessibility
     enhanceFormAccessibility(this.container);
   }
@@ -641,7 +641,7 @@ class CalculatorForm {
         errorElement.textContent = errorMessage;
         errorElement.setAttribute('aria-live', 'polite');
         errorElement.setAttribute('role', 'alert');
-        
+
         // Announce validation error to screen readers
         announceValidationError(field, errorMessage);
       }
@@ -762,7 +762,7 @@ class CalculatorForm {
     }
 
     // Store currently focused element for restoration later
-    const activeElement = document.activeElement;
+    const { activeElement } = document;
     if (activeElement && activeElement !== document.body) {
       activeElement.setAttribute('data-was-focused', 'true');
     }
@@ -781,7 +781,7 @@ class CalculatorForm {
       cancellable: true,
       onCancel: () => {
         this.asyncCalculator.cancelAllCalculations();
-      }
+      },
     });
 
     // Add enhanced loading state to calculate button
@@ -812,7 +812,7 @@ class CalculatorForm {
       // Progress callback for async calculations
       const onProgress = (progress, message, currentStep) => {
         loadingManager.updateProgress(progress, message, currentStep);
-        
+
         // Update step status based on progress
         if (progress >= 95 && currentStep === 'calculate') {
           loadingManager.updateStepStatus('calculate', 'completed');
@@ -822,15 +822,15 @@ class CalculatorForm {
 
       // Perform async calculation
       loadingManager.updateProgress(10, 'Starting async calculation...', 'calculate');
-      
+
       const calculationResult = await this.asyncCalculator.calculateAmortizationAsync(
         formData,
         {
           includeAdditionalPayments: true,
           batchSize: 100, // Larger batch size for better performance
-          timeout: 30000
+          timeout: 30000,
         },
-        onProgress
+        onProgress,
       );
 
       // Update progress for rendering
@@ -845,9 +845,9 @@ class CalculatorForm {
           payments: calculationResult.schedule.payments,
           totalInterest: () => calculationResult.schedule.totalInterest,
           totalPayment: () => calculationResult.schedule.totalPayment,
-          payoffDate: () => new Date(calculationResult.schedule.payoffDate)
+          payoffDate: () => new Date(calculationResult.schedule.payoffDate),
         },
-        inflationAdjusted: calculationResult.inflationAdjusted
+        inflationAdjusted: calculationResult.inflationAdjusted,
       };
 
       // Call the calculation callback
@@ -860,8 +860,9 @@ class CalculatorForm {
       loadingManager.updateStepStatus('render', 'completed');
 
       // Small delay before hiding
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      await new Promise((resolve) => {
+        setTimeout(resolve, 500);
+      });
     } catch (error) {
       console.error('Error calculating loan:', error);
 

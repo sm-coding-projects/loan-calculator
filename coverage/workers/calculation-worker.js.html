@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
@@ -408,7 +408,14 @@
 <a name='L343'></a><a href='#L343'>343</a>
 <a name='L344'></a><a href='#L344'>344</a>
 <a name='L345'></a><a href='#L345'>345</a>
-<a name='L346'></a><a href='#L346'>346</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -560,7 +567,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -701,6 +711,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -714,6 +725,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -729,6 +741,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -746,6 +759,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -811,7 +825,7 @@ class WorkerLoanCalculator {
       includeAdditionalPayments = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
       batchSize = <span class="branch-0 cbranch-no" title="branch not covered" >50,</span>
       maxPayments = <span class="branch-0 cbranch-no" title="branch not covered" >10000,</span>
-      timeout = <span class="branch-0 cbranch-no" title="branch not covered" >30000</span>
+      timeout = <span class="branch-0 cbranch-no" title="branch not covered" >30000,</span>
     } = <span class="cstat-no" title="statement not covered" >options;</span>
 &nbsp;
     // Validate input
@@ -863,7 +877,7 @@ class WorkerLoanCalculator {
       type: 'progress',
       progress: 0,
       message: 'Starting calculation...',
-      currentStep: 'calculate'
+      currentStep: 'calculate',
     });
 &nbsp;
     // Generate payments
@@ -888,7 +902,7 @@ class WorkerLoanCalculator {
         amount: totalPayment,
         principal: principalPayment,
         interest: interestPayment,
-        balance: balance
+        balance,
       };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      payments.push(payment);</span>
@@ -898,14 +912,17 @@ class WorkerLoanCalculator {
         const progress = <span class="cstat-no" title="statement not covered" >Math.min(95, (paymentNumber / estimatedTotalPayments) * 100);</span>
 <span class="cstat-no" title="statement not covered" >        self.postMessage({</span>
           type: 'progress',
-          progress: progress,
+          progress,
           message: `Processing payment ${paymentNumber}...`,
           currentStep: 'calculate',
-          paymentsProcessed: paymentNumber
+          paymentsProcessed: paymentNumber,
         });
 &nbsp;
         // Yield control to prevent blocking
-<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >re</span>solve =&gt; <span class="cstat-no" title="statement not covered" >setTimeout(resolve, 0))</span>;</span>
+        // eslint-disable-next-line no-await-in-loop
+<span class="cstat-no" title="statement not covered" >        await new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          setTimeout(resolve, 0);</span>
+        });
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      paymentNumber++;</span>
@@ -931,7 +948,7 @@ class WorkerLoanCalculator {
       totalInterest,
       totalPayment,
       payoffDate,
-      numberOfPayments: payments.length
+      numberOfPayments: payments.length,
     };
   }
 &nbsp;
@@ -940,7 +957,7 @@ class WorkerLoanCalculator {
    */
 <span class="fstat-no" title="function not covered" >  st</span>atic calculatePaymentDate(startDate, paymentNumber, frequency) {
     const date = <span class="cstat-no" title="statement not covered" >new Date(startDate);</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    switch (frequency) {</span>
       case 'weekly':
 <span class="cstat-no" title="statement not covered" >        date.setDate(date.getDate() + (paymentNumber - 1) * 7);</span>
@@ -953,7 +970,7 @@ class WorkerLoanCalculator {
 <span class="cstat-no" title="statement not covered" >        date.setMonth(date.getMonth() + (paymentNumber - 1));</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
     }
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return date.toISOString();</span>
   }
 &nbsp;
@@ -1002,18 +1019,18 @@ class WorkerLoanCalculator {
 }
 &nbsp;
 // Worker message handler
-<span class="cstat-no" title="statement not covered" >self.onmessage = <span class="fstat-no" title="function not covered" >as</span>ync function(e) {</span>
+<span class="cstat-no" title="statement not covered" >self.onmessage = <span class="fstat-no" title="function not covered" >as</span>ync function (e) {</span>
   const { type, data, id } = <span class="cstat-no" title="statement not covered" >e.data;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    switch (type) {</span>
-      case 'calculateAmortization':
+      case 'calculateAmortization': {
 <span class="cstat-no" title="statement not covered" >        self.postMessage({</span>
           type: 'progress',
           progress: 5,
           message: 'Initializing calculation...',
           currentStep: 'validate',
-          id
+          id,
         });
 &nbsp;
         const schedule = <span class="cstat-no" title="statement not covered" >await WorkerLoanCalculator.generateAmortizationSchedule(data.loanData, data.options);</span>
@@ -1023,15 +1040,15 @@ class WorkerLoanCalculator {
           progress: 98,
           message: 'Finalizing results...',
           currentStep: 'finalize',
-          id
+          id,
         });
 &nbsp;
         // Calculate inflation adjustment if needed
         let inflationAdjusted = <span class="cstat-no" title="statement not covered" >null;</span>
 <span class="cstat-no" title="statement not covered" >        if (data.loanData.inflationRate &amp;&amp; data.loanData.inflationRate &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >          inflationAdjusted = WorkerLoanCalculator.calculateInflationAdjusted(</span>
-            schedule.payments, 
-            data.loanData.inflationRate
+            schedule.payments,
+            data.loanData.inflationRate,
           );
         }
 &nbsp;
@@ -1039,39 +1056,42 @@ class WorkerLoanCalculator {
           type: 'complete',
           result: {
             schedule,
-            inflationAdjusted
+            inflationAdjusted,
           },
-          id
+          id,
         });
 <span class="cstat-no" title="statement not covered" >        break;</span>
+      }
 &nbsp;
-      case 'calculatePayment':
+      case 'calculatePayment': {
         const payment = <span class="cstat-no" title="statement not covered" >WorkerLoanCalculator.calculatePayment(</span>
           data.principal,
           data.interestRate,
           data.term,
-          data.paymentFrequency
+          data.paymentFrequency,
         );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        self.postMessage({</span>
           type: 'complete',
           result: { payment },
-          id
+          id,
         });
 <span class="cstat-no" title="statement not covered" >        break;</span>
+      }
 &nbsp;
-      case 'calculateInflation':
+      case 'calculateInflation': {
         const inflationResult = <span class="cstat-no" title="statement not covered" >WorkerLoanCalculator.calculateInflationAdjusted(</span>
           data.payments,
-          data.inflationRate
+          data.inflationRate,
         );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        self.postMessage({</span>
           type: 'complete',
           result: inflationResult,
-          id
+          id,
         });
 <span class="cstat-no" title="statement not covered" >        break;</span>
+      }
 &nbsp;
       default:
 <span class="cstat-no" title="statement not covered" >        throw new Error(`Unknown calculation type: ${type}`);</span>
@@ -1081,31 +1101,32 @@ class WorkerLoanCalculator {
       type: 'error',
       error: {
         message: error.message,
-        stack: error.stack
+        stack: error.stack,
       },
-      id
+      id,
     });
   }
 };
 &nbsp;
 // Handle worker errors
-<span class="cstat-no" title="statement not covered" >self.onerror = <span class="fstat-no" title="function not covered" >fu</span>nction(error) {</span>
+<span class="cstat-no" title="statement not covered" >self.onerror = <span class="fstat-no" title="function not covered" >fu</span>nction (error) {</span>
 <span class="cstat-no" title="statement not covered" >  self.postMessage({</span>
     type: 'error',
     error: {
       message: error.message,
       filename: error.filename,
-      lineno: error.lineno
-    }
+      lineno: error.lineno,
+    },
   });
-};</pre></td></tr></table></pre>
+};
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T04:02:32.432Z
+                at 2025-07-20T05:41:28.479Z
             </div>
         <script src="../prettify.js"></script>
         <script>

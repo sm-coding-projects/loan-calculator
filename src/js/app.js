@@ -39,6 +39,16 @@ const loadAmortizationTable = () => import(/* webpackChunkName: "amortization-ta
 const loadCharts = () => import(/* webpackChunkName: "charts" */ './components/charts');
 const loadCalculatorService = () => import(/* webpackChunkName: "calculator-service" */ './services/calculator.service');
 
+// Global component references
+let calculatorForm;
+let resultsDisplay;
+let amortizationTable;
+let charts;
+let savedCalculationsManager;
+let settingsPanel;
+let financialGlossary;
+let guidanceManager;
+
 // Set current year in footer and apply saved theme
 document.addEventListener('DOMContentLoaded', () => {
   // Set current year
@@ -65,31 +75,23 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🎯 Keyboard Navigation Manager initialized');
   console.log('Press F1 for keyboard shortcuts help');
   console.log('Press Ctrl+Shift+K to start keyboard navigation testing');
-  
+
   // Add keyboard navigation testing shortcut
   keyboardNavigationManager.registerShortcut('ctrl+shift+k', {
     description: 'Start keyboard navigation testing',
-    handler: () => keyboardNavigationManager.startTesting()
+    handler: () => keyboardNavigationManager.startTesting(),
   });
-  
+
   // Add comprehensive testing shortcut
   keyboardNavigationManager.registerShortcut('ctrl+shift+a', {
     description: 'Test all keyboard functionality',
     handler: async () => {
       const results = await keyboardNavigationManager.testAllKeyboardFunctionality();
       console.log('Comprehensive keyboard test results:', results);
-    }
+    },
   });
 
   // Initialize components
-  let calculatorForm;
-  let resultsDisplay;
-  let amortizationTable;
-  let charts;
-  let savedCalculationsManager;
-  let settingsPanel;
-  let financialGlossary;
-  let guidanceManager;
 
   // Initialize calculator form
   const calculatorFormContainer = document.getElementById('calculator-form-container');
