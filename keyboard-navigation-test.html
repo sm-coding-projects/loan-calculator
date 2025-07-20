@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Navigation Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    
+    .test-section {
+      margin: 2rem 0;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    
+    .test-section h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    .form-group {
+      margin: 1rem 0;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    input, select, button {
+      padding: 0.5rem;
+      margin: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background: #0056b3;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    
+    th {
+      background: #f8f9fa;
+      cursor: pointer;
+    }
+    
+    .instructions {
+      background: #e7f3ff;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+    }
+    
+    .keyboard-shortcut {
+      background: #f8f9fa;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+    
+    /* Enhanced focus indicators */
+    .keyboard-navigation *:focus {
+      outline: 2px solid #007bff !important;
+      outline-offset: 2px !important;
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25) !important;
+      border-radius: 4px;
+    }
+    
+    .keyboard-navigation th:focus,
+    .keyboard-navigation td:focus {
+      outline: 2px solid #007bff !important;
+      outline-offset: -2px !important;
+      background-color: rgba(0, 123, 255, 0.1) !important;
+    }
+    
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #007bff;
+      color: white;
+      padding: 8px 16px;
+      z-index: 1001;
+      transition: top 0.3s ease;
+      border-radius: 0 0 8px 8px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .skip-to-content:focus {
+      top: 0;
+      outline: 2px solid #93c5fd;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <header>
+    <h1>Keyboard Navigation Test</h1>
+  </header>
+  
+  <div class="instructions">
+    <h2>Test Instructions</h2>
+    <p>This page tests keyboard navigation functionality. Try the following:</p>
+    <ul>
+      <li><span class="keyboard-shortcut">Tab</span> - Navigate forward through focusable elements</li>
+      <li><span class="keyboard-shortcut">Shift+Tab</span> - Navigate backward through focusable elements</li>
+      <li><span class="keyboard-shortcut">Arrow Keys</span> - Navigate within tables</li>
+      <li><span class="keyboard-shortcut">F1</span> - Show keyboard shortcuts help</li>
+      <li><span class="keyboard-shortcut">Ctrl+Shift+K</span> - Start keyboard navigation testing</li>
+      <li><span class="keyboard-shortcut">Ctrl+Shift+A</span> - Test all keyboard functionality</li>
+      <li><span class="keyboard-shortcut">Escape</span> - Close modals/dropdowns</li>
+    </ul>
+  </div>
+  
+  <main id="main-content">
+    <div class="test-section">
+      <h2>Form Elements Test</h2>
+      <form>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" placeholder="Enter your name">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+          <label for="country">Country:</label>
+          <select id="country" name="country">
+            <option value="">Select a country</option>
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+            <option value="uk">United Kingdom</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount" min="0" max="1000" value="500">
+          <input type="range" id="amount-slider" class="form-slider" min="0" max="1000" value="500">
+        </div>
+        
+        <button type="submit">Submit</button>
+        <button type="button">Cancel</button>
+      </form>
+    </div>
+    
+    <div class="test-section">
+      <h2>Table Navigation Test</h2>
+      <p>Use arrow keys to navigate within the table:</p>
+      <table>
+        <thead>
+          <tr>
+            <th tabindex="0" class="sortable">Payment #</th>
+            <th tabindex="0" class="sortable">Date</th>
+            <th tabindex="0" class="sortable">Amount</th>
+            <th tabindex="0" class="sortable">Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td tabindex="0">1</td>
+            <td tabindex="0">2024-01-01</td>
+            <td tabindex="0">$1,200.00</td>
+            <td tabindex="0">$98,800.00</td>
+          </tr>
+          <tr>
+            <td tabindex="0">2</td>
+            <td tabindex="0">2024-02-01</td>
+            <td tabindex="0">$1,200.00</td>
+            <td tabindex="0">$97,600.00</td>
+          </tr>
+          <tr>
+            <td tabindex="0">3</td>
+            <td tabindex="0">2024-03-01</td>
+            <td tabindex="0">$1,200.00</td>
+            <td tabindex="0">$96,400.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="test-section">
+      <h2>Interactive Elements Test</h2>
+      <p>Test various interactive elements:</p>
+      <a href="#" onclick="alert('Link clicked'); return false;">Test Link</a>
+      <button onclick="alert('Button clicked')">Test Button</button>
+      <div tabindex="0" onclick="alert('Div clicked')" style="display: inline-block; padding: 0.5rem; background: #f0f0f0; cursor: pointer;">Focusable Div</div>
+    </div>
+  </main>
+  
+  <script type="module">
+    // Simple keyboard navigation manager for testing
+    class SimpleKeyboardNavigationManager {
+      constructor() {
+        this.keyboardShortcuts = new Map();
+        this.init();
+      }
+      
+      init() {
+        this.setupGlobalKeyboardHandlers();
+        this.enhanceFocusIndicators();
+        this.registerDefaultShortcuts();
+      }
+      
+      setupGlobalKeyboardHandlers() {
+        document.addEventListener('keydown', (e) => {
+          this.handleGlobalKeydown(e);
+        });
+      }
+      
+      handleGlobalKeydown(e) {
+        // Handle keyboard shortcuts
+        const shortcutKey = this.getShortcutKey(e);
+        if (this.keyboardShortcuts.has(shortcutKey)) {
+          const shortcut = this.keyboardShortcuts.get(shortcutKey);
+          if (shortcut.handler) {
+            e.preventDefault();
+            shortcut.handler(e);
+          }
+        }
+        
+        // Handle arrow key navigation in tables
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+          this.handleArrowNavigation(e);
+        }
+      }
+      
+      handleArrowNavigation(e) {
+        const activeElement = document.activeElement;
+        
+        // Handle table navigation
+        if (activeElement.closest('table')) {
+          this.handleTableArrowNavigation(e, activeElement);
+        }
+        
+        // Handle slider navigation
+        if (activeElement.type === 'range') {
+          const input = document.getElementById(activeElement.id.replace('-slider', ''));
+          if (input) {
+            setTimeout(() => {
+              input.value = activeElement.value;
+            }, 0);
+          }
+        }
+      }
+      
+      handleTableArrowNavigation(e, activeElement) {
+        const table = activeElement.closest('table');
+        if (!table) return;
+
+        const cells = Array.from(table.querySelectorAll('th, td'));
+        const currentIndex = cells.indexOf(activeElement);
+        if (currentIndex === -1) return;
+
+        const rows = Array.from(table.querySelectorAll('tr'));
+        const currentRow = activeElement.closest('tr');
+        const currentRowIndex = rows.indexOf(currentRow);
+        const cellsInRow = Array.from(currentRow.querySelectorAll('th, td'));
+        const cellIndexInRow = cellsInRow.indexOf(activeElement);
+
+        let targetElement = null;
+
+        switch (e.key) {
+          case 'ArrowUp':
+            if (currentRowIndex > 0) {
+              const targetRow = rows[currentRowIndex - 1];
+              const targetCells = Array.from(targetRow.querySelectorAll('th, td'));
+              targetElement = targetCells[Math.min(cellIndexInRow, targetCells.length - 1)];
+            }
+            break;
+          
+          case 'ArrowDown':
+            if (currentRowIndex < rows.length - 1) {
+              const targetRow = rows[currentRowIndex + 1];
+              const targetCells = Array.from(targetRow.querySelectorAll('th, td'));
+              targetElement = targetCells[Math.min(cellIndexInRow, targetCells.length - 1)];
+            }
+            break;
+          
+          case 'ArrowLeft':
+            if (cellIndexInRow > 0) {
+              targetElement = cellsInRow[cellIndexInRow - 1];
+            }
+            break;
+          
+          case 'ArrowRight':
+            if (cellIndexInRow < cellsInRow.length - 1) {
+              targetElement = cellsInRow[cellIndexInRow + 1];
+            }
+            break;
+        }
+
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.focus();
+        }
+      }
+      
+      enhanceFocusIndicators() {
+        // Add focus-visible polyfill behavior
+        document.addEventListener('keydown', () => {
+          document.body.classList.add('keyboard-navigation');
+        });
+
+        document.addEventListener('mousedown', () => {
+          document.body.classList.remove('keyboard-navigation');
+        });
+      }
+      
+      registerDefaultShortcuts() {
+        this.registerShortcut('f1', {
+          description: 'Show keyboard shortcuts help',
+          handler: (e) => {
+            e.preventDefault();
+            this.showKeyboardShortcutsHelp();
+          }
+        });
+        
+        this.registerShortcut('ctrl+shift+k', {
+          description: 'Start keyboard navigation testing',
+          handler: () => {
+            console.log('🎯 Keyboard Navigation Testing Started');
+            console.log('Use Tab/Shift+Tab to navigate through all elements');
+            alert('Keyboard Navigation Testing Started\nCheck the console for details');
+          }
+        });
+        
+        this.registerShortcut('ctrl+shift+a', {
+          description: 'Test all keyboard functionality',
+          handler: () => {
+            const focusableElements = this.getFocusableElements();
+            console.log('🧪 Keyboard Functionality Test Results:');
+            console.log(`Found ${focusableElements.length} focusable elements`);
+            console.table(focusableElements.map(el => ({
+              tagName: el.tagName,
+              id: el.id,
+              className: el.className,
+              tabIndex: el.tabIndex
+            })));
+            alert(`Keyboard Functionality Test Complete\nFound ${focusableElements.length} focusable elements\nCheck console for details`);
+          }
+        });
+      }
+      
+      registerShortcut(keys, shortcut) {
+        this.keyboardShortcuts.set(keys, shortcut);
+      }
+      
+      getShortcutKey(e) {
+        const parts = [];
+        
+        if (e.ctrlKey) parts.push('ctrl');
+        if (e.altKey) parts.push('alt');
+        if (e.shiftKey) parts.push('shift');
+        if (e.metaKey) parts.push('meta');
+        
+        parts.push(e.key.toLowerCase());
+        
+        return parts.join('+');
+      }
+      
+      getFocusableElements() {
+        const selector = [
+          'a[href]',
+          'button:not([disabled])',
+          'textarea:not([disabled])',
+          'input:not([disabled]):not([type="hidden"])',
+          'select:not([disabled])',
+          '[tabindex]:not([tabindex="-1"])',
+          '[role="button"]:not([disabled])'
+        ].join(', ');
+
+        return Array.from(document.querySelectorAll(selector));
+      }
+      
+      showKeyboardShortcutsHelp() {
+        const helpContent = Array.from(this.keyboardShortcuts.entries())
+          .map(([keys, shortcut]) => `${keys.toUpperCase()}: ${shortcut.description}`)
+          .join('\n');
+        
+        const helpText = `Keyboard Shortcuts:\n\n${helpContent}\n\nAdditional Navigation:\n- TAB: Navigate forward\n- SHIFT+TAB: Navigate backward\n- ARROW KEYS: Navigate within tables\n- ESCAPE: Close modals`;
+        
+        alert(helpText);
+      }
+    }
+    
+    // Initialize keyboard navigation manager
+    const keyboardManager = new SimpleKeyboardNavigationManager();
+    
+    // Sync slider with input
+    const amountSlider = document.getElementById('amount-slider');
+    const amountInput = document.getElementById('amount');
+    
+    amountSlider.addEventListener('input', () => {
+      amountInput.value = amountSlider.value;
+    });
+    
+    amountInput.addEventListener('input', () => {
+      amountSlider.value = amountInput.value;
+    });
+    
+    console.log('🎯 Keyboard Navigation Test Page Loaded');
+    console.log('Press F1 for keyboard shortcuts help');
+    console.log('Press Ctrl+Shift+K to start testing');
+    console.log('Press Ctrl+Shift+A to test all functionality');
+  </script>
+</body>
+</html>

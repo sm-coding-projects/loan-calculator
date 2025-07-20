@@ -13,6 +13,7 @@ import MarketRates from './market-rates.js';
 import loadingManager from '../utils/loading-manager.js';
 import animationManager from '../utils/animation-manager.js';
 import AsyncCalculatorService from '../services/async-calculator.service.js';
+import { enhanceFormAccessibility, announceValidationError, announceLoadingState } from '../utils/accessibility.js';
 
 class CalculatorForm {
   constructor(options = {}) {
@@ -96,12 +97,12 @@ class CalculatorForm {
 
     const formHtml = `
       <div class="calculator-form">
-        <h2>${t('form.title')}</h2>
-        <form id="loan-calculator-form">
+        <h2 id="form-title">${t('form.title')}</h2>
+        <form id="loan-calculator-form" role="form" aria-labelledby="form-title" novalidate>
           <!-- Loan Type Selector -->
           <div class="form-group">
             <div class="form-input-wrapper">
-              <select id="loan-type" class="form-select" name="type">
+              <select id="loan-type" class="form-select" name="type" aria-describedby="loan-type-help">
                 ${Object.entries(LOAN_TYPES).map(([key, value]) => {
     const translationKey = `form.${key}`;
     const description = t(translationKey) !== translationKey ? t(translationKey) : value.description;
@@ -110,8 +111,9 @@ class CalculatorForm {
               </select>
               <label for="loan-type" class="form-label floating">
                 ${t('form.loanType')}
-                <span class="info-icon" data-tooltip="${t('tooltips.loanType')}" data-tooltip-position="top">?</span>
+                <span class="info-icon" data-tooltip="${t('tooltips.loanType')}" data-tooltip-position="top" aria-label="Help information" role="button" tabindex="0">?</span>
               </label>
+              <div id="loan-type-help" class="sr-only">${t('tooltips.loanType')}</div>
             </div>
           </div>
           
@@ -128,10 +130,14 @@ class CalculatorForm {
                 max="${LOAN_TYPES[this.formData.type].maxAmount}" 
                 step="1000"
                 placeholder=" "
+                aria-describedby="principal-error principal-help"
+                aria-invalid="false"
+                required
               >
               <label for="principal" class="form-label">
                 ${t('form.loanAmount')} (${this.formData.currency || 'USD'})
               </label>
+              <div id="principal-help" class="sr-only">Enter the total amount you want to borrow, between ${formatters.formatCurrency(LOAN_TYPES[this.formData.type].minAmount, this.formData.currency || 'USD', this.locale)} and ${formatters.formatCurrency(LOAN_TYPES[this.formData.type].maxAmount, this.formData.currency || 'USD', this.locale)}</div>
             </div>
             <div class="range-container">
               <input 
@@ -142,13 +148,16 @@ class CalculatorForm {
                 max="${LOAN_TYPES[this.formData.type].maxAmount}" 
                 step="1000" 
                 value="${this.formData.principal}"
+                aria-label="Loan amount slider"
+                aria-describedby="principal-slider-help"
               >
-              <div class="range-values">
+              <div id="principal-slider-help" class="sr-only">Use this slider to adjust the loan amount</div>
+              <div class="range-values" aria-hidden="true">
                 <span>${formatters.formatCurrency(LOAN_TYPES[this.formData.type].minAmount, this.formData.currency || 'USD', this.locale)}</span>
                 <span>${formatters.formatCurrency(LOAN_TYPES[this.formData.type].maxAmount, this.formData.currency || 'USD', this.locale)}</span>
               </div>
             </div>
-            <div class="invalid-feedback" id="principal-error"></div>
+            <div class="invalid-feedback" id="principal-error" role="alert" aria-live="polite"></div>
           </div>
           
           <!-- Down Payment -->
@@ -198,8 +207,12 @@ class CalculatorForm {
                 max="30" 
                 step="0.125"
                 placeholder=" "
+                aria-describedby="interestRate-error interestRate-help"
+                aria-invalid="false"
+                required
               >
               <label for="interestRate" class="form-label">${t('form.interestRate')} (%)</label>
+              <div id="interestRate-help" class="sr-only">Enter the annual interest rate as a percentage, between 0% and 30%</div>
             </div>
             <div class="range-container">
               <input 
@@ -210,13 +223,16 @@ class CalculatorForm {
                 max="30" 
                 step="0.125" 
                 value="${this.formData.interestRate}"
+                aria-label="Interest rate slider"
+                aria-describedby="interestRate-slider-help"
               >
-              <div class="range-values">
+              <div id="interestRate-slider-help" class="sr-only">Use this slider to adjust the interest rate</div>
+              <div class="range-values" aria-hidden="true">
                 <span>0%</span>
                 <span>30%</span>
               </div>
             </div>
-            <div class="invalid-feedback" id="interestRate-error"></div>
+            <div class="invalid-feedback" id="interestRate-error" role="alert" aria-live="polite"></div>
           </div>
           
           <!-- Market Rates -->
@@ -349,8 +365,14 @@ class CalculatorForm {
           <!-- Calculate Button -->
           <div class="form-group">
             <div class="form-buttons">
-              <button type="submit" class="form-button" id="calculate-button">${t('form.calculate')}</button>
-              <button type="button" class="form-button secondary" id="reset-button">${t('form.reset')}</button>
+              <button type="submit" class="form-button" id="calculate-button" aria-describedby="calculate-help">
+                ${t('form.calculate')}
+              </button>
+              <button type="button" class="form-button secondary" id="reset-button" aria-describedby="reset-help">
+                ${t('form.reset')}
+              </button>
+              <div id="calculate-help" class="sr-only">Calculate your loan payment and amortization schedule</div>
+              <div id="reset-help" class="sr-only">Reset all form fields to their default values</div>
             </div>
           </div>
         </form>
@@ -358,6 +380,9 @@ class CalculatorForm {
     `;
 
     this.container.innerHTML = formHtml;
+    
+    // Enhance form accessibility
+    enhanceFormAccessibility(this.container);
   }
 
   bindEvents() {
@@ -607,10 +632,18 @@ class CalculatorForm {
     if (input && errorElement) {
       if (isValid) {
         input.classList.remove('is-invalid');
+        input.setAttribute('aria-invalid', 'false');
         errorElement.textContent = '';
+        errorElement.removeAttribute('aria-live');
       } else {
         input.classList.add('is-invalid');
+        input.setAttribute('aria-invalid', 'true');
         errorElement.textContent = errorMessage;
+        errorElement.setAttribute('aria-live', 'polite');
+        errorElement.setAttribute('role', 'alert');
+        
+        // Announce validation error to screen readers
+        announceValidationError(field, errorMessage);
       }
     }
 
@@ -722,8 +755,16 @@ class CalculatorForm {
 
     // Validate form data before calculation
     if (!this.validate()) {
-      this.showFormError('Please correct the errors in the form before calculating.');
+      const errorMessage = 'Please correct the errors in the form before calculating.';
+      this.showFormError(errorMessage);
+      announceLoadingState('error', errorMessage);
       return;
+    }
+
+    // Store currently focused element for restoration later
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement !== document.body) {
+      activeElement.setAttribute('data-was-focused', 'true');
     }
 
     // Show enhanced loading with progress steps

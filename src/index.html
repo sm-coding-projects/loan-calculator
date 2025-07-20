@@ -7,7 +7,10 @@
   <meta name="description" content="Advanced loan calculator with amortization schedule, charts, and comparison tools">
 </head>
 <body>
-  <header>
+  <!-- Skip to content link for keyboard navigation -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <header role="banner">
     <h1>Loan Calculator</h1>
     <div class="header-controls">
       <div id="glossary-container"></div>
@@ -15,38 +18,41 @@
     </div>
   </header>
   
-  <main class="main-layout">
+  <main class="main-layout" id="main-content" role="main" tabindex="-1">
     <div class="container">
-      <div id="guidance-container" class="guidance-section"></div>
+      <div id="guidance-container" class="guidance-section" role="complementary" aria-label="Loan guidance information"></div>
       
       <div class="calculator-grid">
-        <section class="calculator-form-section" id="calculator-form-container">
+        <section class="calculator-form-section" id="calculator-form-container" aria-labelledby="form-title">
           <!-- Calculator form will be rendered here -->
         </section>
-        <section class="results-section" id="results-display-container">
+        <section class="results-section" id="results-display-container" aria-labelledby="results-title" aria-live="polite">
           <!-- Results will be rendered here -->
         </section>
       </div>
       
-      <section class="table-section" id="amortization-table-container">
+      <section class="table-section" id="amortization-table-container" aria-labelledby="table-title">
+        <h2 id="table-title" class="sr-only">Amortization Schedule</h2>
         <!-- Amortization table will be rendered here -->
       </section>
       
-      <section class="charts-section" id="charts-container">
+      <section class="charts-section" id="charts-container" aria-labelledby="charts-title">
+        <h2 id="charts-title" class="sr-only">Loan Visualization Charts</h2>
         <!-- Charts will be rendered here -->
         <div class="charts-grid">
-          <div class="chart-item" id="principal-interest-chart"></div>
-          <div class="chart-item" id="payment-breakdown-chart"></div>
+          <div class="chart-item" id="principal-interest-chart" role="img" aria-label="Principal vs Interest chart"></div>
+          <div class="chart-item" id="payment-breakdown-chart" role="img" aria-label="Payment breakdown chart"></div>
         </div>
       </section>
       
-      <section class="saved-calculations-section" id="saved-calculations-container">
+      <section class="saved-calculations-section" id="saved-calculations-container" aria-labelledby="saved-title">
+        <h2 id="saved-title" class="sr-only">Saved Calculations</h2>
         <!-- Saved calculations will be rendered here -->
       </section>
     </div>
   </main>
   
-  <footer>
+  <footer role="contentinfo">
     <p>&copy; <span id="current-year"></span> Loan Calculator</p>
   </footer>
 </body>

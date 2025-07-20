@@ -31,6 +31,9 @@ import CalculationManagerService from './services/calculation-manager.service';
 import StorageService from './services/storage.service';
 import LanguageService from './services/language.service';
 
+// Import utilities
+import keyboardNavigationManager from './utils/keyboard-navigation';
+
 // Lazy-loaded components
 const loadAmortizationTable = () => import(/* webpackChunkName: "amortization-table" */ './components/amortization-table');
 const loadCharts = () => import(/* webpackChunkName: "charts" */ './components/charts');
@@ -57,6 +60,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Apply saved language
   const currentLanguage = languageService.getLanguage();
+
+  // Initialize keyboard navigation
+  console.log('🎯 Keyboard Navigation Manager initialized');
+  console.log('Press F1 for keyboard shortcuts help');
+  console.log('Press Ctrl+Shift+K to start keyboard navigation testing');
+  
+  // Add keyboard navigation testing shortcut
+  keyboardNavigationManager.registerShortcut('ctrl+shift+k', {
+    description: 'Start keyboard navigation testing',
+    handler: () => keyboardNavigationManager.startTesting()
+  });
+  
+  // Add comprehensive testing shortcut
+  keyboardNavigationManager.registerShortcut('ctrl+shift+a', {
+    description: 'Test all keyboard functionality',
+    handler: async () => {
+      const results = await keyboardNavigationManager.testAllKeyboardFunctionality();
+      console.log('Comprehensive keyboard test results:', results);
+    }
+  });
 
   // Initialize components
   let calculatorForm;

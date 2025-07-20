@@ -7,6 +7,7 @@
 import * as formatters from '../utils/formatters.js';
 import animationManager from '../utils/animation-manager.js';
 import { VirtualTable } from '../utils/virtual-scroller.js';
+import { enhanceTableAccessibility, announceToScreenReader } from '../utils/accessibility.js';
 
 class AmortizationTable {
   /**
@@ -389,6 +390,14 @@ class AmortizationTable {
     // Create table
     const table = document.createElement('table');
     table.className = 'table table-responsive';
+    table.setAttribute('role', 'table');
+    table.setAttribute('aria-label', 'Loan amortization schedule');
+    
+    // Add caption for screen readers
+    const caption = document.createElement('caption');
+    caption.textContent = `Amortization schedule showing ${sortedData.length} payments`;
+    caption.classList.add('sr-only');
+    table.appendChild(caption);
 
     // Create table header
     const tableHeader = this.createTableHeader();
@@ -406,6 +415,9 @@ class AmortizationTable {
     // Add table to container
     tableContainer.appendChild(table);
     this.container.appendChild(tableContainer);
+
+    // Enhance table accessibility
+    enhanceTableAccessibility(table, `Amortization schedule showing ${sortedData.length} payments`);
 
     // Create pagination
     this.createPagination(sortedData.length);
@@ -436,20 +448,35 @@ class AmortizationTable {
     ];
 
     // Create header cells
-    columns.forEach((column) => {
+    columns.forEach((column, index) => {
       const th = document.createElement('th');
       th.textContent = column.label;
+      th.setAttribute('scope', 'col');
+      th.id = `amortization-header-${column.id}`;
 
       if (column.sortable) {
         th.className = 'sortable';
+        th.setAttribute('role', 'columnheader');
+        th.setAttribute('tabindex', '0');
+        th.setAttribute('aria-sort', 
+          column.id === this.sortColumn 
+            ? (this.sortDirection === 'asc' ? 'ascending' : 'descending')
+            : 'none'
+        );
 
         // Add sort indicator if this is the current sort column
         if (column.id === this.sortColumn) {
           th.classList.add(this.sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+          th.setAttribute('aria-label', `${column.label}, sorted ${this.sortDirection === 'asc' ? 'ascending' : 'descending'}`);
+        } else {
+          th.setAttribute('aria-label', `${column.label}, sortable`);
         }
 
-        // Add click event for sorting
-        th.addEventListener('click', () => {
+        // Add click and keyboard event for sorting
+        const handleSort = () => {
+          // Announce sorting action to screen readers
+          announceToScreenReader(`Sorting by ${column.label} ${this.sortColumn === column.id && this.sortDirection === 'asc' ? 'descending' : 'ascending'}`);
+          
           // Toggle direction if already sorting by this column
           if (this.sortColumn === column.id) {
             this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -460,6 +487,16 @@ class AmortizationTable {
 
           // Re-render with new sort
           this.render({ payments: this.currentData });
+        };
+
+        th.addEventListener('click', handleSort);
+        
+        // Add keyboard support for sorting
+        th.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleSort();
+          }
         });
       }
 
@@ -546,16 +583,21 @@ class AmortizationTable {
     }
 
     // Create pagination container
-    const pagination = document.createElement('div');
+    const pagination = document.createElement('nav');
     pagination.className = 'pagination';
+    pagination.setAttribute('role', 'navigation');
+    pagination.setAttribute('aria-label', 'Amortization table pagination');
 
     // Previous button
-    const prevButton = document.createElement('div');
+    const prevButton = document.createElement('button');
     prevButton.className = 'pagination-item';
     prevButton.textContent = '«';
+    prevButton.setAttribute('aria-label', 'Go to previous page');
+    prevButton.disabled = this.currentPage <= 1;
     prevButton.addEventListener('click', () => {
       if (this.currentPage > 1) {
         this.currentPage--;
+        announceToScreenReader(`Page ${this.currentPage} of ${totalPages}`);
         this.render({ payments: this.currentData });
       }
     });
@@ -573,11 +615,13 @@ class AmortizationTable {
 
     // First page button if not visible
     if (startPage > 1) {
-      const firstPageButton = document.createElement('div');
+      const firstPageButton = document.createElement('button');
       firstPageButton.className = 'pagination-item';
       firstPageButton.textContent = '1';
+      firstPageButton.setAttribute('aria-label', 'Go to page 1');
       firstPageButton.addEventListener('click', () => {
         this.currentPage = 1;
+        announceToScreenReader(`Page 1 of ${totalPages}`);
         this.render({ payments: this.currentData });
       });
       pagination.appendChild(firstPageButton);

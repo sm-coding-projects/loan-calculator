@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/13</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/18</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/9</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/13</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -179,7 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">142x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,7 +188,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,7 +199,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,7 +208,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,7 +217,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,7 +226,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -283,8 +283,8 @@
  * @param {any} value - The value to validate
  * @returns {boolean} True if valid
  */
-export function isNumber(value) {
-  return !isNaN(parseFloat(value)) &amp;&amp; isFinite(value);
+export function <span class="fstat-no" title="function not covered" >isNumber(</span>value) {
+<span class="cstat-no" title="statement not covered" >  return !isNaN(parseFloat(value)) &amp;&amp; isFinite(value);</span>
 }
 &nbsp;
 /**
@@ -292,8 +292,8 @@ export function isNumber(value) {
  * @param {any} value - The value to validate
  * @returns {boolean} True if valid
  */
-export function isPositiveNumber(value) {
-  return isNumber(value) &amp;&amp; parseFloat(value) &gt; 0;
+export function <span class="fstat-no" title="function not covered" >isPositiveNumber(</span>value) {
+<span class="cstat-no" title="statement not covered" >  return isNumber(value) &amp;&amp; parseFloat(value) &gt; 0;</span>
 }
 &nbsp;
 /**
@@ -303,8 +303,8 @@ export function isPositiveNumber(value) {
  * @param {number} max - Maximum value
  * @returns {boolean} True if valid
  */
-export function isInRange(value, min, max) {
-  return isNumber(value) &amp;&amp; parseFloat(value) &gt;= min &amp;&amp; parseFloat(value) &lt;= max;
+export function <span class="fstat-no" title="function not covered" >isInRange(</span>value, min, max) {
+<span class="cstat-no" title="statement not covered" >  return isNumber(value) &amp;&amp; parseFloat(value) &gt;= min &amp;&amp; parseFloat(value) &lt;= max;</span>
 }
 &nbsp;
 /**
@@ -312,8 +312,8 @@ export function isInRange(value, min, max) {
  * @param {any} value - The value to validate
  * @returns {boolean} True if valid
  */
-export function isValidInterestRate(value) {
-  return isInRange(value, 0, 100);
+export function <span class="fstat-no" title="function not covered" >isValidInterestRate(</span>value) {
+<span class="cstat-no" title="statement not covered" >  return isInRange(value, 0, 100);</span>
 }
 &nbsp;
 /**
@@ -321,8 +321,8 @@ export function isValidInterestRate(value) {
  * @param {any} value - The value to validate
  * @returns {boolean} True if valid
  */
-export function isValidInflationRate(value) {
-  return isInRange(value, 0, 20);
+export function <span class="fstat-no" title="function not covered" >isValidInflationRate(</span>value) {
+<span class="cstat-no" title="statement not covered" >  return isInRange(value, 0, 20);</span>
 }
 &nbsp;
 /**
@@ -330,8 +330,8 @@ export function isValidInflationRate(value) {
  * @param {any} value - The value to validate
  * @returns {boolean} True if valid
  */
-export function isValidLoanTerm(value) {
-  return isNumber(value) &amp;&amp; Number.isInteger(parseFloat(value)) &amp;&amp; parseFloat(value) &gt; 0;
+export function <span class="fstat-no" title="function not covered" >isValidLoanTerm(</span>value) {
+<span class="cstat-no" title="statement not covered" >  return isNumber(value) &amp;&amp; Number.isInteger(parseFloat(value)) &amp;&amp; parseFloat(value) &gt; 0;</span>
 }
 &nbsp;
 /**
@@ -385,7 +385,7 @@ export function <span class="fstat-no" title="function not covered" >getValidati
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-20T03:42:33.255Z
+                at 2025-07-20T04:02:32.395Z
             </div>
         <script src="../prettify.js"></script>
         <script>

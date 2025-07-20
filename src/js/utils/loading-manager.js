@@ -1,8 +1,10 @@
 /**
  * Loading Manager Utility
  * Manages various loading states and animations
- * Implements requirements 3.2, 3.4
+ * Implements requirements 3.2, 3.4, 5.1, 5.5
  */
+
+import { announceLoadingState, enhanceLoadingAccessibility, removeLoadingAccessibility } from './accessibility.js';
 
 class LoadingManager {
   constructor() {
@@ -70,19 +72,27 @@ class LoadingManager {
     // Remove existing overlay
     this.hideProgressOverlay();
 
+    // Announce loading start to screen readers
+    announceLoadingState('started', `${title}. ${message}`);
+
     // Create overlay
     this.loadingOverlay = document.createElement('div');
     this.loadingOverlay.className = 'calculation-loading-overlay';
+    this.loadingOverlay.setAttribute('role', 'dialog');
+    this.loadingOverlay.setAttribute('aria-modal', 'true');
+    this.loadingOverlay.setAttribute('aria-labelledby', 'loading-title');
+    this.loadingOverlay.setAttribute('aria-describedby', 'loading-message');
+    
     this.loadingOverlay.innerHTML = `
       <div class="loading-content">
         <div class="loading-header">
-          <h3>${title}</h3>
-          <p class="loading-message">${message}</p>
+          <h3 id="loading-title">${title}</h3>
+          <p id="loading-message" class="loading-message">${message}</p>
         </div>
         
         ${steps.length > 0 ? this.generateProgressSteps(steps) : ''}
         
-        <div class="loading-spinner-container">
+        <div class="loading-spinner-container" aria-hidden="true">
           <div class="loading-spinner-dots">
             <div class="loading-dot"></div>
             <div class="loading-dot"></div>
@@ -91,15 +101,15 @@ class LoadingManager {
         </div>
         
         <div class="loading-progress">
-          <div class="progress-bar-enhanced">
+          <div class="progress-bar-enhanced" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Calculation progress">
             <div class="progress-fill-enhanced pulsing" style="width: 0%"></div>
           </div>
-          <div class="progress-text">Initializing...</div>
+          <div class="progress-text" aria-live="polite" aria-atomic="true">Initializing...</div>
         </div>
         
         ${cancellable ? `
           <div class="loading-actions">
-            <button class="btn-cancel" id="cancel-loading">Cancel</button>
+            <button class="btn-cancel" id="cancel-loading" aria-label="Cancel calculation">Cancel</button>
           </div>
         ` : ''}
       </div>
@@ -108,11 +118,16 @@ class LoadingManager {
     // Add to document
     document.body.appendChild(this.loadingOverlay);
 
+    // Set focus to the overlay for screen reader users
+    this.loadingOverlay.setAttribute('tabindex', '-1');
+    this.loadingOverlay.focus();
+
     // Handle cancel button
     if (cancellable && onCancel) {
       const cancelBtn = this.loadingOverlay.querySelector('#cancel-loading');
       if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
+          announceLoadingState('error', 'Calculation cancelled by user.');
           onCancel();
           this.hideProgressOverlay();
         });
@@ -134,15 +149,30 @@ class LoadingManager {
   updateProgress(progress, message = '', currentStep = null) {
     if (!this.loadingOverlay) return;
 
+    const progressBar = this.loadingOverlay.querySelector('[role="progressbar"]');
     const progressFill = this.loadingOverlay.querySelector('.progress-fill-enhanced');
     const progressText = this.loadingOverlay.querySelector('.progress-text');
 
+    const clampedProgress = Math.min(100, Math.max(0, progress));
+
+    if (progressBar) {
+      progressBar.setAttribute('aria-valuenow', clampedProgress);
+      progressBar.setAttribute('aria-valuetext', `${Math.round(clampedProgress)}% complete`);
+    }
+
     if (progressFill) {
-      progressFill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+      progressFill.style.width = `${clampedProgress}%`;
     }
 
     if (progressText && message) {
       progressText.textContent = message;
+      
+      // Announce significant progress milestones
+      if (progress === 100) {
+        announceLoadingState('completed', message);
+      } else if (progress > 0 && progress % 25 === 0) {
+        announceLoadingState('progress', message, progress);
+      }
     }
 
     // Update step status
@@ -190,6 +220,13 @@ class LoadingManager {
    */
   hideProgressOverlay() {
     if (this.loadingOverlay) {
+      // Return focus to the previously focused element
+      const previouslyFocused = document.querySelector('[data-was-focused]');
+      if (previouslyFocused) {
+        previouslyFocused.focus();
+        previouslyFocused.removeAttribute('data-was-focused');
+      }
+
       this.loadingOverlay.style.opacity = '0';
       setTimeout(() => {
         if (this.loadingOverlay && this.loadingOverlay.parentNode) {

@@ -4,33 +4,56 @@
  * Implements requirements 6.1, 6.2, 6.5, 6.6
  */
 
-/* Focus styles for keyboard navigation */
+/* Enhanced focus styles for keyboard navigation */
 :focus {
-  outline: 2px solid var(--primary-button-bg);
+  outline: 2px solid var(--primary-600, #2563eb);
   outline-offset: 2px;
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Ensure focus is visible in both themes */
 .dark-theme :focus {
-  outline-color: var(--primary-button-bg);
+  outline-color: var(--primary-400, #60a5fa);
+}
+
+/* Enhanced keyboard navigation focus indicators */
+.keyboard-navigation *:focus {
+  outline: 2px solid var(--primary-600, #2563eb) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25) !important;
+  border-radius: 4px;
+}
+
+.keyboard-navigation .dark-theme *:focus {
+  outline-color: var(--primary-400, #60a5fa) !important;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.25) !important;
 }
 
 /* Skip to content link - hidden until focused */
 .skip-to-content {
   position: absolute;
   top: -40px;
-  left: 0;
-  background: var(--primary-button-bg);
-  color: var(--primary-button-text);
-  padding: 8px 15px;
+  left: 6px;
+  background: var(--primary-600, #2563eb);
+  color: white;
+  padding: 8px 16px;
   z-index: 1001;
-  transition: top 0.3s;
-  border-radius: 0 0 4px 0;
+  transition: top 0.3s ease;
+  border-radius: 0 0 8px 8px;
   text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .skip-to-content:focus {
   top: 0;
+  outline: 2px solid var(--primary-300, #93c5fd);
+  outline-offset: 2px;
+}
+
+.skip-to-content:hover {
+  background: var(--primary-700, #1d4ed8);
 }
 
 /* Improved focus indicators for interactive elements */
@@ -56,6 +79,45 @@ textarea:focus,
   outline: 2px solid var(--primary-button-bg);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(var(--primary-button-bg-rgb), 0.25);
+}
+
+/* Enhanced focus for table elements */
+table th:focus,
+table td:focus,
+.pagination button:focus,
+.sortable:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--primary-button-bg-rgb), 0.25);
+  background-color: rgba(var(--primary-button-bg-rgb), 0.1);
+}
+
+/* Loading state accessibility */
+[aria-busy="true"] {
+  position: relative;
+}
+
+[aria-busy="true"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1;
+}
+
+/* Progress bar accessibility */
+[role="progressbar"] {
+  background-color: var(--neutral-200);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+[role="progressbar"]:focus {
+  outline: 2px solid var(--primary-button-bg);
+  outline-offset: 2px;
 }
 
 /* High contrast mode support */
@@ -136,6 +198,160 @@ html {
   outline-offset: 2px;
 }
 
+/* Keyboard navigation enhancements */
+.keyboard-help-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.keyboard-help-modal .modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.keyboard-help-modal h2 {
+  margin-top: 0;
+  color: var(--text-color);
+}
+
+.keyboard-help-modal pre {
+  white-space: pre-wrap;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  line-height: 1.5;
+  background: var(--neutral-50);
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--neutral-200);
+}
+
+.keyboard-help-modal .close-help {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.keyboard-help-modal .close-help:hover {
+  background: var(--primary-700);
+}
+
+.keyboard-help-modal .close-help:focus {
+  outline: 2px solid var(--primary-300);
+  outline-offset: 2px;
+}
+
+/* Enhanced table keyboard navigation */
+table th[role="columnheader"]:focus,
+table td:focus {
+  outline: 2px solid var(--primary-600) !important;
+  outline-offset: -2px !important;
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Sortable column indicators */
+.sortable {
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.sortable:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+.sortable::after {
+  content: '↕';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+.sortable.sorted-asc::after {
+  content: '↑';
+  opacity: 1;
+}
+
+.sortable.sorted-desc::after {
+  content: '↓';
+  opacity: 1;
+}
+
+.sortable:focus::after {
+  opacity: 1;
+}
+
+/* Form group keyboard navigation enhancements */
+.form-group {
+  position: relative;
+}
+
+.form-group:focus-within {
+  outline: 1px solid var(--primary-200);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Enhanced slider keyboard navigation */
+.form-slider:focus {
+  outline: 2px solid var(--primary-600) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25) !important;
+}
+
+.form-slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--primary-600);
+}
+
+.form-slider:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--primary-600);
+}
+
+/* Button keyboard navigation enhancements */
+.term-preset:focus,
+.pagination-item:focus,
+.btn-filter:focus {
+  outline: 2px solid var(--primary-600) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Info icon keyboard navigation */
+.info-icon:focus {
+  outline: 2px solid var(--primary-600) !important;
+  outline-offset: 2px !important;
+  border-radius: 50% !important;
+  background-color: rgba(37, 99, 235, 0.1);
+}
+
+/* Chart keyboard navigation */
+.chart-item:focus {
+  outline: 2px solid var(--primary-600) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25) !important;
+}
+
 /* Support for larger text sizes */
 @media (max-width: 768px) and (min-width: 320px) {
   body {
@@ -150,5 +366,11 @@ html {
   .toggle-switch {
     min-height: 44px;
     min-width: 44px;
+  }
+  
+  /* Enhanced mobile keyboard navigation */
+  .keyboard-navigation *:focus {
+    outline-width: 3px !important;
+    outline-offset: 3px !important;
   }
 }
