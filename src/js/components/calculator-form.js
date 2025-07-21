@@ -12,7 +12,8 @@ import { initTooltips } from '../utils/tooltips.js';
 import MarketRates from './market-rates.js';
 import loadingManager from '../utils/loading-manager.js';
 import animationManager from '../utils/animation-manager.js';
-import AsyncCalculatorService from '../services/async-calculator.service.js';
+// Removed unused AsyncCalculatorService import to prevent worker errors
+// import AsyncCalculatorService from '../services/async-calculator.service.js';
 import { enhanceFormAccessibility, announceValidationError, announceLoadingState } from '../utils/accessibility.js';
 
 class CalculatorForm {
@@ -44,8 +45,8 @@ class CalculatorForm {
     // Market rates component
     this.marketRatesComponent = null;
 
-    // Initialize async calculator service
-    this.asyncCalculator = new AsyncCalculatorService();
+    // Removed async calculator service to prevent worker errors
+    // this.asyncCalculator = new AsyncCalculatorService();
 
     this.init();
   }
@@ -802,6 +803,17 @@ class CalculatorForm {
 
     try {
       // Create loan object from form data
+      // Ensure required fields have valid values
+      if (!formData.principal || formData.principal <= 0) {
+        throw new Error('Please enter a valid loan amount');
+      }
+      if (!formData.interestRate || formData.interestRate < 0) {
+        throw new Error('Please enter a valid interest rate');
+      }
+      if (!formData.term || formData.term <= 0) {
+        throw new Error('Please enter a valid loan term');
+      }
+      
       const loan = Loan.fromJSON(formData);
 
       // Update market rates component with current interest rate
@@ -820,39 +832,52 @@ class CalculatorForm {
         }
       };
 
-      // Perform async calculation
-      loadingManager.updateProgress(10, 'Starting async calculation...', 'calculate');
+      // Perform calculation using the same approach as main app
+      loadingManager.updateProgress(10, 'Starting calculation...', 'calculate');
 
-      const calculationResult = await this.asyncCalculator.calculateAmortizationAsync(
-        formData,
-        {
-          includeAdditionalPayments: true,
-          batchSize: 100, // Larger batch size for better performance
-          timeout: 30000,
+      // Import the amortization model dynamically
+      const { AmortizationSchedule } = await import(/* webpackChunkName: "amortization-model" */ '../models/amortization.model');
+
+      // Create amortization schedule without auto-generation
+      const amortizationSchedule = new AmortizationSchedule(loan, false);
+
+      // Verify the loan object has required methods
+      if (typeof loan.totalLoanAmount !== 'function') {
+        throw new Error('Invalid loan object: missing totalLoanAmount method');
+      }
+      if (typeof loan.periodicInterestRate !== 'function') {
+        throw new Error('Invalid loan object: missing periodicInterestRate method');
+      }
+      if (typeof loan.paymentAmount !== 'function') {
+        throw new Error('Invalid loan object: missing paymentAmount method');
+      }
+
+      // Generate schedule asynchronously with progress updates
+      await amortizationSchedule.generateScheduleAsync({
+        includeAdditionalPayments: true,
+        timeout: 30000,
+        onProgress: (progress, message) => {
+          onProgress(10 + (progress * 0.8), message, 'calculate');
         },
-        onProgress,
-      );
+      });
 
       // Update progress for rendering
       loadingManager.updateProgress(95, 'Preparing results...', 'render');
       loadingManager.updateStepStatus('amortization', 'completed');
       loadingManager.updateStepStatus('render', 'active');
 
-      // Prepare results for callback
-      const results = {
-        loan,
-        amortizationSchedule: {
-          payments: calculationResult.schedule.payments,
-          totalInterest: () => calculationResult.schedule.totalInterest,
-          totalPayment: () => calculationResult.schedule.totalPayment,
-          payoffDate: () => new Date(calculationResult.schedule.payoffDate),
-        },
-        inflationAdjusted: calculationResult.inflationAdjusted,
-      };
+      // Calculate inflation-adjusted values if inflation rate is provided
+      let inflationAdjusted = null;
+      if (loan.inflationRate !== undefined && loan.inflationRate > 0) {
+        const module = await import(/* webpackChunkName: "calculator-service" */ '../services/calculator.service');
+        const CalculatorService = module.default;
+        const calculatorService = new CalculatorService();
+        inflationAdjusted = calculatorService.calculateInflationAdjusted(amortizationSchedule, loan.inflationRate);
+      }
 
       // Call the calculation callback
       if (typeof this.onCalculate === 'function') {
-        await this.onCalculate(results.loan, results.amortizationSchedule, results.inflationAdjusted);
+        await this.onCalculate(loan, amortizationSchedule, inflationAdjusted);
       }
 
       // Complete the process
@@ -935,7 +960,9 @@ class CalculatorForm {
    */
   getFormData() {
     const form = this.container.querySelector('#loan-calculator-form');
-    if (!form) return this.formData;
+    if (!form) {
+      return this.formData;
+    }
 
     const formData = {
       ...this.formData,
@@ -943,6 +970,7 @@ class CalculatorForm {
 
     // Get values from form inputs
     const inputs = form.querySelectorAll('input, select');
+    
     inputs.forEach((input) => {
       const field = input.name || input.id;
       let { value } = input;
@@ -950,6 +978,10 @@ class CalculatorForm {
       // Convert numeric values
       if (input.type === 'number' || input.type === 'range') {
         value = parseFloat(value);
+        // Handle NaN values
+        if (isNaN(value)) {
+          value = 0;
+        }
       }
 
       // Convert date values
@@ -959,6 +991,32 @@ class CalculatorForm {
 
       formData[field] = value;
     });
+
+    // Ensure required fields have default values
+    if (!formData.principal || formData.principal <= 0) {
+      formData.principal = 300000; // Default loan amount
+    }
+    if (!formData.interestRate || formData.interestRate < 0) {
+      formData.interestRate = 4.5; // Default interest rate
+    }
+    if (!formData.term || formData.term <= 0) {
+      formData.term = 360; // Default 30 years
+    }
+    if (!formData.downPayment) {
+      formData.downPayment = 0;
+    }
+    if (!formData.additionalPayment) {
+      formData.additionalPayment = 0;
+    }
+    if (!formData.paymentFrequency) {
+      formData.paymentFrequency = 'monthly';
+    }
+    if (!formData.type) {
+      formData.type = 'mortgage';
+    }
+    if (!formData.startDate) {
+      formData.startDate = new Date();
+    }
 
     this.formData = formData;
     return formData;

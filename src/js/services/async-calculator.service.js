@@ -11,8 +11,8 @@ class AsyncCalculatorService {
     this.calculationId = 0;
     this.workerPath = '/src/js/workers/calculation-worker.js';
 
-    // Initialize worker
-    this.initWorker();
+    // Don't initialize worker automatically to avoid errors
+    // this.initWorker();
   }
 
   /**
@@ -26,16 +26,21 @@ class AsyncCalculatorService {
         return;
       }
 
-      this.worker = new Worker(this.workerPath);
+      // For now, skip worker initialization to avoid path issues
+      // TODO: Fix worker path configuration in webpack
+      console.info('Worker initialization skipped, using synchronous calculations');
+      this.worker = null;
+      return;
 
-      this.worker.onmessage = (e) => {
-        this.handleWorkerMessage(e.data);
-      };
-
-      this.worker.onerror = (error) => {
-        console.error('Worker error:', error);
-        this.handleWorkerError(error);
-      };
+      // Commented out worker initialization
+      // this.worker = new Worker(this.workerPath);
+      // this.worker.onmessage = (e) => {
+      //   this.handleWorkerMessage(e.data);
+      // };
+      // this.worker.onerror = (error) => {
+      //   console.error('Worker error:', error);
+      //   this.handleWorkerError(error);
+      // };
     } catch (error) {
       console.warn('Failed to initialize Web Worker:', error);
       this.worker = null;
@@ -82,16 +87,19 @@ class AsyncCalculatorService {
    * Handle worker errors
    */
   handleWorkerError(error) {
+    const errorMessage = error && error.message ? error.message : 'Unknown worker error';
+    console.warn('Worker error occurred:', errorMessage);
+    
     // Reject all pending calculations
     this.pendingCalculations.forEach((calculation) => {
-      calculation.reject(new Error(`Worker error: ${error.message}`));
+      calculation.reject(new Error(`Worker error: ${errorMessage}`));
     });
     this.pendingCalculations.clear();
 
-    // Try to reinitialize worker
-    setTimeout(() => {
-      this.initWorker();
-    }, 1000);
+    // Don't try to reinitialize worker to avoid repeated errors
+    // setTimeout(() => {
+    //   this.initWorker();
+    // }, 1000);
   }
 
   /**

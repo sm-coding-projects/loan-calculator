@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (calculatorFormContainer) {
     calculatorForm = new CalculatorForm({
       container: calculatorFormContainer,
-      onCalculate: async (loan) => {
+      onCalculate: async (loan, amortizationSchedule, inflationAdjusted) => {
         try {
           // Show loading state immediately
           showCalculationLoading('Starting calculation...');
@@ -108,35 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
             amortizationTable.showLoadingSkeleton();
           }
 
-          // Import the amortization model dynamically
-          const { AmortizationSchedule } = await import(/* webpackChunkName: "amortization-model" */ './models/amortization.model');
+          // Debug: Log the loan object
+          console.log('Calculating loan:', loan);
 
-          // Create amortization schedule without auto-generation
-          const amortizationSchedule = new AmortizationSchedule(loan, false);
+          // Use the provided amortization schedule (already calculated by calculator form)
+          console.log('Using provided amortization schedule with', amortizationSchedule.payments.length, 'payments');
 
-          // Generate schedule asynchronously with progress updates
-          await amortizationSchedule.generateScheduleAsync({
-            includeAdditionalPayments: true,
-            timeout: 10000, // 10 second timeout
-            onProgress: (progress, message) => {
-              updateCalculationProgress(progress, message);
-            },
-          });
-
-          // Update progress for inflation calculation
-          updateCalculationProgress(95, 'Calculating inflation adjustments...');
-
-          // Calculate inflation-adjusted values if inflation rate is provided
-          let inflationAdjusted = null;
-          if (loan.inflationRate !== undefined && loan.inflationRate > 0) {
-            const module = await loadCalculatorService();
-            const CalculatorService = module.default;
-            const calculatorService = new CalculatorService();
-            inflationAdjusted = calculatorService.calculateInflationAdjusted(amortizationSchedule, loan.inflationRate);
-          }
-
-          // Update progress for rendering
-          updateCalculationProgress(98, 'Rendering results...');
+          // Update progress for rendering (calculation already done by form)
+          updateCalculationProgress(90, 'Rendering results...');
 
           // Update results display immediately (core component)
           if (resultsDisplay) {
@@ -591,3 +570,7 @@ function retryCalculation() {
     calculatorForm.handleCalculate();
   }
 }
+
+// Make functions available globally
+window.closeCalculationError = closeCalculationError;
+window.retryCalculation = retryCalculation;
